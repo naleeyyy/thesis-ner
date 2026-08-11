@@ -23,8 +23,28 @@ Set these environment variables in Coolify:
 Every variable is declared `:?` in the compose file, so a missing one fails the deploy
 immediately rather than silently starting an instance with a blank password.
 
-Two choices worth knowing about:
+Then set the **domain** on the `label-studio` service, pointing at port **8080**.
 
+**Two ordering traps:**
+
+1. `LABEL_STUDIO_HOST` must be the final `https://…` URL, which you don't know until
+   Coolify has assigned the domain. Deploy once, copy the domain, set the variable,
+   **redeploy**. Get it wrong and invite links point at the wrong host — which you only
+   discover when an annotator can't sign up.
+2. First boot is slow: Postgres migrations run before Label Studio answers. The
+   healthcheck allows 120 s, so don't panic at "unhealthy" in the first minute or two.
+
+Three choices worth knowing about:
+
+- **`expose`, not `ports`.** Coolify's reverse proxy reaches the container over the
+  internal Docker network and terminates TLS itself, so publishing a host port buys
+  nothing and collides with whatever already holds 8080 on the host:
+
+  ```
+  Bind for 0.0.0.0:8080 failed: port is already allocated
+  ```
+
+  If you see that, something is still publishing a host port.
 - **Postgres, not SQLite.** SQLite locks under concurrent writes, which is exactly what
   5–10 simultaneous annotators produce. Losing an evening's work to a corrupt database
   costs more than the extra container.
