@@ -1,0 +1,67 @@
+# Label Studio for the Albanian NER annotation campaign, sized for ~10 annotators.
+#
+# Deploy on Coolify as a Docker Compose resource. Coolify supplies the domain and TLS,
+# so no reverse proxy is defined here.
+#
+# Postgres rather than the default SQLite: SQLite locks under concurrent writes, and a
+# handful of people annotating simultaneously is exactly that workload. Losing an
+# evening of annotation to a corrupted database would cost more than this container.
+
+services:
+  label-studio:
+    image: heartexlabs/label-studio:1.13.1
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      # Public URL Coolify serves this on. Label Studio builds invite links from it, so
+      # a wrong value produces invitations that land on the wrong host.
+      LABEL_STUDIO_HOST: ${LABEL_STUDIO_HOST:?set this to the public https URL}
+
+      DJANGO_DB: default
+      POSTGRE_NAME: labelstudio
+      POSTGRE_USER: labelstudio
+      POSTGRE_PASSWORD: ${POSTGRES_PASSWORD:?set a strong password}
+      POSTGRE_HOST: postgres
+      POSTGRE_PORT: 5432
+
+      # Invite-link-only signup. Without this the instance is open to anyone who finds
+      # the URL — it is on the public internet the moment Coolify assigns a domain.
+      LABEL_STUDIO_DISABLE_SIGNUP_WITHOUT_LINK: "true"
+
+      # Bootstrap admin, created on first start only. Change the password after login.
+      LABEL_STUDIO_USERNAME: ${LABEL_STUDIO_USERNAME:?set an admin email}
+      LABEL_STUDIO_PASSWORD: ${LABEL_STUDIO_PASSWORD:?set an admin password}
+
+      CSRF_TRUSTED_ORIGINS: ${LABEL_STUDIO_HOST}
+    volumes:
+      - label-studio-data:/label-studio/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: labelstudio
+      POSTGRES_USER: labelstudio
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set a strong password}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      # Without this gate Label Studio races Postgres on cold start and dies migrating.
+      test: ["CMD-SHELL", "pg_isready -U labelstudio -d labelstudio"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  label-studio-data:
+  postgres-data:

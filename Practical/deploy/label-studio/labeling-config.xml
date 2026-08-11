@@ -1,0 +1,36 @@
+<!--
+  Labeling interface for the Albanian NER campaign.
+  Paste into: Project → Settings → Labeling Interface → Code.
+
+  Four labels, not three. PER/ORG/LOC mark entities; HEAD marks the proper-name core
+  *inside* an entity, and is only used for the `X i Y` construction where the two
+  boundaries differ (`Stacioni i Bramit` → HEAD on `Bramit`). Most entities need no HEAD
+  region at all, which is why it is a separate label rather than a second required pass.
+
+  Hotkeys are digits so annotators can work without leaving the keyboard; at ~200
+  sentences each that difference compounds.
+-->
+<View>
+  <Header value="Mark named entities. Select the text, then press the label's number."/>
+
+  <Labels name="label" toName="text" showInline="true">
+    <Label value="PER" background="#4A7DBF" hotkey="1"/>
+    <Label value="ORG" background="#C77B3E" hotkey="2"/>
+    <Label value="LOC" background="#3F8F6B" hotkey="3"/>
+    <Label value="HEAD" background="#8A8FA3" hotkey="4"/>
+  </Labels>
+
+  <Text name="text" value="$text"/>
+
+  <Header value="Flags"/>
+  <Choices name="flags" toName="text" choice="multiple" showInline="true">
+    <!-- Junk is flagged, never deleted: the rate is a reportable data-quality number,
+         and a silently dropped sentence cannot be audited or recovered. -->
+    <Choice value="junk" hotkey="j" hint="Garbled text — split words, fragments. Do not annotate."/>
+    <Choice value="unsure" hotkey="u" hint="Annotated, but you want it reviewed."/>
+  </Choices>
+
+  <View style="margin-top:1em; opacity:0.75">
+    <Header size="5" value="HEAD is only for cases like 'Stacioni i Bramit' → HEAD on 'Bramit'. If the entity is just a name, skip it."/>
+  </View>
+</View>
