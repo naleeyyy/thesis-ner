@@ -1,0 +1,27 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Secrets (HF_TOKEN lives here) — never commit.
+.env
+
+# Sampled raw text is regeneratable; only labeled JSONL is committed.
+data/raw/
+
+# LLM response cache and pre-labels: regeneratable (at API cost) and not gold data.
+data/interim/
+
+# results/ is committed on purpose: baselines.json carries the CIs, significance
+# tests and environment fingerprint behind the reported numbers, and
+# predictions/*.jsonl (~500 KB) lets the scoring and statistics be re-derived
+# without a GPU or a gated-model token. Smoke runs use --out-prefix _smoke.
+results/_*.json
+results/_*.md
+
+# Local HF caches (in case anyone sets HF_HOME to ./hf-cache)
+hf-cache/
+stanza_resources/
+
+.DS_Store
+.pytest_cache/
