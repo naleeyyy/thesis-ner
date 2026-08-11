@@ -88,11 +88,48 @@ For each project: Settings → Labeling Interface → Code → paste
 
 ---
 
-## 3. Reserve a batch, pre-label it, import it
+## 3. Prepare batches
 
-Three commands per batch. The ledger is what stops a sentence being handed out twice
-(which would inflate agreement) or never at all (which would silently shrink the corpus)
-across the 20+ batches this campaign will produce.
+`scripts/prepare_batch.sh` does reserve → pre-label → task file in one go. Source your
+credentials first:
+
+```bash
+set -a; source .env; set +a
+```
+
+**A whole round for five annotators:**
+
+```bash
+# 30 shared sentences for agreement, in both conditions
+scripts/prepare_batch.sh overlap ov1 30 ana blerim drita edon fatos
+
+# then 50 unique sentences each
+for who in ana blerim drita edon fatos; do
+  scripts/prepare_batch.sh unique "$who" r1 50
+done
+```
+
+Roughly 3 minutes and 8 cents per 50-sentence batch, so a five-person round is about 20
+minutes and 50 cents. Run it again with `r2`, `r3` … for later rounds; the ledger
+guarantees nobody sees a sentence twice.
+
+Overlap mode writes **two** task files from the same sentences —
+`tasks_ov1_assisted.json` and `tasks_ov1_scratch.json`. Import the assisted one into
+`02-overlap-assisted` (group A) and the scratch one into `03-overlap-scratch` (group B).
+Same sentences, same interface, only the suggestions differ: that pair *is* the anchoring
+experiment, and it collapses if the sentence sets diverge.
+
+Check progress any time:
+
+```bash
+uv run python -m src.annotate.assign status --pool data/raw/wiki_segmented_v2.jsonl
+```
+
+### Doing it by hand
+
+The script wraps three commands; run them directly if you want finer control. The ledger
+is what stops a sentence being handed out twice (which inflates agreement) or never at
+all (which silently shrinks the corpus) across the 20+ batches this campaign produces.
 
 ```bash
 # 1. Reserve 50 sentences nobody has seen
