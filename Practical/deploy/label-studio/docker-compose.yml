@@ -45,11 +45,20 @@ services:
     volumes:
       - label-studio-data:/label-studio/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      # Uses python3 rather than curl: this is a Python image, so the interpreter is
+      # guaranteed present while curl is not. A healthcheck that fails because its own
+      # binary is missing leaves the container permanently "unhealthy", and Coolify's
+      # proxy will not route to an unhealthy container — which surfaces to the user as
+      # "no available server" rather than as anything mentioning the healthcheck.
+      test:
+        - CMD
+        - python3
+        - -c
+        - "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8080/health', timeout=5).status==200 else 1)"
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 120s
+      start_period: 180s
 
   postgres:
     image: postgres:16-alpine
