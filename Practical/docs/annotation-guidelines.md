@@ -132,17 +132,12 @@ Sentences with **no entities at all** are common and completely valid.
 
 ---
 
-## For Krenar — before circulating
+## Questions
 
-- [x] Albanian examples confirmed; real corpus sentences throughout.
-- [x] Junk handling decided: flag, don't delete.
-- [ ] Verify the analysis of the examples — the Albanian is authentic but the claims about
-      it are mine. Check especially that `Duka` reads as a title, and that `maqedonasit` /
-      `kroatët` are ethnicities you'd want unmarked.
-- [x] Competitions and national teams decided: both ORG (rules 5 and 6). A nationality
-      word inside a team's only designation stays inside the ORG span; it is never a LOC
-      in its own right, which keeps the tagset comparable with WikiANN.
-- [ ] After the pilot: fold in disagreements, bump to v1.0, and update `SYSTEM_PROMPT` in
-      `src/annotate/prompt.py` to match. The two must agree, or measured LLM-vs-human
-      agreement reflects the mismatch between two rulebooks. Make prompt edits *before*
-      the bulk pre-labeling run — a `PROMPT_VERSION` bump invalidates the response cache.
+If a sentence makes you hesitate for more than a few seconds, tick `unsure` and keep
+going — don't lose momentum on one hard case. Send Krenar anything that seems like a gap
+in these rules rather than a hard sentence; those notes are what the next version is
+built from.
+
+Thanks for helping — the dataset only exists because people were willing to read a few
+hundred sentences carefully.
