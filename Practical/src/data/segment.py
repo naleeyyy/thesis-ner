@@ -24,7 +24,7 @@ from pathlib import Path
 import stanza
 from tqdm import tqdm
 
-from .quality import sentence_issues
+from .quality import repair_tokens, sentence_issues
 
 MIN_TOKENS = 8
 MAX_TOKENS = 40
@@ -120,7 +120,8 @@ def main() -> int:
     for art in tqdm(articles, desc="segmenting"):
         doc = nlp(art["extract"])
         for sent in doc.sentences:
-            tokens = [w.text for w in sent.words]
+            # Repair before the length check so the filter sees the final token count.
+            tokens = repair_tokens([w.text for w in sent.words])
             if not MIN_TOKENS <= len(tokens) <= MAX_TOKENS:
                 n_length_filtered += 1
                 continue

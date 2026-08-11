@@ -24,6 +24,40 @@ MAX_DIGIT_RATIO = 0.5
 MIN_ALPHA_TOKENS = 4
 
 
+# Punctuation that stanza sometimes leaves welded to a word (`(Theron)`, `"Perla`).
+# Apostrophes are deliberately absent: Albanian contractions (`t'`, `s'`, `n'`) and
+# borrowed names (`d'Azur`, `L'`, `Rubin's`) legitimately end or begin with one, and
+# splitting those would corrupt real tokens to fix a cosmetic one.
+OPENING_PUNCT = '([{"«“'
+CLOSING_PUNCT = ')]}"»”'
+
+
+def repair_tokens(tokens: list[str]) -> list[str]:
+    """Peel bracket and quote characters off the edges of word tokens.
+
+    Stanza usually separates punctuation but not always, and a welded token is not a
+    cosmetic problem: the entity span becomes `(Theron)` instead of `Theron`, for the
+    model *and* for the human annotator, because both work on the same token sequence.
+    Neither can express the correct boundary if the tokenizer never offered it.
+    """
+    out: list[str] = []
+    for token in tokens:
+        leading: list[str] = []
+        trailing: list[str] = []
+
+        while len(token) > 1 and token[0] in OPENING_PUNCT and token[1].isalnum():
+            leading.append(token[0])
+            token = token[1:]
+        while len(token) > 1 and token[-1] in CLOSING_PUNCT and token[-2].isalnum():
+            trailing.append(token[-1])
+            token = token[:-1]
+
+        out.extend(leading)
+        out.append(token)
+        out.extend(reversed(trailing))
+    return out
+
+
 def _is_number(token: str) -> bool:
     """Digit-led numerics, including ranges, times and decimals.
 

@@ -14,6 +14,7 @@ from src.data.quality import (
     hyphen_fragments,
     is_junk,
     orphan_letters,
+    repair_tokens,
     sentence_issues,
     unbalanced_brackets,
 )
@@ -178,3 +179,44 @@ def test_deduplicate_keeps_distinct_sentences():
     recs = [{"tokens": toks(s)} for s in ["një dy tre", "katër pesë gjashtë", "shtatë tetë"]]
     kept, _ = deduplicate(recs, max_per_template=3)
     assert len(kept) == 3
+
+
+# --------------------------------------------------- token repair (welded punctuation)
+
+
+def test_repair_splits_wrapping_parentheses():
+    # `(Theron)` arrived as one token, so neither model nor annotator could mark `Theron`.
+    assert repair_tokens(["gruaja", "(Theron)", "bëhet"]) == ["gruaja", "(", "Theron", ")", "bëhet"]
+
+
+def test_repair_splits_quotes_around_a_name():
+    assert repair_tokens(['"Perla', 'Franceze"']) == ['"', "Perla", "Franceze", '"']
+
+
+def test_repair_handles_a_year_in_brackets():
+    assert repair_tokens(["(2009)"]) == ["(", "2009", ")"]
+
+
+def test_repair_leaves_albanian_contractions_alone():
+    # `t'`, `s'`, `n'` are real Albanian tokens; splitting them corrupts the text.
+    for tok in ["t'", "s'", "n'", "t’ja"]:
+        assert repair_tokens([tok]) == [tok]
+
+
+def test_repair_leaves_apostrophe_names_alone():
+    for tok in ["d'Azur", "L'", "Rubin's", "Howe's"]:
+        assert repair_tokens([tok]) == [tok]
+
+
+def test_repair_leaves_standalone_punctuation_alone():
+    assert repair_tokens([",", "(", ")", '"', "."]) == [",", "(", ")", '"', "."]
+
+
+def test_repair_leaves_clean_tokens_untouched():
+    tokens = ["Stacioni", "i", "Bramit", "ka", "lidhje", "."]
+    assert repair_tokens(tokens) == tokens
+
+
+def test_repair_is_idempotent():
+    once = repair_tokens(["(Theron)", '"Perla'])
+    assert repair_tokens(once) == once
