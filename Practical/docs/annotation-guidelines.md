@@ -1,6 +1,6 @@
 # Albanian NER — Annotation Guidelines
 
-**Version 0.2 (draft, pre-pilot).** Rules will change after the pilot round. If something
+**Version 0.3 (draft, pre-pilot).** Rules will change after the pilot round. If something
 seems ambiguous while you work, write it down — that note is worth more than a guess.
 
 ---
@@ -23,7 +23,7 @@ nobody catches.
 | | | |
 |---|---|---|
 | **PER** | people | `Salman Rushdi` |
-| **ORG** | companies, institutions, parties, teams | `Universiteti i Prishtinës` |
+| **ORG** | companies, institutions, parties, teams, leagues | `Universiteti i Prishtinës`, `Serie A` |
 | **LOC** | countries, cities, regions, rivers, buildings | `Shqipëria`, `Tuluzën` |
 
 There is no fourth label. Anything that isn't one of these is left unmarked.
@@ -78,7 +78,14 @@ Same country, both marked, each exactly as written. Same for `Tuluzën`, `Bramit
 > **Stacioni hekurudhor në Zveçan** … → a description; only `Zveçan` (LOC)
 
 **5. Nationality and ethnicity words are not entities.**
-`shqiptarët`, `maqedonasit`, `kroatët`, `gjerman`, `italiane` — all unmarked.
+`shqiptarët`, `maqedonasit`, `kroatët`, `gjerman`, `italiane` — all unmarked. Never tag
+one as a LOC, even though they come from place names.
+
+**6. A team named only by description is still ORG.** `kombëtaren gjermane` ("the German
+national team") has no proper name to fall back on, so the whole phrase is one ORG span.
+This is the only place a nationality word sits inside an entity — it doesn't make the word
+an entity anywhere else. Compare `klubi anglez Arsenal`, where a real name exists, so only
+`Arsenal` is marked.
 
 ---
 
@@ -132,8 +139,9 @@ Sentences with **no entities at all** are common and completely valid.
 - [ ] Verify the analysis of the examples — the Albanian is authentic but the claims about
       it are mine. Check especially that `Duka` reads as a title, and that `maqedonasit` /
       `kroatët` are ethnicities you'd want unmarked.
-- [ ] Decide two cases these rules don't cover: **competitions** (`Serie A`) and
-      **national teams** (`kombëtaren gjermane`) — both arguably ORG.
+- [x] Competitions and national teams decided: both ORG (rules 5 and 6). A nationality
+      word inside a team's only designation stays inside the ORG span; it is never a LOC
+      in its own right, which keeps the tagset comparable with WikiANN.
 - [ ] After the pilot: fold in disagreements, bump to v1.0, and update `SYSTEM_PROMPT` in
       `src/annotate/prompt.py` to match. The two must agree, or measured LLM-vs-human
       agreement reflects the mismatch between two rulebooks. Make prompt edits *before*

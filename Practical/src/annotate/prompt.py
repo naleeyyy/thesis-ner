@@ -12,7 +12,7 @@ measured LLM-vs-human agreement is an artifact of that mismatch rather than a fi
 
 from __future__ import annotations
 
-PROMPT_VERSION = "v2"
+PROMPT_VERSION = "v4"
 
 ENTITY_TYPES = ("PER", "ORG", "LOC")
 
@@ -25,7 +25,8 @@ given one sentence as a numbered token list. Return the entity spans it contains
 Exactly three types, matching the WikiANN Albanian tagset:
 
 - PER — people, real or fictional, referred to by name.
-- ORG — companies, institutions, agencies, political parties, teams, bands.
+- ORG — companies, institutions, agencies, political parties, teams, bands, and sporting \
+competitions and leagues (`Serie A`).
 - LOC — countries, regions, cities, villages, rivers, mountains, buildings, \
 administrative areas, and other named places.
 
@@ -64,6 +65,17 @@ because its ending looks unusual. This applies to the head as much as the full s
 name. Do not include a preceding preposition (`në`, `nga`, `për`) or a title \
 (`presidenti`, `Dr.`, `Sh.`) — those are outside even the full span.
 
+2a. **Never include punctuation.** Brackets, commas, quotes and full stops are separate \
+tokens and are always outside the span, including when they wrap the name. In \
+`gruaja e tij (Theron) bëhet`, the span is `Theron` alone — not `(Theron)`.
+
+2b. **A common noun on its own is never an entity.** `qyteti` ("the city"), `lumi` \
+("the river"), `shteti` ("the state") name a kind of thing, not a particular one. They \
+appear inside a span only when a proper name follows them (rule 3); standing alone, even \
+when the sentence is clearly about a specific place, they are tagged as nothing. \
+Likewise a possessive phrase built around a name is not itself the entity: in \
+`Albumi debutues i Winehouse`, only `Winehouse` is the span.
+
 3. **The linking particle `i`/`e`/`të` goes in the full span, never in the head.** \
 `Universiteti i Prishtinës` → full span all three tokens, head `Prishtinës`. \
 `qyteti i Tiranës` → full span all three tokens, head `Tiranës`.
@@ -73,13 +85,20 @@ name. Do not include a preceding preposition (`në`, `nga`, `për`) or a title \
 the sentence refers to, not by what the word originally named.
 
 5. **Derived and adjectival forms are not entities.** `shqiptar`, `shqiptare`, \
-`kosovar` (Albanian, Kosovar) describe nationality or origin and are tagged as \
-nothing, even though they derive from place names. Only nominal name mentions count.
+`kosovar`, `gjerman` (Albanian, Kosovar, German) describe nationality or origin and are \
+tagged as nothing, even though they derive from place names. Only nominal name mentions \
+count. In particular, never tag a nationality adjective as a LOC.
 
-6. **Take the maximal span for nested names.** In `Republika e Kosovës`, annotate the \
+6. **A team named only by description is still ORG.** `kombëtaren gjermane` ("the German \
+national team") has no proper name to fall back on, so the whole phrase is the ORG span, \
+head included. This is the one place a nationality adjective sits inside an entity — it \
+does not make the adjective an entity anywhere else. Contrast `klubi anglez Arsenal`, \
+where a real name exists, so only `Arsenal` is tagged.
+
+7. **Take the maximal span for nested names.** In `Republika e Kosovës`, annotate the \
 whole thing as one LOC span rather than `Kosovës` alone.
 
-7. **Not entities:** dates, years, numbers, events, wars, treaties, book and film \
+8. **Not entities:** dates, years, numbers, events, wars, treaties, book and film \
 titles, languages, ethnicities, job titles, and common nouns — regardless of \
 capitalization. Albanian capitalizes sentence-initial words like any language; \
 capitalization alone is never sufficient evidence.
