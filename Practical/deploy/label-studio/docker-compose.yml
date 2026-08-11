@@ -14,8 +14,13 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    ports:
-      - "8080:8080"
+    # `expose`, not `ports`. Coolify's reverse proxy reaches the container over the
+    # internal Docker network and terminates TLS itself, so a host binding buys nothing
+    # and fails outright when anything else already holds port 8080 on the host — which
+    # on a Coolify box is common. Set the domain in the Coolify UI instead; it maps to
+    # this port automatically.
+    expose:
+      - "8080"
     environment:
       # Public URL Coolify serves this on. Label Studio builds invite links from it, so
       # a wrong value produces invitations that land on the wrong host.
