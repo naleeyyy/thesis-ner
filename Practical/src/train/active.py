@@ -184,6 +184,12 @@ def main() -> int:
     p.add_argument("--test-frac", type=float, default=0.25)
     p.add_argument("--split-seed", type=int, default=20260811)
     p.add_argument("--out-prefix", default="active_learning")
+    p.add_argument(
+        "--resume", action="store_true",
+        help="Skip (strategy, seed) pairs already present in the checkpoint file. "
+        "A full sweep is dozens of trainings over hours; without this, one transient "
+        "failure late in the run discards everything before it.",
+    )
     args = p.parse_args()
 
     if not args.gold and not args.wikiann:
@@ -211,11 +217,28 @@ def main() -> int:
           f"({len(args.strategies)} strategies x {len(args.seeds)} seeds x {args.rounds + 1} rounds)\n")
 
     t0 = time.perf_counter()
+    checkpoint = RESULTS_DIR / f"{args.out_prefix}.partial.json"
+    done: dict[str, dict[str, list[dict]]] = {}
+    if args.resume and checkpoint.exists():
+        done = json.loads(checkpoint.read_text())
+        n = sum(len(v) for v in done.values())
+        print(f"resuming: {n} (strategy, seed) curves already complete\n")
+
     curves: dict[str, dict[int, list[RoundResult]]] = {}
     for strategy in args.strategies:
         curves[strategy] = {}
         for seed in args.seeds:
+            cached = done.get(strategy, {}).get(str(seed))
+            if cached is not None:
+                curves[strategy][seed] = [RoundResult(**r) for r in cached]
+                print(f"  [{strategy} seed {seed}] restored from checkpoint")
+                continue
             curves[strategy][seed] = run_loop(strategy, seed, pool, dev, test, args, device)
+            # Persist after every curve: a two-hour sweep should never lose more than
+            # the one combination that was in flight.
+            done.setdefault(strategy, {})[str(seed)] = [vars(r) for r in curves[strategy][seed]]
+            RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+            checkpoint.write_text(json.dumps(done, indent=2))
     total_s = time.perf_counter() - t0
 
     # Aggregate: at each budget, mean and std across seeds.
