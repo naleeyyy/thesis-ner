@@ -166,6 +166,13 @@ def main() -> int:
     p.add_argument("--acquire", type=int, default=100, help="Sentences revealed per round.")
     p.add_argument("--rounds", type=int, default=4)
     p.add_argument("--pool-limit", type=int, default=None, help="Cap the unlabelled pool.")
+    p.add_argument(
+        "--dev-limit", type=int, default=None,
+        help="Cap the dev set. Dev is scored once per epoch per training, so it "
+        "dominates runtime across dozens of retrains. A smaller dev makes epoch "
+        "selection noisier, but identically so for every strategy, so the comparison "
+        "stays fair while the run gets several times cheaper.",
+    )
     # Training hyperparameters, kept identical across strategies by construction.
     p.add_argument("--model", default="xlm-roberta-base")
     p.add_argument("--epochs", type=int, default=3)
@@ -193,6 +200,8 @@ def main() -> int:
         data_desc = f"gold {args.gold.name} ({args.mode} spans)"
     if args.pool_limit:
         pool = pool[: args.pool_limit]
+    if args.dev_limit:
+        dev = dev[: args.dev_limit]
 
     device = resolve_device()
     hardware = hardware_info(device)
