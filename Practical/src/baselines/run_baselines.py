@@ -28,7 +28,7 @@ from transformers import AutoModelForTokenClassification, AutoTokenizer
 
 from . import stats
 from .envinfo import describe, hardware_info, software_info
-from .metrics import resolve_device, wikiann_ids_to_bio
+from .metrics import first_subword_tags, resolve_device, wikiann_ids_to_bio
 from .models import MODELS, ModelSpec
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -114,16 +114,14 @@ def predict(spec: ModelSpec, dataset, label_names, device) -> tuple[list, list, 
             logits = model(**inputs).logits[0]
             sub_pred_ids = logits.argmax(dim=-1).tolist()
 
-            # "first-subword" aggregation: each word gets the label of its first subtoken.
-            tok_tags: list[str] = ["O"] * len(tokens)
-            seen: set[int] = set()
-            for sub_idx, wid in enumerate(word_ids):
-                if wid is None or wid in seen or wid >= len(tokens):
-                    continue
-                seen.add(wid)
-                tag = id2label[sub_pred_ids[sub_idx]]
-                tok_tags[wid] = _remap_tag(tag, spec.label_map)
-            # Truncation safety: any word missing a subword (rare for <40-token sents) stays "O".
+            # "first-subword" aggregation, shared with the fine-tuned model's eval.
+            tok_tags = first_subword_tags(
+                word_ids,
+                sub_pred_ids,
+                id2label,
+                len(tokens),
+                remap=lambda tag: _remap_tag(tag, spec.label_map),
+            )
 
             preds.append(tok_tags)
             refs.append(gold)
