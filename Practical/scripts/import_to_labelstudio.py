@@ -5,8 +5,10 @@ must be saved *before* the tasks are imported, or predictions arrive referencing
 that do not exist yet and silently fail to attach. Scripting it makes that ordering
 impossible to get wrong across a dozen projects.
 
-Idempotent by title — a project that already exists is reused rather than duplicated, and
-tasks are only imported if it is empty, so re-running never double-imports.
+Projects are identified by a `[batch:NN]` marker in their description rather than by
+title, so you can rename them (to add an annotator's name, say) without a later run
+creating duplicates. Tasks are only imported into an empty project, so re-running never
+double-imports.
 
     LABEL_STUDIO_ACCESS_TOKEN=... python -m scripts.import_to_labelstudio --dry-run
 """
@@ -73,14 +75,36 @@ def main() -> int:
     if not task_files:
         raise SystemExit(f"no task files in {TASK_DIR}")
 
-    existing = {
-        proj["title"]: proj
-        for proj in call(f"{args.host}/api/projects?page_size=200", token).get("results", [])
-    }
+    # Projects are matched by a marker written into their description, not by title, so
+    # you can rename them freely (e.g. "batch-01" -> "batch-01 ana") without a re-run
+    # creating duplicates. Titles are for humans; the marker is the identity.
+    def marker(stem: str) -> str:
+        return f"[batch:{stem}]"
+
+    all_projects = call(f"{args.host}/api/projects?page_size=200", token).get("results", [])
+    stems = {path.stem for path in task_files}
+    existing = {}
+    for proj in all_projects:
+        desc = proj.get("description") or ""
+        for stem in stems:
+            if marker(stem) in desc:
+                existing[stem] = proj
+        # Fall back to the title for projects created before markers existed. The stem
+        # must name an actual task file, or a renamed project ("batch-01 — ana") would
+        # register under a phantom key of its own.
+        if proj["title"].startswith(args.prefix):
+            stem = proj["title"][len(args.prefix) :]
+            if stem in stems:
+                existing.setdefault(stem, proj)
     print(f"{len(task_files)} task files, {len(existing)} existing projects\n")
 
     if args.reset:
-        doomed = {t: p for t, p in existing.items() if t.startswith(args.prefix)}
+        doomed = {
+            proj["title"]: proj
+            for proj in all_projects
+            if proj["title"].startswith(args.prefix)
+            or any(marker(f.stem) in (proj.get("description") or "") for f in task_files)
+        }
         annotated = sum(p.get("num_tasks_with_annotations") or 0 for p in doomed.values())
         if annotated and not args.dry_run:
             raise SystemExit(
@@ -104,11 +128,11 @@ def main() -> int:
         kind = "assisted" if assisted else "scratch"
 
         if args.dry_run:
-            state = "exists" if title in existing else "create"
+            state = "exists" if path.stem in existing else "create"
             print(f"  {title:12s} {kind:9s} {len(tasks):4d} tasks  [{state}]")
             continue
 
-        project = existing.get(title)
+        project = existing.get(path.stem)
         if project is None:
             project = call(
                 f"{args.host}/api/projects",
@@ -117,7 +141,7 @@ def main() -> int:
                 {
                     "title": title,
                     "label_config": label_config,
-                    "description": f"Albanian NER — batch {path.stem} ({kind})",
+                    "description": f"Albanian NER — batch {path.stem} ({kind}) {marker(path.stem)}",
                 },
             )
             print(f"  {title:12s} created (id={project['id']})", end="", flush=True)
