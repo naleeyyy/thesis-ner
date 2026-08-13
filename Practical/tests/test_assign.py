@@ -75,3 +75,39 @@ def test_chosen_batch_is_sorted_by_id():
     chosen, _ = _reserve([], ["ana"], 25, "r1")
     ids = [c["id"] for c in chosen]
     assert ids == sorted(ids)
+
+
+# ------------------------------------------------- numbered batches with shared overlap
+
+
+def test_reserve_marks_overlap_rows_so_they_are_identifiable():
+    _, rows = _reserve([], ["shared-overlap"], 20, "overlap", overlap=True, condition="both")
+    assert all(r["overlap"] for r in rows)
+    assert all(r["batch"] == "overlap" for r in rows)
+
+
+def test_unique_portions_of_two_batches_never_intersect():
+    ledger = []
+    _, shared = _reserve(ledger, ["shared-overlap"], 10, "overlap", overlap=True)
+    ledger += shared
+    picks = []
+    for i in (1, 2, 3):
+        chosen, rows = _reserve(ledger, [f"batch-{i:02d}"], 20, f"{i:02d}", seed=100 + i)
+        ledger += rows
+        picks.append({c["id"] for c in chosen})
+    assert not (picks[0] & picks[1])
+    assert not (picks[1] & picks[2])
+    assert not (picks[0] & picks[2])
+
+
+def test_shared_sentences_are_excluded_from_every_unique_portion():
+    """The overlap must appear in each batch by being added back, never by being re-drawn."""
+    ledger = []
+    shared_ids = set()
+    chosen, shared = _reserve(ledger, ["shared-overlap"], 10, "overlap", overlap=True)
+    shared_ids = {c["id"] for c in chosen}
+    ledger += shared
+    for i in (1, 2):
+        picked, rows = _reserve(ledger, [f"batch-{i:02d}"], 20, f"{i:02d}", seed=200 + i)
+        ledger += rows
+        assert not (shared_ids & {p["id"] for p in picked})

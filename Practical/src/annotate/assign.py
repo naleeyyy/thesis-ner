@@ -116,6 +116,25 @@ def main() -> int:
     res.add_argument("--ledger", type=Path, default=DEFAULT_LEDGER)
     res.add_argument("--seed", type=int, default=None)
 
+    bat = sub.add_parser(
+        "batches",
+        help="Generate numbered batches, each mixing a shared overlap set with unique "
+        "sentences. Hand out batch numbers; the ledger tracks the rest.",
+    )
+    bat.add_argument("--pool", type=Path, required=True)
+    bat.add_argument("--out-dir", type=Path, required=True)
+    bat.add_argument("--count", type=int, default=10, help="How many batches to create.")
+    bat.add_argument("--size", type=int, default=100, help="Sentences per batch.")
+    bat.add_argument(
+        "--overlap",
+        type=int,
+        default=20,
+        help="Sentences shared by EVERY batch, for inter-annotator agreement. Embedding "
+        "them means agreement needs no separate project and no extra assignment.",
+    )
+    bat.add_argument("--ledger", type=Path, default=DEFAULT_LEDGER)
+    bat.add_argument("--seed", type=int, default=20260813)
+
     st = sub.add_parser("status", help="Show pool usage and per-annotator counts.")
     st.add_argument("--pool", type=Path, required=True)
     st.add_argument("--ledger", type=Path, default=DEFAULT_LEDGER)
@@ -123,6 +142,48 @@ def main() -> int:
     args = p.parse_args()
     pool = read_jsonl(args.pool)
     ledger = load_ledger(args.ledger)
+
+    if args.cmd == "batches":
+        unique_per_batch = args.size - args.overlap
+        if unique_per_batch <= 0:
+            raise SystemExit("--overlap must be smaller than --size")
+        needed = args.overlap + args.count * unique_per_batch
+        free = len(pool) - len(assigned_ids(ledger))
+        if free < needed:
+            raise SystemExit(f"need {needed} unassigned sentences, only {free} left")
+
+        shared, shared_rows = reserve(
+            pool, ledger, ["shared-overlap"], args.overlap, "overlap", "both", True, args.seed
+        )
+        append_ledger(args.ledger, shared_rows)
+        ledger += shared_rows
+
+        args.out_dir.mkdir(parents=True, exist_ok=True)
+        print(f"{args.overlap} shared sentences + {unique_per_batch} unique per batch\n")
+        for i in range(1, args.count + 1):
+            label = f"{i:02d}"
+            # Odd batches carry the model's suggestions, even ones do not. Since every
+            # batch contains the same shared sentences, that alternation yields the same
+            # sentences annotated both ways — the anchoring experiment — with no extra
+            # bookkeeping for whoever hands the batches out.
+            condition = "assisted" if i % 2 else "scratch"
+            unique, rows = reserve(
+                pool, ledger, [f"batch-{label}"], unique_per_batch, label,
+                condition, False, args.seed + i,
+            )
+            append_ledger(args.ledger, rows)
+            ledger += rows
+
+            records = sorted(shared + unique, key=lambda r: r["id"])
+            out = args.out_dir / f"batch_{label}_{condition}.jsonl"
+            with out.open("w", encoding="utf-8") as fh:
+                for rec in records:
+                    fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
+            print(f"  batch {label}  {condition:9s} {len(records):4d} sentences → {out.name}")
+
+        remaining = len(pool) - len(assigned_ids(ledger))
+        print(f"\n{remaining} sentences still unassigned")
+        return 0
 
     if args.cmd == "status":
         taken = assigned_ids(ledger)
