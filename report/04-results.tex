@@ -1,0 +1,156 @@
+\section{Results}
+\label{sec:results}
+
+%% Sections 4.1--4.3 report measurements that already exist and are reproducible from the
+%% repository. Sections 4.4--4.6 are placeholders: they depend on the annotated gold set
+%% and are marked TODO. Do not leave a TODO in the submitted version.
+
+\subsection{Corpus}
+\label{sec:results:corpus}
+
+Table~\ref{tab:filter} reports what the quality filter removed. The drop rate of 4.5\% is
+itself a finding: automatic extraction from Wikipedia is not clean, and a pipeline that
+does not measure this is silently training on fragments.
+
+\begin{table}[htbp]
+\centering
+\caption{Sentences discarded during corpus construction (2\,687 candidates).}
+\label{tab:filter}
+\begin{tabular}{lr}
+\toprule
+Reason & Count \\
+\midrule
+Fragment with unbalanced brackets & 71 \\
+Fourth or later member of a stub template family & 22 \\
+Split word (e.g.\ \emph{Andre}~+~\emph{w}) & 18 \\
+Exact duplicate & 5 \\
+Split hyphenated name (\emph{Dommartin-au}~+~\emph{x-Bois}) & 2 \\
+\midrule
+Total & 120 (4.5\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The resulting corpus differs substantially from WikiANN-sq, the standard Albanian NER
+resource, despite both deriving from Wikipedia (Table~\ref{tab:corpora}). WikiANN-sq is
+built by automatic cross-lingual link projection, and its median sentence is 6 tokens
+against 20 here. Inspection shows fragments, leaked wiki markup, and lines beginning with
+the Albanian redirect directive \texttt{RIDREJTO} presented as sentences. There is no
+sentence overlap between the two corpora, so WikiANN may be used as supplementary training
+data without contaminating the held-out test split.
+
+\begin{table}[htbp]
+\centering
+\caption{Corpus comparison. Both derive from Albanian Wikipedia.}
+\label{tab:corpora}
+\begin{tabular}{lrrl}
+\toprule
+Corpus & Sentences & Median tokens & Construction \\
+\midrule
+WikiANN-sq (train) & 5\,000 & 6 & automatic link projection \\
+This work & 2\,500 & 20 & sampled, filtered, hand-verified \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Baselines}
+\label{sec:results:baselines}
+
+Table~\ref{tab:baselines} reports four publicly available checkpoints on the WikiANN-sq
+test split. Every pairwise gap is significant under a paired bootstrap ($p < 0.001$), so
+the ordering is not an artefact of the test sample.
+
+\begin{table}[htbp]
+\centering
+\caption{Baseline checkpoints on WikiANN-sq test (1\,000 sentences). Brackets give a 95\%
+bootstrap confidence interval over test sentences.}
+\label{tab:baselines}
+\begin{tabular}{lccccc}
+\toprule
+Model & $F_1$ & 95\% CI & PER & ORG & LOC \\
+\midrule
+Kushtrim mBERT-sq   & 0.925 & [0.907, 0.942] & 0.937 & 0.902 & 0.938 \\
+akdeniz27 mBERT-sq  & 0.780 & [0.754, 0.806] & 0.891 & 0.686 & 0.764 \\
+Babelscape WikiNeural & 0.710 & [0.683, 0.737] & 0.843 & 0.578 & 0.682 \\
+Davlan XLM-R HRL    & 0.520 & [0.489, 0.551] & 0.740 & 0.432 & 0.306 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two observations. ORG is the hardest class for every model without exception, which
+motivates the error analysis in Section~\ref{sec:results:errors}. And the two checkpoints
+nominally trained on the same data differ by 0.145 $F_1$ --- a reproducibility gap worth
+noting, since it suggests that releasing checkpoints without training and evaluation code
+leaves published numbers difficult to interpret.
+
+\subsection{Fine-tuning: pipeline validation}
+\label{sec:results:validation}
+
+Before applying the training pipeline to the annotated data, it was validated on
+WikiANN-sq. A fine-tuned \texttt{xlm-roberta-base} reached $F_1 = 0.928$ on the WikiANN
+test split, against 0.925 for the published Kushtrim checkpoint. A paired bootstrap gives a
+difference of $+0.003$ with a 95\% confidence interval of $[-0.012, +0.018]$ and $p =
+0.691$: the two are statistically indistinguishable.
+
+This is reported not as a contribution but as a control. It establishes that the training
+configuration reaches parity with published work on the standard benchmark, so differences
+observed later on the annotated corpus are attributable to the data rather than to the
+training setup.
+
+\subsection{Active learning}
+\label{sec:results:al}
+
+%% TODO: re-run on the gold set. The table below is the WikiANN calibration run and should
+%% either be replaced by the gold-set result or retained explicitly as a calibration,
+%% clearly labelled as such.
+
+Table~\ref{tab:al} reports a calibration sweep on WikiANN-sq: two acquisition strategies,
+three seeds, five annotation budgets, 30 model trainings in total.
+
+\begin{table}[htbp]
+\centering
+\caption{Active learning on WikiANN-sq. Mean $F_1 \pm$ standard deviation over three seeds.}
+\label{tab:al}
+\begin{tabular}{lcc}
+\toprule
+Labelled sentences & Random & Uncertainty \\
+\midrule
+250  & 0.685 $\pm$ 0.000 & 0.692 $\pm$ 0.016 \\
+500  & 0.863 $\pm$ 0.017 & 0.847 $\pm$ 0.017 \\
+750  & 0.882 $\pm$ 0.007 & 0.858 $\pm$ 0.019 \\
+1000 & 0.883 $\pm$ 0.029 & 0.888 $\pm$ 0.025 \\
+1250 & 0.898 $\pm$ 0.004 & 0.906 $\pm$ 0.012 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+No budget shows a significant difference. The largest gap, 0.024 at 750 sentences, reaches
+$t = -2.03$ against the $|t| > 2.8$ required at three seeds. The direction of the
+difference also alternates --- uncertainty leads at three of five budgets and random at two
+--- which is characteristic of noise rather than of an effect.
+
+Uncertainty sampling is slightly \emph{worse} at intermediate budgets. This is consistent
+with a known property of entropy-based acquisition: it favours atypical and difficult
+sentences, which early in training are unrepresentative of the test distribution.
+
+The practical consequence is a detection threshold. With three seeds at these budgets, a
+strategy difference below approximately 0.04 cannot be distinguished from seed variance.
+Any conclusive claim would require more seeds or wider budget spacing.
+
+\subsection{Annotation}
+\label{sec:results:annotation}
+
+%% TODO: requires the completed annotation campaign.
+%%   - dataset statistics: sentences, entities by type, sentences with no entities
+%%   - inter-annotator agreement: Fleiss' kappa, pairwise Cohen's kappa, span-level F1,
+%%     reported separately for the full-span and head conventions
+%%   - the assistance experiment: agreement and time per sentence, with and without the
+%%     model's suggestions; how often an incorrect suggestion was accepted
+%%   - junk flag rate and whether annotators agreed on what counted as junk
+
+\subsection{Error analysis}
+\label{sec:results:errors}
+
+%% TODO: requires a model trained on the gold set. Use the committed per-sentence
+%% predictions. Break errors into boundary, type, and missed-entity; check whether they
+%% concentrate in the Albanian-specific constructions the guidelines had to legislate.

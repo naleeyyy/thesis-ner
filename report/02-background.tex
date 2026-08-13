@@ -1,0 +1,53 @@
+\section{Background}
+\label{sec:background}
+
+%% PARTIAL DRAFT. The factual content below is accurate and can stand; expand where you
+%% want more depth, and add any Albanian-specific work you find. Keep it short --- the
+%% report is capped at ten pages and the marks are in Method, Results and Figures.
+
+\subsection{Named entity recognition for Albanian}
+
+Named entity recognition is conventionally framed as token-level sequence labelling over a
+BIO tag scheme, with entities drawn from a small closed set of types. This work uses
+\texttt{PER}, \texttt{ORG} and \texttt{LOC}, matching the WikiANN tagset so that results
+remain comparable with the existing Albanian resource.
+
+Albanian presents two properties that complicate annotation relative to English. Nouns
+inflect for case and definiteness, so a name surfaces in several forms --- \emph{Shqipëri},
+\emph{Shqipëria}, \emph{Shqipërisë} --- and borrowed names inflect too, as in
+\emph{Tuluzën} for Toulouse. Annotation must therefore mark the surface token rather than
+normalise to a base form. Second, the \emph{X i Y} construction links a common noun to a
+proper name (\emph{qyteti i Tiranës}, ``the city of Tirana'') in a way that is genuinely
+ambiguous about where the name ends; Section~\ref{sec:method:annotation} describes how this
+work avoids committing to one reading.
+
+\subsection{Existing resources}
+
+WikiANN~\cite{bib:wikiann} provides silver-standard NER data for 282 languages, produced by
+projecting entity annotations through cross-lingual Wikipedia links; the balanced train,
+development and test splits used here are those of Rahimi et al.~\cite{bib:wikiann-splits}.
+The method was designed for breadth rather than depth, and the Albanian portion shows the
+consequences: short fragments, residual markup, and non-sentential lines
+(Section~\ref{sec:results:corpus}).
+
+%% TODO: add AlbNER or any other hand-built Albanian NER resource here. The bib entry
+%% bib:albner is flagged as unverified -- check it against the actual publication or
+%% remove it rather than citing something unconfirmed.
+
+\subsection{Model pre-annotation and active learning}
+
+Pre-annotating with a model and having humans correct the output is standard practice for
+reducing annotation cost, but it introduces a bias risk: annotators may accept incorrect
+suggestions they would have caught unaided. This work measures that effect directly rather
+than assuming it away (Section~\ref{sec:method:annotation}).
+
+Active learning selects which examples to label next in order to reach a given performance
+with fewer labels~\cite{bib:settles2009}. Uncertainty sampling, the strategy compared here,
+ranks candidates by the model's predictive uncertainty.
+
+\subsection{Evaluating differences}
+
+Reporting a single $F_1$ per system invites comparisons that the data does not support. This
+work uses a bootstrap over test sentences for confidence intervals, and a paired bootstrap
+for model comparisons~\cite{bib:koehn2004}, so that a claim of improvement is accompanied by
+evidence that the difference exceeds sampling variation.

@@ -1,0 +1,143 @@
+\section{Method}
+\label{sec:method}
+
+%% DRAFT. This section documents what was actually built and run; the numbers it refers
+%% to are in Section~\ref{sec:results}. Everything here is factual and verifiable against
+%% the repository, so it should need editing for style rather than for content.
+
+\subsection{Corpus construction}
+\label{sec:method:corpus}
+
+Candidate sentences were drawn from Albanian Wikipedia through the MediaWiki REST API's
+random-article endpoint, which returns an article summary rather than a full page. From
+900 randomly sampled articles, \texttt{stanza}~\cite{bib:stanza} produced 3\,113
+sentences, of which 426 fell outside the 8--40 token range and were discarded.
+
+Automatic extraction and tokenisation corrupt a measurable share of sentences, so the
+remainder passed through a quality filter (Table~\ref{tab:filter}). Every rule was
+calibrated against a held-out sample rather than chosen a~priori, and the calibration
+changed the rules twice. A naive ``an isolated lowercase letter indicates a split word''
+test flags the unit symbol in \emph{400~m} and \emph{1--2~m}, and the Spanish particle in
+\emph{Diego Rodríguez de Silva y Velázquez} --- the latter a sentence containing a person
+entity. The final rule therefore exempts letters adjacent to a number, letters between two
+capitalised tokens, and uppercase letters, which in this corpus are Roman numerals and
+initials.
+
+A separate defect proved more consequential. Tokenisation occasionally leaves punctuation
+welded to a word, so that \emph{(Theron)} arrives as a single token. This is not cosmetic:
+the model and the human annotator both operate on the same token sequence, so neither can
+express the span \emph{Theron} if the tokeniser never offered it. Across the pool, 11.7\%
+of sentences contained such a token and 156 of those tokens were capitalised, i.e.\ names.
+A repair step splits bracket and quote characters from token edges while deliberately
+leaving apostrophes intact, since Albanian contractions (\emph{t'}, \emph{s'}) and borrowed
+names (\emph{d'Azur}) legitimately carry them. The affected share fell to 0.3\%, all of
+them the apostrophe cases the repair declines to touch.
+
+Finally, exact duplicates were removed and near-identical stub sentences capped at three
+per template family. Albanian Wikipedia contains generated geography stubs that differ only
+in their figures; one such template occurred fifteen times. These are genuine negatives ---
+a model must learn that a sentence may contain no entities --- but fifteen near-copies add
+nothing over three while consuming annotation effort. The final pool holds 2\,500 sentences
+from 865 distinct articles, median length 20 tokens.
+
+\subsection{Pre-annotation with a large language model}
+\label{sec:method:prelabel}
+
+Each sentence is presented to Claude Sonnet~5 as a numbered token list, and the model
+returns entity spans as inclusive token-index ranges under a constrained JSON schema. Spans
+rather than a per-token tag sequence: a parallel tag array can silently disagree in length
+with its input, whereas a span list either validates or does not. Every returned span is
+checked for range, type and overlap before conversion to BIO, so a malformed response
+cannot produce a malformed tag sequence; rejections are counted by reason.
+
+The model also returns the surface text it believes it selected. Where that disagrees with
+the tokens at the given indices, the indices win and the disagreement is recorded, giving a
+direct measure of how often the model miscounts.
+
+Pre-annotation is performed per batch rather than over the whole pool. The prompt is
+versioned and its version forms part of the response-cache key, so revising the annotation
+conventions invalidates cached labels by construction and cannot silently mix two
+standards. Because only sentences about to be annotated are pre-labelled, a mid-campaign
+revision costs nothing for work not yet issued.
+
+\subsection{Annotation protocol}
+\label{sec:method:annotation}
+
+Annotation is carried out in a self-hosted Label Studio instance. Work is issued in
+numbered batches of 100 sentences; an append-only ledger records every assignment, which
+prevents a sentence being issued twice --- inflating apparent agreement --- or never
+issued at all.
+
+\paragraph{Two boundary conventions.}
+Albanian's \emph{X i Y} construction is genuinely ambiguous about where a name ends.
+\emph{Stacioni i Bramit} (``Bram station'') may reasonably be annotated as a single
+location or as the proper name \emph{Bramit} alone, and published annotation standards
+differ. Rather than fixing the choice in the data, annotators mark both: a \emph{full span}
+covering the phrase and a \emph{head} covering the proper-name core. Two flat BIO views are
+derived from the single annotation, so the convention remains a reporting decision. Most
+entities are bare names for which the two coincide, so the additional effort is confined to
+the ambiguous cases.
+
+\paragraph{Agreement and the assistance condition.}
+Each batch embeds the same 20 shared sentences, so every annotator contributes to
+inter-annotator agreement without a separate assignment. Odd-numbered batches are issued
+with the model's suggestions visible and even-numbered batches without them. Because both
+contain the same shared sentences, this yields the same sentences annotated under both
+conditions --- a between-subjects design, which avoids the memory effects that would arise
+from having one annotator work both ways.
+
+Agreement is reported three ways: Fleiss'~$\kappa$~\cite{bib:fleiss1971} across all
+annotators, pairwise Cohen's~$\kappa$~\cite{bib:cohen1960}, and pairwise span-level $F_1$.
+The $\kappa$ statistics are chance-corrected but flattered by the preponderance of
+\texttt{O} tokens, on which annotators trivially agree; span-level $F_1$ scores one
+annotator against another exactly as a model is scored, and is the harsher measure.
+Sentences garbled by extraction are flagged rather than deleted, so the rate remains
+reportable and the decision auditable.
+
+\subsection{Models and training}
+\label{sec:method:models}
+
+Four publicly available checkpoints provide reference points, evaluated with word-level
+token classification in which each word takes the label predicted for its first subword.
+The same routine scores the fine-tuned model, so comparisons reflect models rather than
+measurement procedures.
+
+The fine-tuned system is \texttt{xlm-roberta-base}~\cite{bib:xlmr}, trained with AdamW, a
+linear warmup schedule, and epoch selection on a held-out development split. Every
+configuration is trained under several random seeds.
+
+\subsection{Active learning}
+\label{sec:method:al}
+
+The active learning comparison is a simulation over the annotated pool: labels are hidden
+and revealed only as a strategy requests them. This is standard practice and is the only
+practical option here, since a live loop would require annotators on standby between rounds
+and could not be replayed under a different seed.
+
+Two strategies are compared. \emph{Random} samples uniformly. \emph{Uncertainty} ranks
+candidates by mean per-token predictive entropy --- mean rather than sum, so that the
+strategy does not simply prefer long sentences and thereby confound informativeness with
+annotation cost. Each round retrains from scratch on the labelled subset.
+
+\subsection{Statistical treatment}
+\label{sec:method:stats}
+
+Two distinct uncertainties are reported, because conflating them understates both.
+
+Inference over a frozen checkpoint is deterministic, so re-running with a different seed
+reproduces the predictions exactly and seed variance is identically zero. What is uncertain
+is the test set: a different sample of sentences would give a different score. This is
+quantified by a percentile bootstrap over test sentences. Model comparisons use a
+\emph{paired} bootstrap on the same resampled indices, so the shared difficulty of a
+resample cancels out of the difference; this is substantially more powerful than checking
+whether two independent intervals overlap.
+
+Training, by contrast, has genuine run-to-run variance, so results are additionally
+reported as mean~$\pm$~standard deviation across seeds.
+
+A practical caveat applies to reproducibility. On the Apple silicon hardware used here,
+two runs with identical seeds and hyperparameters produced test $F_1$ scores of 0.9187 and
+0.9279, because the GPU kernels are not deterministic. Seeding therefore does not make
+training bit-reproducible on this platform, no single run should be reported as \emph{the}
+result, and the seed-to-seed standard deviation should be read as an upper bound on model
+variance since it also absorbs this hardware noise.

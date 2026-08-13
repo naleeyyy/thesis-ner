@@ -1,26 +1,70 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-\cleardoubleoddpage%  Make sure to start each chapter on a new odd page
-\chapter{Introduction}
+\section{Introduction}
 \label{sec:introduction}
 
+%% ===========================================================================
+%% SKELETON — write this yourself.
+%%
+%% This section and the conclusion are where the grading rubric assesses whether
+%% you understand and can motivate your own work, so the prose should be yours.
+%% What follows is the argument structure and the evidence available for each
+%% point, with pointers to where the numbers live.
+%%
+%% Rubric: minimum 300 words. Must establish background, state the objectives
+%% clearly, and explain why the work matters.
+%% ===========================================================================
 
-\section{Motivation}
-\label{sec:introduction:motivation}
+%% ---------------------------------------------------------------------------
+%% 1. The problem  (~100 words)
+%%
+%%    Albanian is spoken by roughly 7 million people and is under-resourced for
+%%    NLP. Named entity recognition is a prerequisite for information
+%%    extraction, search, and downstream tasks, and the resources that exist
+%%    for Albanian are small or automatically derived.
+%%
+%%    Available evidence:
+%%      - WikiANN-sq is built by automatic cross-lingual link projection
+%%        \cite{bib:wikiann,bib:wikiann-splits}
+%%      - AlbNER is small (~900 sentences) -- VERIFY the citation before use,
+%%        the bib entry is flagged unverified
+%% ---------------------------------------------------------------------------
 
-Space for your introduction.
-A typical introduction consists of a motivation for your thesis, your objectives, your research approach, and finishes with an outlook over your work.
-Of course, different structuring and naming of sections is possible.
+%% ---------------------------------------------------------------------------
+%% 2. Why the existing resource is not sufficient  (~100 words)
+%%
+%%    This is your strongest motivating evidence and it is measured, not asserted:
+%%      - WikiANN-sq median sentence length is 6 tokens against 20 in a freshly
+%%        sampled Wikipedia corpus (Table~\ref{tab:corpora})
+%%      - it contains fragments, leaked wiki markup, and lines beginning with the
+%%        redirect directive RIDREJTO presented as sentences
+%%      - a model's score on such text says little about how it handles real
+%%        full-length Albanian
+%%
+%%    Be careful to state this as a limitation of automatic construction, not as
+%%    a criticism of the WikiANN authors -- the method was designed for breadth
+%%    across 282 languages, not depth in one.
+%% ---------------------------------------------------------------------------
 
+%% ---------------------------------------------------------------------------
+%% 3. What this work does  (~100 words)
+%%
+%%    State the contributions plainly. Suggested ordering, strongest first:
+%%      (a) a hand-verified Albanian NER corpus, annotated under an explicit
+%%          protocol, with inter-annotator agreement measured rather than assumed
+%%      (b) a measurement of whether LLM pre-annotation helps or biases human
+%%          annotators -- the between-subjects design in
+%%          Section~\ref{sec:method:annotation}
+%%      (c) an evaluation of existing checkpoints and a fine-tuned model on that
+%%          corpus, with significance testing rather than bare score comparisons
+%%      (d) an active learning comparison
+%%
+%%    Do not overclaim (b) and (d) until the results are in. If the active
+%%    learning comparison remains null, say so here -- a stated null result reads
+%%    as competence, whereas a contribution claim the results do not support does
+%%    the opposite.
+%% ---------------------------------------------------------------------------
 
-\section{Objectives and Approach}
-\label{sec:introduction:objectives}
-
-
-\section{Outline}
-\label{sec:introduction:outline}
-
-
-
-%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ---------------------------------------------------------------------------
+%% 4. Report structure  (~40 words)
+%%    One short paragraph pointing at Sections~\ref{sec:method} and
+%%    \ref{sec:results}. Keep it brief; it is a signpost, not a summary.
+%% ---------------------------------------------------------------------------

@@ -1,12 +1,56 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-\cleardoubleoddpage%  Make sure to start each chapter on a new odd page
-\chapter{Conclusion and Outlook}
+\section{Limitations and conclusion}
 \label{sec:conclusion}
 
-Space for your summary, central conclusions, and an outlook on potential future work.
+%% ===========================================================================
+%% SKELETON — write this yourself, as with the introduction.
+%%
+%% Rubric: minimum 300 words, and limitations are graded explicitly. The top
+%% band asks for major limitations discussed in depth, so this section rewards
+%% candour rather than defensiveness. Every item below is a real limitation of
+%% this work, not a hypothetical one.
+%% ===========================================================================
 
+%% ---------------------------------------------------------------------------
+%% LIMITATIONS  (~180 words)
+%%
+%%  - Corpus size. Small relative to what a fine-tuned transformer can absorb.
+%%    Quantify the consequence rather than merely admitting it: the 95% confidence
+%%    interval on F1 is +/-0.067 at 50 test sentences, +/-0.050 at 100, +/-0.036
+%%    at 250. State the test split size and the resulting interval, and say plainly
+%%    what magnitude of difference the study can and cannot detect.
+%%
+%%  - Domain. Wikipedia summaries only. Encyclopaedic register, entity-dense,
+%%    unrepresentative of news, speech, or social media.
+%%
+%%  - Single adjudicator. Disagreements were resolved by one person, so
+%%    systematic bias in that judgement is not detectable by the agreement
+%%    statistics, which measure annotators against each other and not against
+%%    truth.
+%%
+%%  - Annotator anchoring. Even in the from-scratch condition, annotators worked
+%%    from the same written guidelines, which were themselves informed by model
+%%    output. The conditions differ in whether suggestions were visible, not in
+%%    whether the model influenced the standard.
+%%
+%%  - Reproducibility. Training was not bit-reproducible on the hardware used:
+%%    identical seeds gave F1 0.9187 and 0.9279 (Section~\ref{sec:method:stats}).
+%%    Numbers are reproducible in distribution, not exactly.
+%%
+%%  - Statistical power for active learning. The detection threshold of roughly
+%%    0.04 (Section~\ref{sec:results:al}) means a null result here does not show
+%%    that acquisition strategy is irrelevant, only that any effect is smaller
+%%    than this design can resolve.
+%% ---------------------------------------------------------------------------
 
-
-%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ---------------------------------------------------------------------------
+%% CONCLUSION  (~120 words)
+%%
+%%  Restate what was built and what was measured, and let the results carry it.
+%%  Do not introduce claims the results section does not support.
+%%
+%%  Candidate future work, only if genuinely warranted:
+%%    - extend beyond Wikipedia to a second domain
+%%    - a second adjudicator on a subset, to bound adjudication bias
+%%    - a wider budget range for the active learning comparison, since the
+%%      present design cannot resolve small effects
+%% ---------------------------------------------------------------------------
