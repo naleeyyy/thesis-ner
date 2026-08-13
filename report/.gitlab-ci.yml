@@ -1,0 +1,15 @@
+include: 
+  - 'https://git.ins.jku.at/configurations/ci/-/raw/main/latex/build_pdf.yml'
+
+.latex-build-matrix:
+  parallel:
+    matrix:
+      - LATEX_BUILDPDF_SOURCE_NAME: [main-thesis, main-report, main-seminarreport]
+        LATEX_BUILDPDF_TEX_COMMAND: [pdflatex, xelatex, lualatex]
+
+latex_build_pdf:
+  extends:
+    - .latex-build-matrix
+  variables:
+    LATEX_BUILDPDF_TEXLIVE_IMAGE: texlive/texlive
+    LATEX_BUILDPDF_TEXLIVE_VERSION: latest

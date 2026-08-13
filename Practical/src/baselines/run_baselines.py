@@ -1,9 +1,16 @@
-"""Run a fleet of HF NER models on the WikiANN `sq` test split.
+"""Run a fleet of HF NER models on a test set — WikiANN-sq, or the hand-annotated gold.
 
 Every reported F1 comes with a bootstrap confidence interval over test sentences, and
 every pair of models is compared with a paired bootstrap test, so the leaderboard says
 which gaps are real and which are sampling noise. See `stats.py` for why bootstrap
 rather than seed variance.
+
+`--gold` scores the same checkpoints on the gold test split, which is the comparison the
+thesis actually rests on: WikiANN-sq sentences have a median length of 6 tokens against
+20 in the gold pool and carry markup artifacts, so a model's WikiANN score says little
+about how it handles real full-length Albanian. The split arguments must match
+`src.train.finetune`'s, or the baselines and the fine-tuned model are measured on
+different test sets.
 
 Outputs:
     results/baselines.md              human-readable leaderboard + significance table
@@ -179,10 +186,9 @@ def write_markdown(rows: list[dict], comparisons: list, out_path: Path, meta: di
     alpha = meta["bootstrap"]["alpha"]
     conf = round((1 - alpha) * 100)
     lines = [
-        "# WikiANN-sq baselines",
+        f"# Baselines on {meta['dataset']}",
         "",
-        f"Evaluated on {meta['n_sentences']} sentences from the `test` split of "
-        "`unimelb-nlp/wikiann` (`sq`).",
+        f"Evaluated on {meta['n_sentences']} sentences from {meta['dataset']}.",
         "",
         f"F1 is micro-averaged over entity spans. Brackets give a {conf}% bootstrap "
         f"confidence interval from {meta['bootstrap']['n_resamples']} resamples of the test "
@@ -285,18 +291,54 @@ def main() -> int:
         default="baselines",
         help="Basename for the result files, to avoid overwriting a full run with a smoke test.",
     )
+    parser.add_argument(
+        "--gold",
+        type=Path,
+        default=None,
+        help="Score the checkpoints on the hand-annotated gold TEST split instead of "
+        "WikiANN. This is the comparison the thesis rests on: WikiANN-sq sentences have a "
+        "median length of 6 tokens against 20 in the gold pool, so a model's WikiANN score "
+        "says little about how it handles real full-length Albanian.",
+    )
+    parser.add_argument("--mode", choices=["full", "head"], default="full")
+    parser.add_argument("--dev-frac", type=float, default=0.15)
+    parser.add_argument("--test-frac", type=float, default=0.25)
+    parser.add_argument("--split-seed", type=int, default=20260811)
     args = parser.parse_args()
+
+    # The split arguments must match src.train.finetune's, or the baselines and the
+    # fine-tuned model are scored on different test sets and the table is meaningless.
 
     device = resolve_device()
     hardware = hardware_info(device)
     print(f"Device: {device} ({hardware['accelerator']})", flush=True)
 
-    ds = load_dataset("unimelb-nlp/wikiann", "sq", split="test")
-    label_names = ds.features["ner_tags"].feature.names
-    print(f"WikiANN sq test: {len(ds)} sentences, labels={label_names}", flush=True)
-    if args.limit:
-        ds = ds.select(range(min(args.limit, len(ds))))
-        print(f"Limiting to {len(ds)} sentences", flush=True)
+    if args.gold:
+        from ..train.data import LABELS, load_gold, split_examples
+
+        examples = load_gold(args.gold, args.mode)
+        _, _, test = split_examples(examples, args.dev_frac, args.test_frac, args.split_seed)
+        label_names = LABELS
+        ds = [
+            {"tokens": e.tokens, "ner_tags": [LABELS.index(t) for t in e.tags]} for e in test
+        ]
+        dataset_name = f"gold {args.gold.name} ({args.mode} spans), test split"
+        print(
+            f"{dataset_name}: {len(ds)} of {len(examples)} sentences "
+            f"(split seed {args.split_seed})",
+            flush=True,
+        )
+        if args.limit:
+            ds = ds[: args.limit]
+            print(f"Limiting to {len(ds)} sentences", flush=True)
+    else:
+        ds = load_dataset("unimelb-nlp/wikiann", "sq", split="test")
+        label_names = ds.features["ner_tags"].feature.names
+        dataset_name = "unimelb-nlp/wikiann (sq, test)"
+        print(f"WikiANN sq test: {len(ds)} sentences, labels={label_names}", flush=True)
+        if args.limit:
+            ds = ds.select(range(min(args.limit, len(ds))))
+            print(f"Limiting to {len(ds)} sentences", flush=True)
 
     # One shared resample matrix for every model — this is what makes comparisons paired.
     indices = stats.resample_indices(len(ds), args.bootstrap, args.seed)
@@ -356,7 +398,7 @@ def main() -> int:
 
     meta = {
         "date": datetime.date.today().isoformat(),
-        "dataset": "unimelb-nlp/wikiann (sq, test)",
+        "dataset": dataset_name,
         "n_sentences": len(ds),
         "hardware": hardware,
         "software": software_info(),
