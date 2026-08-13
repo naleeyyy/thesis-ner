@@ -55,6 +55,13 @@ def main() -> int:
     p.add_argument("--host", default="https://nerls.krenarahmeti.com")
     p.add_argument("--prefix", default="batch-", help="Project title prefix.")
     p.add_argument("--dry-run", action="store_true", help="Show the plan, change nothing.")
+    p.add_argument(
+        "--reset",
+        action="store_true",
+        help="DELETE every project whose title starts with --prefix, then re-import. "
+        "Destroys any annotations in them, so only use this before people start work. "
+        "Projects outside the prefix (e.g. the pilot) are never touched.",
+    )
     args = p.parse_args()
 
     token = os.environ.get("LABEL_STUDIO_ACCESS_TOKEN")
@@ -71,6 +78,24 @@ def main() -> int:
         for proj in call(f"{args.host}/api/projects?page_size=200", token).get("results", [])
     }
     print(f"{len(task_files)} task files, {len(existing)} existing projects\n")
+
+    if args.reset:
+        doomed = {t: p for t, p in existing.items() if t.startswith(args.prefix)}
+        annotated = sum(p.get("num_tasks_with_annotations") or 0 for p in doomed.values())
+        if annotated and not args.dry_run:
+            raise SystemExit(
+                f"refusing to reset: {annotated} tasks already have annotations across "
+                f"{len(doomed)} projects. Deleting would destroy that work."
+            )
+        for title, proj in sorted(doomed.items()):
+            if args.dry_run:
+                print(f"  {title:12s} would DELETE (id={proj['id']})")
+            else:
+                call(f"{args.host}/api/projects/{proj['id']}", token, "DELETE")
+                print(f"  {title:12s} deleted (id={proj['id']})")
+        if not args.dry_run:
+            existing = {}
+            print()
 
     for path in task_files:
         title = f"{args.prefix}{path.stem}"
