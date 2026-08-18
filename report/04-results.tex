@@ -53,6 +53,14 @@ This work & 2\,500 & 20 & sampled, filtered, hand-verified \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig_corpus_lengths}
+\caption{Sentence-length distributions. WikiANN-sq is dominated by short fragments;
+the corpus built here has a median of 20 tokens.}
+\label{fig:corpus}
+\end{figure}
+
 \subsection{Baselines}
 \label{sec:results:baselines}
 
@@ -76,6 +84,14 @@ Davlan XLM-R HRL    & 0.520 & [0.489, 0.551] & 0.740 & 0.432 & 0.306 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig_baselines}
+\caption{Baseline checkpoints on WikiANN-sq test. Bars give the 95\% bootstrap
+confidence interval; the point is the observed $F_1$.}
+\label{fig:baselines}
+\end{figure}
 
 Two observations. ORG is the hardest class for every model without exception, which
 motivates the error analysis in Section~\ref{sec:results:errors}. And the two checkpoints
@@ -124,6 +140,14 @@ Labelled sentences & Random & Uncertainty \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig_learning_curve}
+\caption{Active learning on WikiANN-sq. Shaded bands are $\pm$ one standard deviation
+across three seeds; they overlap at every budget.}
+\label{fig:al}
+\end{figure}
+
 No budget shows a significant difference. The largest gap, 0.024 at 750 sentences, reaches
 $t = -2.03$ against the $|t| > 2.8$ required at three seeds. The direction of the
 difference also alternates --- uncertainty leads at three of five budgets and random at two
@@ -151,6 +175,39 @@ Any conclusive claim would require more seeds or wider budget spacing.
 \subsection{Error analysis}
 \label{sec:results:errors}
 
-%% TODO: requires a model trained on the gold set. Use the committed per-sentence
-%% predictions. Break errors into boundary, type, and missed-entity; check whether they
-%% concentrate in the Albanian-specific constructions the guidelines had to legislate.
+An $F_1$ score says a model is wrong without saying how. Classifying every mismatch into
+four categories --- a gold entity with no overlapping prediction (\emph{missed}), a
+prediction overlapping no gold entity (\emph{spurious}), the same token extent with the
+wrong type (\emph{type}), and overlapping extents that do not match exactly
+(\emph{boundary}) --- separates failures that annotation guidelines can address from
+failures that are modelling problems (Figure~\ref{fig:errors}).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig_errors}
+\caption{Error composition per model; the total error count is in parentheses.
+Categories are mutually exclusive and sum to 100\%.}
+\label{fig:errors}
+\end{figure}
+
+Three findings stand out.
+
+\emph{Boundary errors are overwhelmingly under-extensions.} Across every model, a span
+that is wrong at its edges is far more often too short than too long --- 150 against 5 for
+akdeniz27, 116 against 7 for Babelscape, 153 against 1 for Davlan. Models truncate
+multi-token entities rather than over-reaching. This is directly relevant to the
+annotation design: Albanian's \emph{X i Y} construction produces exactly the multi-token
+spans that are being cut short, which is part of why the boundary convention was recorded
+twice rather than fixed in advance (Section~\ref{sec:method:annotation}).
+
+\emph{The reproducibility gap is a boundary problem, not a recall problem.} The two
+mBERT checkpoints nominally trained on the same data differ by 0.145 $F_1$, and the error
+profiles show why: 56\% of akdeniz27's errors are boundary errors against 21\% for
+Kushtrim. The weaker model is not failing to find entities so much as failing to delimit
+them.
+
+\emph{ORG is confused with LOC, in that direction.} ORG$\rightarrow$LOC is the most
+common type confusion for four of the five models. This is consistent with the class being
+hardest for every model in Table~\ref{tab:baselines}, and with the Albanian pattern in
+which institutions are named after places --- a distinction the annotation guidelines had
+to legislate explicitly.

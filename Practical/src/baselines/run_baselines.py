@@ -370,7 +370,11 @@ def main() -> int:
         counts_by_model[spec.name] = counts
 
         # Persist predictions so the scoring and stats can be re-derived without a GPU.
-        with (PREDICTIONS_DIR / f"{spec.name}.jsonl").open("w") as fh:
+        # Non-default runs get a prefixed filename: `--out-prefix` used to isolate only
+        # the results files, so a smoke test or a gold-set run silently overwrote the
+        # committed baseline predictions with its own (a bug that did occur).
+        stem = spec.name if args.out_prefix == "baselines" else f"{args.out_prefix}-{spec.name}"
+        with (PREDICTIONS_DIR / f"{stem}.jsonl").open("w") as fh:
             for i, (pred, ref) in enumerate(zip(preds, refs, strict=True)):
                 fh.write(json.dumps({"id": i, "gold": ref, "pred": pred}) + "\n")
 
