@@ -30,9 +30,21 @@ The method was designed for breadth rather than depth, and the Albanian portion 
 consequences: short fragments, residual markup, and non-sentential lines
 (Section~\ref{sec:results:corpus}).
 
-%% TODO: add AlbNER or any other hand-built Albanian NER resource here. The bib entry
-%% bib:albner is flagged as unverified -- check it against the actual publication or
-%% remove it rather than citing something unconfirmed.
+Two hand-annotated Albanian NER corpora exist. AlbNER~\cite{bib:albner} contains 900
+Wikipedia sentences labelled under the CoNLL-2003 tagset. Kote et al.~\cite{bib:kote2025}
+annotate substantially more --- 56\,595 sentences and roughly one million tokens drawn from
+Albanian news platforms, under a ten-tag scheme.
+
+Neither removes the need for the resource built here, but the reason is not size, and it is
+worth being precise about it. Kote et al.\ is the larger corpus by an order of magnitude and
+this work does not compete with it on that axis. What is absent from all three existing
+resources is a corpus built on the WikiANN tagset with its annotation process measured:
+inter-annotator agreement reported rather than assumed, the boundary convention for
+Albanian's \emph{X i Y} construction recorded rather than silently fixed, and the influence
+of model pre-annotation on the annotators quantified rather than presumed benign. The
+contribution of this work is therefore methodological as much as it is a dataset, and the
+corpus should be read as a hand-verified evaluation set that is directly comparable with
+WikiANN-sq, not as a replacement for the larger news corpus.
 
 \subsection{Model pre-annotation and active learning}
 

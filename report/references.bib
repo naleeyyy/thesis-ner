@@ -47,17 +47,19 @@
 
 %% ---------------------------------------------------------------------------
 %% Added for the Albanian NER report.
-%% VERIFY BEFORE SUBMISSION: entries marked TODO were written from memory and
-%% must be checked against the actual publication before they are cited.
+%% All entries below were verified against the publisher record (ACL Anthology,
+%% Crossref or arXiv) on 2026-08-18. DOIs are included where one exists.
 %% ---------------------------------------------------------------------------
 
 @inproceedings{bib:wikiann,
     title = {{Cross-lingual Name Tagging and Linking for 282 Languages}},
     author = {Pan, Xiaoman and Zhang, Boliang and May, Jonathan and Nothman, Joel and Knight, Kevin and Ji, Heng},
-    booktitle = {Proceedings of the 55th Annual Meeting of the Association for Computational Linguistics},
+    booktitle = {Proceedings of the 55th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
     pages = {1946--1958},
     publisher = {Association for Computational Linguistics},
-    year = {2017}
+    doi = {10.18653/v1/P17-1178},
+    year = {2017},
+    month = JUL
 }
 
 @inproceedings{bib:wikiann-splits,
@@ -66,7 +68,9 @@
     booktitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
     pages = {151--164},
     publisher = {Association for Computational Linguistics},
-    year = {2019}
+    doi = {10.18653/v1/P19-1015},
+    year = {2019},
+    month = JUL
 }
 
 @inproceedings{bib:xlmr,
@@ -75,7 +79,9 @@
     booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics},
     pages = {8440--8451},
     publisher = {Association for Computational Linguistics},
-    year = {2020}
+    doi = {10.18653/v1/2020.acl-main.747},
+    year = {2020},
+    month = JUL
 }
 
 @inproceedings{bib:stanza,
@@ -84,7 +90,9 @@
     booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics: System Demonstrations},
     pages = {101--108},
     publisher = {Association for Computational Linguistics},
-    year = {2020}
+    doi = {10.18653/v1/2020.acl-demos.14},
+    year = {2020},
+    month = JUL
 }
 
 @article{bib:fleiss1971,
@@ -94,7 +102,9 @@
     volume = {76},
     number = {5},
     pages = {378--382},
-    year = {1971}
+    doi = {10.1037/h0031619},
+    year = {1971},
+    month = NOV
 }
 
 @article{bib:cohen1960,
@@ -104,15 +114,20 @@
     volume = {20},
     number = {1},
     pages = {37--46},
-    year = {1960}
+    doi = {10.1177/001316446002000104},
+    year = {1960},
+    month = APR
 }
 
 @inproceedings{bib:koehn2004,
     title = {{Statistical Significance Tests for Machine Translation Evaluation}},
     author = {Koehn, Philipp},
     booktitle = {Proceedings of the 2004 Conference on Empirical Methods in Natural Language Processing},
+    location = {Barcelona, Spain},
     pages = {388--395},
-    year = {2004}
+    publisher = {Association for Computational Linguistics},
+    year = {2004},
+    month = JUL
 }
 
 @techreport{bib:settles2009,
@@ -121,15 +136,29 @@
     institution = {University of Wisconsin--Madison},
     number = {1648},
     type = {Computer Sciences Technical Report},
+    url = {https://minds.wisconsin.edu/handle/1793/60660},
     year = {2009}
 }
 
-%% TODO(krenar): verify this entry against the actual paper before citing.
-%% Referenced from memory as the existing hand-built Albanian NER dataset (~900
-%% sentences). Check the authors, venue and year, or remove the citation.
 @misc{bib:albner,
-    title = {{AlbNER: A Named Entity Recognition Dataset for Albanian}},
-    author = {TODO},
-    year = {TODO},
-    note = {ENTRY UNVERIFIED --- confirm details before submission}
+    title = {{AlbNER: A Corpus for Named Entity Recognition in Albanian}},
+    author = {{\c{C}}ano, Erion},
+    howpublished = {arXiv preprint arXiv:2309.08741},
+    eprint = {2309.08741},
+    archiveprefix = {arXiv},
+    primaryclass = {cs.CL},
+    doi = {10.48550/arXiv.2309.08741},
+    year = {2023},
+    month = SEP
+}
+
+@inproceedings{bib:kote2025,
+    title = {{NER for Albanian Language: A Manually Annotated Corpus and Machine Learning Models}},
+    author = {Kote, Nelda and Kalliri, Klea and Kalliri, Kejsi and Haveriku, Alba and Muraku, Besjana and Kajo Me{\c{c}}e, Elinda},
+    booktitle = {Advanced Information Networking and Applications (AINA 2025)},
+    series = {Lecture Notes on Data Engineering and Communications Technologies},
+    pages = {153--165},
+    publisher = {Springer Nature Switzerland},
+    doi = {10.1007/978-3-031-87769-8_14},
+    year = {2025}
 }

@@ -186,12 +186,7 @@
 \titleshort{A Hand-Verified NER Corpus for Albanian}
 
 %% Command \subtitle{subtitle}: sets the subtitle for seminar/technical reports (not used for theses)
-\subtitle{Practical Work Report\\%
-    \usekomafont{subtitlesmall}%
-    \hfill\\%
-    Institute of Machine Learning\\
-    \hfill\\%
-}
+\subtitle{Practical Work Report}
 
 %% Command \author{name}: sets the author name(s); separate multiple authors with \and; use \prefix{}
 %%   and \suffix{} to add academic titles and suffixes (if needed); use \affiliation{} to add an
@@ -224,10 +219,19 @@ Institute of Machine Learning, Johannes Kepler University Linz}
 %\setbottommark{Space for your bottom mark}
 
 %% Command \abstract{text}: set the document abstract on the title page
+%% DRAFT abstract. Two numbers are still missing because the annotation campaign is
+%% running; they are marked \todonum below and must be filled before submission.
+\newcommand{\todonum}[1]{\textbf{[#1]}}
 \abstract{%
-    %% TODO(krenar): write this last, once the annotation results are in. Roughly 120
-    %% words: the problem, what was built, the headline numbers, what it means.
-    Space for your (short) abstract.%
+    Albanian's most widely used NER resource, WikiANN-sq, is built by automatic
+    cross-lingual projection: its median sentence is 6 tokens against 20 in freshly
+    sampled Wikipedia text. This report presents a hand-verified Albanian NER corpus of
+    \todonum{N} sentences with inter-annotator agreement measured rather than assumed.
+    Every entity carries both a full span and a proper-name head, so the boundary of
+    Albanian's ambiguous \emph{X i Y} construction remains a reporting choice rather than a
+    property of the data. The effect of large-language-model pre-annotation on annotators
+    is measured in a between-subjects design (\todonum{result}). All model comparisons use
+    bootstrap confidence intervals and paired significance tests.%
 }
 
 %% Command \keywords{text}: set the document keywords

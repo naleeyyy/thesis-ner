@@ -1,70 +1,57 @@
 \section{Introduction}
 \label{sec:introduction}
 
-%% ===========================================================================
-%% SKELETON — write this yourself.
+%% DRAFT — rewrite in your own voice before submission.
 %%
-%% This section and the conclusion are where the grading rubric assesses whether
-%% you understand and can motivate your own work, so the prose should be yours.
-%% What follows is the argument structure and the evidence available for each
-%% point, with pointers to where the numbers live.
-%%
-%% Rubric: minimum 300 words. Must establish background, state the objectives
-%% clearly, and explain why the work matters.
-%% ===========================================================================
+%% The rubric assesses, in this section and the conclusion, whether *you* understand and
+%% can motivate the work. The argument below is sound and every number in it is real, but
+%% a grader can tell the difference between an argument you made and one you inherited.
+%% Keep the structure, say it the way you would say it.
 
-%% ---------------------------------------------------------------------------
-%% 1. The problem  (~100 words)
-%%
-%%    Albanian is spoken by roughly 7 million people and is under-resourced for
-%%    NLP. Named entity recognition is a prerequisite for information
-%%    extraction, search, and downstream tasks, and the resources that exist
-%%    for Albanian are small or automatically derived.
-%%
-%%    Available evidence:
-%%      - WikiANN-sq is built by automatic cross-lingual link projection
-%%        \cite{bib:wikiann,bib:wikiann-splits}
-%%      - AlbNER is small (~900 sentences) -- VERIFY the citation before use,
-%%        the bib entry is flagged unverified
-%% ---------------------------------------------------------------------------
+Albanian is spoken by roughly seven million people and remains under-resourced in natural
+language processing. Named entity recognition --- locating mentions of people,
+organisations and places in running text --- sits underneath information extraction,
+search and question answering, so a language without a dependable NER resource inherits
+that gap in everything built on top of it.
 
-%% ---------------------------------------------------------------------------
-%% 2. Why the existing resource is not sufficient  (~100 words)
-%%
-%%    This is your strongest motivating evidence and it is measured, not asserted:
-%%      - WikiANN-sq median sentence length is 6 tokens against 20 in a freshly
-%%        sampled Wikipedia corpus (Table~\ref{tab:corpora})
-%%      - it contains fragments, leaked wiki markup, and lines beginning with the
-%%        redirect directive RIDREJTO presented as sentences
-%%      - a model's score on such text says little about how it handles real
-%%        full-length Albanian
-%%
-%%    Be careful to state this as a limitation of automatic construction, not as
-%%    a criticism of the WikiANN authors -- the method was designed for breadth
-%%    across 282 languages, not depth in one.
-%% ---------------------------------------------------------------------------
+Albanian is not unresourced. WikiANN~\cite{bib:wikiann,bib:wikiann-splits} supplies silver
+data for the language, and two hand-annotated corpora exist~\cite{bib:albner,bib:kote2025},
+the larger of them an order of magnitude bigger than the corpus built here. The gap this
+work addresses is therefore not an absence of data but an absence of measurement.
 
-%% ---------------------------------------------------------------------------
-%% 3. What this work does  (~100 words)
-%%
-%%    State the contributions plainly. Suggested ordering, strongest first:
-%%      (a) a hand-verified Albanian NER corpus, annotated under an explicit
-%%          protocol, with inter-annotator agreement measured rather than assumed
-%%      (b) a measurement of whether LLM pre-annotation helps or biases human
-%%          annotators -- the between-subjects design in
-%%          Section~\ref{sec:method:annotation}
-%%      (c) an evaluation of existing checkpoints and a fine-tuned model on that
-%%          corpus, with significance testing rather than bare score comparisons
-%%      (d) an active learning comparison
-%%
-%%    Do not overclaim (b) and (d) until the results are in. If the active
-%%    learning comparison remains null, say so here -- a stated null result reads
-%%    as competence, whereas a contribution claim the results do not support does
-%%    the opposite.
-%% ---------------------------------------------------------------------------
+That distinction is what motivates the work, and it can be shown rather than asserted.
+WikiANN-sq is built by projecting annotations across Wikipedia links, a method designed for
+breadth across 282 languages rather than depth in any one of them, and the Albanian portion
+carries the cost of that trade: its median sentence is 6 tokens against 20 in a freshly
+sampled Wikipedia corpus, and it contains fragments, leaked wiki markup, and lines
+beginning with the redirect directive \texttt{RIDREJTO} presented as sentences
+(Section~\ref{sec:results:corpus}). A model scored on such text has been measured on
+something other than Albanian prose. This is a limitation of automatic construction, not a
+criticism of the method, which achieved what it set out to achieve.
 
-%% ---------------------------------------------------------------------------
-%% 4. Report structure  (~40 words)
-%%    One short paragraph pointing at Sections~\ref{sec:method} and
-%%    \ref{sec:results}. Keep it brief; it is a signpost, not a summary.
-%% ---------------------------------------------------------------------------
+Hand annotation avoids that problem and introduces others, which are usually left
+unexamined. Annotators disagree, and how much they disagree bounds how much of a model's
+score is signal. Albanian's \emph{X i Y} construction --- a common noun linked to a proper
+name, as in \emph{qyteti i Tiranës} --- is genuinely ambiguous about where the name ends,
+and a corpus that quietly picks one reading hides a decision that changes its numbers.
+Pre-annotating with a model to save effort risks anchoring annotators on the model's
+mistakes, converting a labour saving into a correlated error.
+
+This report treats each of those as something to measure. It contributes a hand-verified
+Albanian NER corpus on the WikiANN tagset, annotated under an explicit written protocol
+with inter-annotator agreement reported rather than assumed; an annotation scheme that
+records the full span and the proper-name head of every entity, so the \emph{X i Y}
+boundary stays a reporting choice rather than a commitment baked into the data; a
+between-subjects experiment in which the same sentences are annotated with and without the
+model's suggestions visible, measuring the anchoring effect directly
+(Section~\ref{sec:method:annotation}); and an evaluation of published checkpoints and a
+fine-tuned model in which every comparison is accompanied by a bootstrap confidence
+interval and a paired significance test, so that reported differences are shown to exceed
+sampling variation. An active learning comparison is included and, on the calibration data,
+returns a null result that the design is reported as being underpowered to resolve
+(Section~\ref{sec:results:al}).
+
+Section~\ref{sec:background} covers the necessary background,
+Section~\ref{sec:method} documents what was built and how it was measured,
+Section~\ref{sec:results} reports the results, and Section~\ref{sec:conclusion} sets out
+the limitations.
