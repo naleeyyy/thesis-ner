@@ -180,16 +180,16 @@
 %% 
 
 %% Command \title{title}: sets the title of your report
-\title{Space for your report title}
+\title{Building a Hand-Verified Named Entity Recognition Corpus for Albanian}
 
 %% Command \titleshort{short title}: sets an abbreviated version of the report title for page heads
-%\titleshort{Optional space for your abbreviated title}
+\titleshort{A Hand-Verified NER Corpus for Albanian}
 
 %% Command \subtitle{subtitle}: sets the subtitle for seminar/technical reports (not used for theses)
-\subtitle{Technical Report\\%
+\subtitle{Practical Work Report\\%
     \usekomafont{subtitlesmall}%
     \hfill\\%
-    Optional space for mentioning e.g.\ your research lab\\
+    Institute of Machine Learning\\
     \hfill\\%
 }
 
@@ -199,12 +199,11 @@
 %%   information), use \authormail{}, \authorweb{}, \authorphone{} and \authorfax{} to add contact
 %%   information)
 \author{%
-    Firstname1 Lastname1 \and Firstname2 Lastname2 \and Firstname3 Lastname3
-    \affiliation{Institute of Networks~and~Security}
+    Krenar Ahmeti
+    \affiliation{Institute of Machine Learning}
     \authornewline
-    \authorphone{+43 732 2468-XXXX}
-    \authormail{firstname.lastname@jku.at}
-    \authorweb{https://jku.at/ins}
+    %% TODO(krenar): your real JKU address — k<matriculation number>@students.jku.at
+    \authormail{k12345678@students.jku.at}
     \authornewline
 }
 
@@ -215,7 +214,8 @@
 %\partnerlogo{logos/ins}
 
 %% Command \revisionblock{text}: set the document revision block on the title page
-\revisionblock{Space for your revision block, acknowledgements, etc.}
+\revisionblock{Supervisor: Timo Bertram\\
+Institute of Machine Learning, Johannes Kepler University Linz}
 
 %% Command \reportnumber{number}: set the report number
 %\reportnumber{Space for your report number}
@@ -224,10 +224,14 @@
 %\setbottommark{Space for your bottom mark}
 
 %% Command \abstract{text}: set the document abstract on the title page
-\abstract{Space for your (short) abstract.}
+\abstract{%
+    %% TODO(krenar): write this last, once the annotation results are in. Roughly 120
+    %% words: the problem, what was built, the headline numbers, what it means.
+    Space for your (short) abstract.%
+}
 
 %% Command \keywords{text}: set the document keywords
-%\keywords{Space for your comma-separated keywords}
+\keywords{named entity recognition, Albanian, low-resource NLP, corpus annotation, active learning}
 
 
 %% Finally, print the title page using the above information:
