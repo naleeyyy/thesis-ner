@@ -25,3 +25,8 @@ stanza_resources/
 
 .DS_Store
 .pytest_cache/
+
+# Raw Label Studio exports: these embed annotator email addresses in the `drafts`
+# field, and this repo is public. Back them up locally, but publish only a
+# de-identified derivative.
+data/labeled/exports/
