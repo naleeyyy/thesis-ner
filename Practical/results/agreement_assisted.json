@@ -1,0 +1,138 @@
+{
+  "n_annotations": 1000,
+  "n_sentences": 820,
+  "per_annotator": {
+    "4": 100,
+    "3": 99,
+    "1": 101,
+    "13": 100,
+    "8": 100,
+    "15": 100,
+    "5": 100,
+    "14": 100,
+    "10": 100,
+    "11": 100
+  },
+  "junk": {
+    "n_sentences": 20,
+    "fleiss_kappa": 0.2347,
+    "flagged_by_someone": 1,
+    "flagged_by_everyone": 0
+  },
+  "views": {
+    "full": {
+      "mode": "full",
+      "n_sentences": 20,
+      "n_tokens": 355,
+      "annotators": [
+        "3",
+        "4",
+        "8",
+        "10",
+        "14"
+      ],
+      "fleiss_kappa": 0.9404,
+      "pairwise": {
+        "3 vs 4": {
+          "cohen_kappa": 0.9231,
+          "span_f1": 0.8197
+        },
+        "3 vs 8": {
+          "cohen_kappa": 0.9428,
+          "span_f1": 0.8667
+        },
+        "3 vs 10": {
+          "cohen_kappa": 0.9231,
+          "span_f1": 0.8197
+        },
+        "3 vs 14": {
+          "cohen_kappa": 0.9266,
+          "span_f1": 0.871
+        },
+        "4 vs 8": {
+          "cohen_kappa": 0.9802,
+          "span_f1": 0.9508
+        },
+        "4 vs 10": {
+          "cohen_kappa": 1.0,
+          "span_f1": 1.0
+        },
+        "4 vs 14": {
+          "cohen_kappa": 0.9049,
+          "span_f1": 0.8571
+        },
+        "8 vs 10": {
+          "cohen_kappa": 0.9802,
+          "span_f1": 0.9508
+        },
+        "8 vs 14": {
+          "cohen_kappa": 0.9245,
+          "span_f1": 0.9032
+        },
+        "10 vs 14": {
+          "cohen_kappa": 0.9049,
+          "span_f1": 0.8571
+        }
+      },
+      "n_sentences_with_disagreement": 5,
+      "pct_tokens_disputed": 3.38
+    },
+    "head": {
+      "mode": "head",
+      "n_sentences": 20,
+      "n_tokens": 355,
+      "annotators": [
+        "3",
+        "4",
+        "8",
+        "10",
+        "14"
+      ],
+      "fleiss_kappa": 0.9247,
+      "pairwise": {
+        "3 vs 4": {
+          "cohen_kappa": 0.9306,
+          "span_f1": 0.8525
+        },
+        "3 vs 8": {
+          "cohen_kappa": 0.9057,
+          "span_f1": 0.8667
+        },
+        "3 vs 10": {
+          "cohen_kappa": 0.9299,
+          "span_f1": 0.8525
+        },
+        "3 vs 14": {
+          "cohen_kappa": 0.9326,
+          "span_f1": 0.871
+        },
+        "4 vs 8": {
+          "cohen_kappa": 0.9757,
+          "span_f1": 0.9836
+        },
+        "4 vs 10": {
+          "cohen_kappa": 0.9518,
+          "span_f1": 0.9355
+        },
+        "4 vs 14": {
+          "cohen_kappa": 0.9075,
+          "span_f1": 0.8571
+        },
+        "8 vs 10": {
+          "cohen_kappa": 0.9263,
+          "span_f1": 0.918
+        },
+        "8 vs 14": {
+          "cohen_kappa": 0.8822,
+          "span_f1": 0.871
+        },
+        "10 vs 14": {
+          "cohen_kappa": 0.9067,
+          "span_f1": 0.8571
+        }
+      },
+      "n_sentences_with_disagreement": 7,
+      "pct_tokens_disputed": 3.94
+    }
+  }
+}

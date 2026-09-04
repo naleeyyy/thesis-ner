@@ -221,9 +221,16 @@ def test_reported_cost_matches_the_billed_dashboard_figure():
 
     from src.annotate.llm_label import rates_for
 
-    assert rates_for("claude-sonnet-5", datetime.date(2026, 8, 11)) == (2.0, 10.0)
-    # $0.0096 billed vs $0.0144 under the old list-rate table.
-    assert usd_cost("claude-sonnet-5", usage) == pytest.approx(0.0096, abs=5e-4)
+    billed_on = datetime.date(2026, 8, 11)
+    assert rates_for("claude-sonnet-5", billed_on) == (2.0, 10.0)
+    # $0.0096 billed vs $0.0144 under the old list-rate table. Pinned to the billing
+    # date: the promotional rate expired 2026-08-31, so an unpinned call would price
+    # this at list and the assertion would start failing on a calendar boundary.
+    assert usd_cost("claude-sonnet-5", usage, on=billed_on) == pytest.approx(0.0096, abs=5e-4)
+    # After expiry the same usage costs list price.
+    after = datetime.date(2026, 9, 1)
+    assert rates_for("claude-sonnet-5", after) == (3.0, 15.0)
+    assert usd_cost("claude-sonnet-5", usage, on=after) == pytest.approx(0.0144, abs=5e-4)
 
 
 def test_usd_cost_unknown_model_is_zero_not_an_error():

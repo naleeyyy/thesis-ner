@@ -1,0 +1,138 @@
+{
+  "n_annotations": 1000,
+  "n_sentences": 820,
+  "per_annotator": {
+    "4": 100,
+    "3": 99,
+    "1": 101,
+    "13": 100,
+    "8": 100,
+    "15": 100,
+    "5": 100,
+    "14": 100,
+    "10": 100,
+    "11": 100
+  },
+  "junk": {
+    "n_sentences": 20,
+    "fleiss_kappa": 0.4845,
+    "flagged_by_someone": 1,
+    "flagged_by_everyone": 0
+  },
+  "views": {
+    "full": {
+      "mode": "full",
+      "n_sentences": 20,
+      "n_tokens": 355,
+      "annotators": [
+        "1",
+        "5",
+        "11",
+        "13",
+        "15"
+      ],
+      "fleiss_kappa": 0.7589,
+      "pairwise": {
+        "1 vs 5": {
+          "cohen_kappa": 0.7956,
+          "span_f1": 0.678
+        },
+        "1 vs 11": {
+          "cohen_kappa": 0.715,
+          "span_f1": 0.7
+        },
+        "1 vs 13": {
+          "cohen_kappa": 0.7601,
+          "span_f1": 0.6429
+        },
+        "1 vs 15": {
+          "cohen_kappa": 0.6904,
+          "span_f1": 0.6923
+        },
+        "5 vs 11": {
+          "cohen_kappa": 0.7453,
+          "span_f1": 0.6885
+        },
+        "5 vs 13": {
+          "cohen_kappa": 0.8224,
+          "span_f1": 0.7018
+        },
+        "5 vs 15": {
+          "cohen_kappa": 0.7881,
+          "span_f1": 0.7547
+        },
+        "11 vs 13": {
+          "cohen_kappa": 0.8215,
+          "span_f1": 0.7931
+        },
+        "11 vs 15": {
+          "cohen_kappa": 0.7013,
+          "span_f1": 0.7407
+        },
+        "13 vs 15": {
+          "cohen_kappa": 0.7368,
+          "span_f1": 0.72
+        }
+      },
+      "n_sentences_with_disagreement": 12,
+      "pct_tokens_disputed": 12.11
+    },
+    "head": {
+      "mode": "head",
+      "n_sentences": 20,
+      "n_tokens": 355,
+      "annotators": [
+        "1",
+        "5",
+        "11",
+        "13",
+        "15"
+      ],
+      "fleiss_kappa": 0.6637,
+      "pairwise": {
+        "1 vs 5": {
+          "cohen_kappa": 0.6486,
+          "span_f1": 0.6441
+        },
+        "1 vs 11": {
+          "cohen_kappa": 0.5105,
+          "span_f1": 0.5
+        },
+        "1 vs 13": {
+          "cohen_kappa": 0.6601,
+          "span_f1": 0.5714
+        },
+        "1 vs 15": {
+          "cohen_kappa": 0.7204,
+          "span_f1": 0.7308
+        },
+        "5 vs 11": {
+          "cohen_kappa": 0.7309,
+          "span_f1": 0.6885
+        },
+        "5 vs 13": {
+          "cohen_kappa": 0.7332,
+          "span_f1": 0.6316
+        },
+        "5 vs 15": {
+          "cohen_kappa": 0.6857,
+          "span_f1": 0.6415
+        },
+        "11 vs 13": {
+          "cohen_kappa": 0.712,
+          "span_f1": 0.7241
+        },
+        "11 vs 15": {
+          "cohen_kappa": 0.541,
+          "span_f1": 0.5926
+        },
+        "13 vs 15": {
+          "cohen_kappa": 0.7136,
+          "span_f1": 0.68
+        }
+      },
+      "n_sentences_with_disagreement": 12,
+      "pct_tokens_disputed": 13.52
+    }
+  }
+}

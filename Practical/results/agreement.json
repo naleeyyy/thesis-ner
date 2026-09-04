@@ -1,0 +1,428 @@
+{
+  "n_annotations": 1000,
+  "n_sentences": 820,
+  "per_annotator": {
+    "4": 100,
+    "3": 99,
+    "1": 101,
+    "13": 100,
+    "8": 100,
+    "15": 100,
+    "5": 100,
+    "14": 100,
+    "10": 100,
+    "11": 100
+  },
+  "junk": {
+    "n_sentences": 20,
+    "fleiss_kappa": 0.4302,
+    "flagged_by_someone": 1,
+    "flagged_by_everyone": 0
+  },
+  "views": {
+    "full": {
+      "mode": "full",
+      "n_sentences": 20,
+      "n_tokens": 355,
+      "annotators": [
+        "1",
+        "10",
+        "11",
+        "13",
+        "14",
+        "15",
+        "3",
+        "4",
+        "5",
+        "8"
+      ],
+      "fleiss_kappa": 0.8287,
+      "pairwise": {
+        "1 vs 10": {
+          "cohen_kappa": 0.8203,
+          "span_f1": 0.7333
+        },
+        "1 vs 11": {
+          "cohen_kappa": 0.715,
+          "span_f1": 0.7
+        },
+        "1 vs 13": {
+          "cohen_kappa": 0.7601,
+          "span_f1": 0.6429
+        },
+        "1 vs 14": {
+          "cohen_kappa": 0.7696,
+          "span_f1": 0.6885
+        },
+        "1 vs 15": {
+          "cohen_kappa": 0.6904,
+          "span_f1": 0.6923
+        },
+        "1 vs 3": {
+          "cohen_kappa": 0.8076,
+          "span_f1": 0.7119
+        },
+        "1 vs 4": {
+          "cohen_kappa": 0.8203,
+          "span_f1": 0.7333
+        },
+        "1 vs 5": {
+          "cohen_kappa": 0.7956,
+          "span_f1": 0.678
+        },
+        "1 vs 8": {
+          "cohen_kappa": 0.8429,
+          "span_f1": 0.7797
+        },
+        "10 vs 11": {
+          "cohen_kappa": 0.8071,
+          "span_f1": 0.6774
+        },
+        "10 vs 13": {
+          "cohen_kappa": 0.8459,
+          "span_f1": 0.7931
+        },
+        "10 vs 14": {
+          "cohen_kappa": 0.9049,
+          "span_f1": 0.8571
+        },
+        "10 vs 15": {
+          "cohen_kappa": 0.7577,
+          "span_f1": 0.7407
+        },
+        "10 vs 3": {
+          "cohen_kappa": 0.9231,
+          "span_f1": 0.8197
+        },
+        "10 vs 4": {
+          "cohen_kappa": 1.0,
+          "span_f1": 1.0
+        },
+        "10 vs 5": {
+          "cohen_kappa": 0.8781,
+          "span_f1": 0.7869
+        },
+        "10 vs 8": {
+          "cohen_kappa": 0.9802,
+          "span_f1": 0.9508
+        },
+        "11 vs 13": {
+          "cohen_kappa": 0.8215,
+          "span_f1": 0.7931
+        },
+        "11 vs 14": {
+          "cohen_kappa": 0.8343,
+          "span_f1": 0.6667
+        },
+        "11 vs 15": {
+          "cohen_kappa": 0.7013,
+          "span_f1": 0.7407
+        },
+        "11 vs 3": {
+          "cohen_kappa": 0.7955,
+          "span_f1": 0.6557
+        },
+        "11 vs 4": {
+          "cohen_kappa": 0.8071,
+          "span_f1": 0.6774
+        },
+        "11 vs 5": {
+          "cohen_kappa": 0.7453,
+          "span_f1": 0.6885
+        },
+        "11 vs 8": {
+          "cohen_kappa": 0.7894,
+          "span_f1": 0.623
+        },
+        "13 vs 14": {
+          "cohen_kappa": 0.756,
+          "span_f1": 0.6441
+        },
+        "13 vs 15": {
+          "cohen_kappa": 0.7368,
+          "span_f1": 0.72
+        },
+        "13 vs 3": {
+          "cohen_kappa": 0.8127,
+          "span_f1": 0.7368
+        },
+        "13 vs 4": {
+          "cohen_kappa": 0.8459,
+          "span_f1": 0.7931
+        },
+        "13 vs 5": {
+          "cohen_kappa": 0.8224,
+          "span_f1": 0.7018
+        },
+        "13 vs 8": {
+          "cohen_kappa": 0.8268,
+          "span_f1": 0.7368
+        },
+        "14 vs 15": {
+          "cohen_kappa": 0.6958,
+          "span_f1": 0.6909
+        },
+        "14 vs 3": {
+          "cohen_kappa": 0.9266,
+          "span_f1": 0.871
+        },
+        "14 vs 4": {
+          "cohen_kappa": 0.9049,
+          "span_f1": 0.8571
+        },
+        "14 vs 5": {
+          "cohen_kappa": 0.8166,
+          "span_f1": 0.7097
+        },
+        "14 vs 8": {
+          "cohen_kappa": 0.9245,
+          "span_f1": 0.9032
+        },
+        "15 vs 3": {
+          "cohen_kappa": 0.7252,
+          "span_f1": 0.7547
+        },
+        "15 vs 4": {
+          "cohen_kappa": 0.7577,
+          "span_f1": 0.7407
+        },
+        "15 vs 5": {
+          "cohen_kappa": 0.7881,
+          "span_f1": 0.7547
+        },
+        "15 vs 8": {
+          "cohen_kappa": 0.7373,
+          "span_f1": 0.717
+        },
+        "3 vs 4": {
+          "cohen_kappa": 0.9231,
+          "span_f1": 0.8197
+        },
+        "3 vs 5": {
+          "cohen_kappa": 0.8731,
+          "span_f1": 0.7667
+        },
+        "3 vs 8": {
+          "cohen_kappa": 0.9428,
+          "span_f1": 0.8667
+        },
+        "4 vs 5": {
+          "cohen_kappa": 0.8781,
+          "span_f1": 0.7869
+        },
+        "4 vs 8": {
+          "cohen_kappa": 0.9802,
+          "span_f1": 0.9508
+        },
+        "5 vs 8": {
+          "cohen_kappa": 0.859,
+          "span_f1": 0.7333
+        }
+      },
+      "n_sentences_with_disagreement": 12,
+      "pct_tokens_disputed": 12.39
+    },
+    "head": {
+      "mode": "head",
+      "n_sentences": 20,
+      "n_tokens": 355,
+      "annotators": [
+        "1",
+        "10",
+        "11",
+        "13",
+        "14",
+        "15",
+        "3",
+        "4",
+        "5",
+        "8"
+      ],
+      "fleiss_kappa": 0.7597,
+      "pairwise": {
+        "1 vs 10": {
+          "cohen_kappa": 0.7227,
+          "span_f1": 0.7333
+        },
+        "1 vs 11": {
+          "cohen_kappa": 0.5105,
+          "span_f1": 0.5
+        },
+        "1 vs 13": {
+          "cohen_kappa": 0.6601,
+          "span_f1": 0.5714
+        },
+        "1 vs 14": {
+          "cohen_kappa": 0.6703,
+          "span_f1": 0.6885
+        },
+        "1 vs 15": {
+          "cohen_kappa": 0.7204,
+          "span_f1": 0.7308
+        },
+        "1 vs 3": {
+          "cohen_kappa": 0.6701,
+          "span_f1": 0.6441
+        },
+        "1 vs 4": {
+          "cohen_kappa": 0.6987,
+          "span_f1": 0.7
+        },
+        "1 vs 5": {
+          "cohen_kappa": 0.6486,
+          "span_f1": 0.6441
+        },
+        "1 vs 8": {
+          "cohen_kappa": 0.7054,
+          "span_f1": 0.7119
+        },
+        "10 vs 11": {
+          "cohen_kappa": 0.6952,
+          "span_f1": 0.5806
+        },
+        "10 vs 13": {
+          "cohen_kappa": 0.8267,
+          "span_f1": 0.7586
+        },
+        "10 vs 14": {
+          "cohen_kappa": 0.9067,
+          "span_f1": 0.8571
+        },
+        "10 vs 15": {
+          "cohen_kappa": 0.7339,
+          "span_f1": 0.7037
+        },
+        "10 vs 3": {
+          "cohen_kappa": 0.9299,
+          "span_f1": 0.8525
+        },
+        "10 vs 4": {
+          "cohen_kappa": 0.9518,
+          "span_f1": 0.9355
+        },
+        "10 vs 5": {
+          "cohen_kappa": 0.7138,
+          "span_f1": 0.6557
+        },
+        "10 vs 8": {
+          "cohen_kappa": 0.9263,
+          "span_f1": 0.918
+        },
+        "11 vs 13": {
+          "cohen_kappa": 0.712,
+          "span_f1": 0.7241
+        },
+        "11 vs 14": {
+          "cohen_kappa": 0.7358,
+          "span_f1": 0.6032
+        },
+        "11 vs 15": {
+          "cohen_kappa": 0.541,
+          "span_f1": 0.5926
+        },
+        "11 vs 3": {
+          "cohen_kappa": 0.7252,
+          "span_f1": 0.623
+        },
+        "11 vs 4": {
+          "cohen_kappa": 0.7289,
+          "span_f1": 0.6452
+        },
+        "11 vs 5": {
+          "cohen_kappa": 0.7309,
+          "span_f1": 0.6885
+        },
+        "11 vs 8": {
+          "cohen_kappa": 0.7033,
+          "span_f1": 0.623
+        },
+        "13 vs 14": {
+          "cohen_kappa": 0.739,
+          "span_f1": 0.6102
+        },
+        "13 vs 15": {
+          "cohen_kappa": 0.7136,
+          "span_f1": 0.68
+        },
+        "13 vs 3": {
+          "cohen_kappa": 0.81,
+          "span_f1": 0.7368
+        },
+        "13 vs 4": {
+          "cohen_kappa": 0.8285,
+          "span_f1": 0.7586
+        },
+        "13 vs 5": {
+          "cohen_kappa": 0.7332,
+          "span_f1": 0.6316
+        },
+        "13 vs 8": {
+          "cohen_kappa": 0.7999,
+          "span_f1": 0.7368
+        },
+        "14 vs 15": {
+          "cohen_kappa": 0.6803,
+          "span_f1": 0.6545
+        },
+        "14 vs 3": {
+          "cohen_kappa": 0.9326,
+          "span_f1": 0.871
+        },
+        "14 vs 4": {
+          "cohen_kappa": 0.9075,
+          "span_f1": 0.8571
+        },
+        "14 vs 5": {
+          "cohen_kappa": 0.6909,
+          "span_f1": 0.6129
+        },
+        "14 vs 8": {
+          "cohen_kappa": 0.8822,
+          "span_f1": 0.871
+        },
+        "15 vs 3": {
+          "cohen_kappa": 0.7067,
+          "span_f1": 0.717
+        },
+        "15 vs 4": {
+          "cohen_kappa": 0.7095,
+          "span_f1": 0.6667
+        },
+        "15 vs 5": {
+          "cohen_kappa": 0.6857,
+          "span_f1": 0.6415
+        },
+        "15 vs 8": {
+          "cohen_kappa": 0.7165,
+          "span_f1": 0.6792
+        },
+        "3 vs 4": {
+          "cohen_kappa": 0.9306,
+          "span_f1": 0.8525
+        },
+        "3 vs 5": {
+          "cohen_kappa": 0.7362,
+          "span_f1": 0.6667
+        },
+        "3 vs 8": {
+          "cohen_kappa": 0.9057,
+          "span_f1": 0.8667
+        },
+        "4 vs 5": {
+          "cohen_kappa": 0.7402,
+          "span_f1": 0.6885
+        },
+        "4 vs 8": {
+          "cohen_kappa": 0.9757,
+          "span_f1": 0.9836
+        },
+        "5 vs 8": {
+          "cohen_kappa": 0.711,
+          "span_f1": 0.6667
+        }
+      },
+      "n_sentences_with_disagreement": 12,
+      "pct_tokens_disputed": 13.8
+    }
+  }
+}

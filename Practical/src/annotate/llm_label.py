@@ -353,10 +353,12 @@ def label_with_retry(
     raise RuntimeError(f"failed after {attempts} attempts: {last}")
 
 
-def usd_cost(model: str, usage: dict) -> float:
-    """Cost of one call at the rate in force today. Unknown models cost 0 rather than
-    crashing a run mid-campaign over a pricing table that is merely out of date."""
-    rates = rates_for(model)
+def usd_cost(model: str, usage: dict, on: datetime.date | None = None) -> float:
+    """Cost of one call at the rate in force on `on` (default today). Unknown models cost
+    0 rather than crashing a run mid-campaign over a pricing table that is merely out of
+    date. Pass `on` to re-derive what a past run actually cost: promotional rates expire,
+    so recomputing an old run at today's rates silently overstates it."""
+    rates = rates_for(model, on)
     if rates is None:
         return 0.0
     in_rate, out_rate = rates
