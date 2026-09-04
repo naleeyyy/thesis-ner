@@ -8,58 +8,25 @@
 \subsection{Corpus}
 \label{sec:results:corpus}
 
-Table~\ref{tab:filter} reports what the quality filter removed. The drop rate of 4.5\% is
+Table~\ref{tab:filter} in Appendix~\ref{app:corpus} reports what the quality filter removed.
+The drop rate of 4.5\% is
 itself a finding: automatic extraction from Wikipedia is not clean, and a pipeline that
 does not measure this is silently training on fragments.
 
-\begin{table}[htbp]
-\centering
-\caption{Sentences discarded during corpus construction (2\,687 candidates).}
-\label{tab:filter}
-\begin{tabular}{lr}
-\toprule
-Reason & Count \\
-\midrule
-Fragment with unbalanced brackets & 71 \\
-Fourth or later member of a stub template family & 22 \\
-Split word (e.g.\ \emph{Andre}~+~\emph{w}) & 18 \\
-Exact duplicate & 5 \\
-Split hyphenated name (\emph{Dommartin-au}~+~\emph{x-Bois}) & 2 \\
-\midrule
-Total & 120 (4.5\%) \\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 The resulting corpus differs substantially from WikiANN-sq, the standard Albanian NER
-resource, despite both deriving from Wikipedia (Table~\ref{tab:corpora}). WikiANN-sq is
-built by automatic cross-lingual link projection, and its median sentence is 6 tokens
-against 20 here. Inspection shows fragments, leaked wiki markup, and lines beginning with
+resource, despite both deriving from Wikipedia. WikiANN-sq's 5\,000 training sentences are
+built by automatic cross-lingual link projection and have a median length of 6 tokens,
+against 2\,500 sampled, filtered and hand-verified sentences with a median of 20 here
+(Figure~\ref{fig:corpus}, Appendix~\ref{app:corpus}). Inspection shows fragments, leaked wiki markup, and lines beginning with
 the Albanian redirect directive \texttt{RIDREJTO} presented as sentences. There is no
 sentence overlap between the two corpora, so WikiANN may be used as supplementary training
 data without contaminating the held-out test split.
 
-\begin{table}[htbp]
-\centering
-\caption{Corpus comparison. Both derive from Albanian Wikipedia.}
-\label{tab:corpora}
-\begin{tabular}{lrrl}
-\toprule
-Corpus & Sentences & Median tokens & Construction \\
-\midrule
-WikiANN-sq (train) & 5\,000 & 6 & automatic link projection \\
-This work & 2\,500 & 20 & sampled, filtered, hand-verified \\
-\bottomrule
-\end{tabular}
-\end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig_corpus_lengths}
-\caption{Sentence-length distributions. WikiANN-sq is dominated by short fragments;
-the corpus built here has a median of 20 tokens.}
-\label{fig:corpus}
-\end{figure}
+
+
 
 \subsection{Baselines}
 \label{sec:results:baselines}
@@ -70,28 +37,25 @@ the ordering is not an artefact of the test sample.
 
 \begin{table}[htbp]
 \centering
-\caption{Baseline checkpoints on WikiANN-sq test (1\,000 sentences). Brackets give a 95\%
-bootstrap confidence interval over test sentences.}
+\caption{Four public checkpoints, one scoring routine, two test sets: WikiANN-sq
+(1\,000 sentences) and the gold split built here (201). Brackets are 95\% bootstrap
+confidence intervals over test sentences.}
 \label{tab:baselines}
-\begin{tabular}{lccccc}
+\begin{tabular}{lcclcc}
 \toprule
-Model & $F_1$ & 95\% CI & PER & ORG & LOC \\
+& \multicolumn{2}{c}{WikiANN-sq test} & & \multicolumn{2}{c}{gold test} \\
+\cmidrule(lr){2-3}\cmidrule(lr){5-6}
+Model & $F_1$ & 95\% CI & & $F_1$ & 95\% CI \\
 \midrule
-Kushtrim mBERT-sq   & 0.925 & [0.907, 0.942] & 0.937 & 0.902 & 0.938 \\
-akdeniz27 mBERT-sq  & 0.780 & [0.754, 0.806] & 0.891 & 0.686 & 0.764 \\
-Babelscape WikiNeural & 0.710 & [0.683, 0.737] & 0.843 & 0.578 & 0.682 \\
-Davlan XLM-R HRL    & 0.520 & [0.489, 0.551] & 0.740 & 0.432 & 0.306 \\
+Kushtrim mBERT-sq     & 0.925 & [0.907, 0.942] & & 0.574 & [0.511, 0.636] \\
+akdeniz27 mBERT-sq    & 0.780 & [0.754, 0.806] & & 0.554 & [0.489, 0.615] \\
+Babelscape WikiNeural & 0.710 & [0.683, 0.737] & & 0.640 & [0.574, 0.705] \\
+Davlan XLM-R HRL      & 0.520 & [0.489, 0.551] & & 0.711 & [0.648, 0.772] \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig_baselines}
-\caption{Baseline checkpoints on WikiANN-sq test. Bars give the 95\% bootstrap
-confidence interval; the point is the observed $F_1$.}
-\label{fig:baselines}
-\end{figure}
+
 
 Two observations. ORG is the hardest class for every model without exception, which
 motivates the error analysis in Section~\ref{sec:results:errors}. And the two checkpoints
@@ -102,26 +66,10 @@ leaves published numbers difficult to interpret.
 \subsection{The same checkpoints on hand-verified text}
 \label{sec:results:transfer}
 
-Table~\ref{tab:baselines} ranks the checkpoints on WikiANN-sq. Table~\ref{tab:gold-baselines}
-ranks the same four checkpoints, scored by the same routine, on the 201-sentence test split
-of the corpus built here. The ranking inverts.
+Table~\ref{tab:baselines} scores the four checkpoints on both test sets with the same
+routine. The ranking inverts between them.
 
-\begin{table}[htbp]
-\centering
-\caption{The same four checkpoints on the gold test split (201 sentences). Rank on
-WikiANN-sq is repeated from Table~\ref{tab:baselines} for comparison.}
-\label{tab:gold-baselines}
-\begin{tabular}{lccccc}
-\toprule
-Model & $F_1$ & 95\% CI & WikiANN $F_1$ & rank here & rank there \\
-\midrule
-Davlan XLM-R HRL      & 0.711 & [0.648, 0.772] & 0.520 & 1 & 4 \\
-Babelscape WikiNeural & 0.640 & [0.574, 0.705] & 0.710 & 2 & 3 \\
-Kushtrim mBERT-sq     & 0.574 & [0.511, 0.636] & 0.925 & 3 & 1 \\
-akdeniz27 mBERT-sq    & 0.554 & [0.489, 0.615] & 0.780 & 4 & 2 \\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 \begin{figure}[htbp]
 \centering
@@ -134,8 +82,7 @@ $\rho = -0.80$.}
 
 The best model on WikiANN-sq is the third-best here, losing 0.351 $F_1$; the worst model on
 WikiANN-sq is the best here, gaining 0.191. Spearman's rank correlation between the two
-orderings is $-0.80$, close to a perfect inversion. Every pairwise gap in
-Table~\ref{tab:gold-baselines} is significant under a paired bootstrap except
+orderings is $-0.80$, close to a perfect inversion. Every pairwise gap on the gold split is significant under a paired bootstrap except
 Kushtrim against akdeniz27 ($p = 0.345$), so the new ordering is not an artefact of the
 test sample.
 
@@ -152,34 +99,44 @@ on WikiANN-sq, whose median sentence is 6 tokens and which contains fragments an
 markup (Section~\ref{sec:results:corpus}). They are strongest on text of that shape and
 degrade on the 20-token sentences here. Davlan XLM-R HRL was trained on high-resource
 languages and applied to Albanian zero-shot, so it never fitted WikiANN-sq's idiosyncrasies
-and transfers to ordinary prose more evenly. Specialising on a silver benchmark bought
-performance on that benchmark at the cost of performance on the language.
+and transfers to ordinary prose more evenly.
+
+It would overstate the evidence to conclude from this that training on WikiANN-sq damages a
+model, because the mismatch runs both ways. A model fine-tuned on the gold corpus here
+scores 0.548 $\pm$ 0.020 on WikiANN-sq test, against 0.707 $\pm$ 0.027 on its own test split
+(Section~\ref{sec:results:gold-finetune}). Set beside Kushtrim's 0.574 on the gold split,
+the picture is symmetric: each model reaches roughly 0.55--0.57 on the corpus it was not
+trained on, whichever direction the move is made.
+
+One explanation can be ruled out. The two corpora might simply disagree about where entities
+end, in which case the cross-benchmark drop would be a scoring artefact rather than a
+modelling result. They do not: mean entity length is 2.30 tokens in WikiANN-sq test against
+1.93 under the full-span convention used here (1.68 under the head convention). WikiANN's
+spans are the \emph{wider} of the two, so a model predicting full spans is not being
+penalised for over-reaching, and the head convention would fare worse still.
+
+What the evidence supports is narrower than a claim about damage, and more useful. The two
+benchmarks measure different things, neither substitutes for the other, and a WikiANN-sq
+score does not order models by their performance on running text --- in this comparison it
+orders them almost exactly backwards. Since applications process running text, that is the
+setting an evaluation set has to represent, and none existed for Albanian.
 
 \subsection{Fine-tuning on the annotated corpus}
 \label{sec:results:gold-finetune}
 
 Fine-tuning \texttt{xlm-roberta-base} on 483 gold training sentences reaches
-$F_1 = 0.709 \pm 0.028$ across three seeds (Table~\ref{tab:gold-finetune}), against 0.711
+$F_1 = 0.709 \pm 0.028$ across three seeds (Table~\ref{tab:gold-finetune},
+Appendix~\ref{app:finetune}), against 0.711
 for the best zero-shot checkpoint. A paired bootstrap gives a difference of $+0.012$ with a
 95\% interval of $[-0.034, +0.055]$ and $p = 0.590$: the two are indistinguishable.
 
-\begin{table}[htbp]
-\centering
-\caption{Fine-tuned on the gold training split. The bracketed interval is a bootstrap CI
-over test sentences for the best-dev seed; $\pm$ is run-to-run variance across seeds.}
-\label{tab:gold-finetune}
-\begin{tabular}{lccc}
-\toprule
-Seed & dev $F_1$ & test $F_1$ & \\
-\midrule
-1 & 0.774 & 0.723 & [0.660, 0.782] \\
-2 & 0.747 & 0.728 & \\
-3 & 0.770 & 0.677 & \\
-\midrule
-Mean & & \multicolumn{2}{l}{0.709 $\pm$ 0.028} \\
-\bottomrule
-\end{tabular}
-\end{table}
+
+
+The same three models were also scored on WikiANN-sq test, giving
+$F_1 = 0.548 \pm 0.020$. That number belongs with the transfer discussion in
+Section~\ref{sec:results:transfer}: it establishes that the domain gap is symmetric rather
+than a one-way deficiency of the silver corpus. Note that it is the more precisely measured
+of the two figures, since WikiANN-sq test has 1\,000 sentences against the gold split's 201.
 
 Three observations, none of them flattering, all of them worth reporting.
 
@@ -213,54 +170,6 @@ This is reported not as a contribution but as a control. It establishes that the
 configuration reaches parity with published work on the standard benchmark, so differences
 observed later on the annotated corpus are attributable to the data rather than to the
 training setup.
-
-\subsection{Active learning}
-\label{sec:results:al}
-
-%% TODO: re-run on the gold set. The table below is the WikiANN calibration run and should
-%% either be replaced by the gold-set result or retained explicitly as a calibration,
-%% clearly labelled as such.
-
-Table~\ref{tab:al} reports a calibration sweep on WikiANN-sq: two acquisition strategies,
-three seeds, five annotation budgets, 30 model trainings in total.
-
-\begin{table}[htbp]
-\centering
-\caption{Active learning on WikiANN-sq. Mean $F_1 \pm$ standard deviation over three seeds.}
-\label{tab:al}
-\begin{tabular}{lcc}
-\toprule
-Labelled sentences & Random & Uncertainty \\
-\midrule
-250  & 0.685 $\pm$ 0.000 & 0.692 $\pm$ 0.016 \\
-500  & 0.863 $\pm$ 0.017 & 0.847 $\pm$ 0.017 \\
-750  & 0.882 $\pm$ 0.007 & 0.858 $\pm$ 0.019 \\
-1000 & 0.883 $\pm$ 0.029 & 0.888 $\pm$ 0.025 \\
-1250 & 0.898 $\pm$ 0.004 & 0.906 $\pm$ 0.012 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig_learning_curve}
-\caption{Active learning on WikiANN-sq. Shaded bands are $\pm$ one standard deviation
-across three seeds; they overlap at every budget.}
-\label{fig:al}
-\end{figure}
-
-No budget shows a significant difference. The largest gap, 0.024 at 750 sentences, reaches
-$t = -2.03$ against the $|t| > 2.8$ required at three seeds. The direction of the
-difference also alternates --- uncertainty leads at three of five budgets and random at two
---- which is characteristic of noise rather than of an effect.
-
-Uncertainty sampling is slightly \emph{worse} at intermediate budgets. This is consistent
-with a known property of entropy-based acquisition: it favours atypical and difficult
-sentences, which early in training are unrepresentative of the test distribution.
-
-The practical consequence is a detection threshold. With three seeds at these budgets, a
-strategy difference below approximately 0.04 cannot be distinguished from seed variance.
-Any conclusive claim would require more seeds or wider budget spacing.
 
 \subsection{Annotation}
 \label{sec:results:annotation}
@@ -366,15 +275,9 @@ four categories --- a gold entity with no overlapping prediction (\emph{missed})
 prediction overlapping no gold entity (\emph{spurious}), the same token extent with the
 wrong type (\emph{type}), and overlapping extents that do not match exactly
 (\emph{boundary}) --- separates failures that annotation guidelines can address from
-failures that are modelling problems (Figure~\ref{fig:errors}).
+failures that are modelling problems (Figure~\ref{fig:errors}, Appendix~\ref{app:errors}).
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig_errors}
-\caption{Error composition per model; the total error count is in parentheses.
-Categories are mutually exclusive and sum to 100\%.}
-\label{fig:errors}
-\end{figure}
+
 
 Three findings stand out.
 
