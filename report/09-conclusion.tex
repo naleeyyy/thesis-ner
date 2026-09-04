@@ -32,6 +32,22 @@
 %%    output. The conditions differ in whether suggestions were visible, not in
 %%    whether the model influenced the standard.
 %%
+%%  - Annotator protocol compliance. One of ten annotators (id 11, batch 12) never
+%%    marked a head: 0 of 73 multi-token entities, where peers narrow 10-49% of the
+%%    time. Under the lowest peer rate the chance of that being coincidence is 3e-4.
+%%    Their 100 sentences are in the gold set with heads defaulting to full spans, so
+%%    they contribute 11.5% of the multi-token pool with a systematic bias toward
+%%    full-span behaviour. Say what you did about it -- excluded them from head-view
+%%    results, had the batch re-annotated, or reported the head view with the caveat.
+%%    See results/annotator_qc.json. This is worth reporting rather than quietly
+%%    fixing: it is evidence that a two-boundary protocol costs compliance, which is a
+%%    finding about the method, not just a defect in one annotator's work.
+%%
+%%  - Automatic adjudication. The 20 shared sentences were resolved by token-level
+%%    majority vote, not by a human. 12 of the 20 were non-unanimous
+%%    (results/adjudication.md). Majority vote is reproducible but it is not
+%%    adjudication, and the two should not be conflated in the write-up.
+%%
 %%  - Reproducibility. Training was not bit-reproducible on the hardware used:
 %%    identical seeds gave F1 0.9187 and 0.9279 (Section~\ref{sec:method:stats}).
 %%    Numbers are reproducible in distribution, not exactly.
