@@ -161,6 +161,60 @@ def fig_corpus(path: Path) -> None:
     plt.close(fig)
 
 
+
+def fig_transfer(path: Path) -> None:
+    """Slope chart: the same four checkpoints on two benchmarks.
+
+    A slope chart rather than grouped bars because the finding *is* the crossing --- the
+    reader should see lines swapping order, which grouped bars force them to reconstruct
+    by comparing heights across a gap.
+    """
+    wikiann = json.loads((RESULTS / "baselines.json").read_text())
+    gold = json.loads((RESULTS / "gold-baselines.json").read_text())
+
+    def scores(blob):
+        return {row["model"]: row["overall_f1"] for row in blob["models"]}
+
+    w, g = scores(wikiann), scores(gold)
+    models = [m for m in SHORT if m in w and m in g]
+
+    fig, ax = plt.subplots(figsize=(4.9, 3.3))
+    for i, m in enumerate(sorted(models, key=lambda x: -w[x])):
+        colour = SERIES[i % len(SERIES)]
+        ax.plot([0, 1], [w[m], g[m]], "-o", color=colour, lw=1.8, ms=5, zorder=3)
+        ax.annotate(
+            f"{SHORT[m]}  {w[m]:.3f}",
+            (0, w[m]),
+            textcoords="offset points",
+            xytext=(-8, 0),
+            ha="right",
+            va="center",
+            fontsize=7,
+            color=INK,
+        )
+        ax.annotate(
+            f"{g[m]:.3f}",
+            (1, g[m]),
+            textcoords="offset points",
+            xytext=(8, 0),
+            ha="left",
+            va="center",
+            fontsize=7,
+            color=INK,
+        )
+
+    ax.set_xlim(-0.72, 1.28)
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(["WikiANN-sq test", "gold test (this work)"])
+    ax.set_ylabel("$F_1$")
+    ax.set_ylim(0.45, 1.0)
+    ax.grid(axis="y", color=GRID, lw=0.6, zorder=0)
+    ax.set_axisbelow(True)
+    strip_frame(ax)
+    fig.savefig(path)
+    plt.close(fig)
+
+
 def main() -> int:
     use_report_style()
     OUT.mkdir(parents=True, exist_ok=True)
@@ -169,6 +223,7 @@ def main() -> int:
         ("learning_curve", fig_learning_curve),
         ("errors", fig_errors),
         ("corpus_lengths", fig_corpus),
+        ("transfer", fig_transfer),
     ]
     for name, fn in figures:
         path = OUT / f"fig_{name}.pdf"

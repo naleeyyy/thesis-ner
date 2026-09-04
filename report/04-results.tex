@@ -99,6 +99,107 @@ nominally trained on the same data differ by 0.145 $F_1$ --- a reproducibility g
 noting, since it suggests that releasing checkpoints without training and evaluation code
 leaves published numbers difficult to interpret.
 
+\subsection{The same checkpoints on hand-verified text}
+\label{sec:results:transfer}
+
+Table~\ref{tab:baselines} ranks the checkpoints on WikiANN-sq. Table~\ref{tab:gold-baselines}
+ranks the same four checkpoints, scored by the same routine, on the 201-sentence test split
+of the corpus built here. The ranking inverts.
+
+\begin{table}[htbp]
+\centering
+\caption{The same four checkpoints on the gold test split (201 sentences). Rank on
+WikiANN-sq is repeated from Table~\ref{tab:baselines} for comparison.}
+\label{tab:gold-baselines}
+\begin{tabular}{lccccc}
+\toprule
+Model & $F_1$ & 95\% CI & WikiANN $F_1$ & rank here & rank there \\
+\midrule
+Davlan XLM-R HRL      & 0.711 & [0.648, 0.772] & 0.520 & 1 & 4 \\
+Babelscape WikiNeural & 0.640 & [0.574, 0.705] & 0.710 & 2 & 3 \\
+Kushtrim mBERT-sq     & 0.574 & [0.511, 0.636] & 0.925 & 3 & 1 \\
+akdeniz27 mBERT-sq    & 0.554 & [0.489, 0.615] & 0.780 & 4 & 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig_transfer}
+\caption{The same four checkpoints, the same scoring routine, two benchmarks. Rank on
+WikiANN-sq does not predict rank on hand-verified Albanian prose; Spearman's
+$\rho = -0.80$.}
+\label{fig:transfer}
+\end{figure}
+
+The best model on WikiANN-sq is the third-best here, losing 0.351 $F_1$; the worst model on
+WikiANN-sq is the best here, gaining 0.191. Spearman's rank correlation between the two
+orderings is $-0.80$, close to a perfect inversion. Every pairwise gap in
+Table~\ref{tab:gold-baselines} is significant under a paired bootstrap except
+Kushtrim against akdeniz27 ($p = 0.345$), so the new ordering is not an artefact of the
+test sample.
+
+This is the central result of the report, and it is worth stating carefully. It does not
+show that the Albanian-specific checkpoints are bad models, nor that their published
+numbers are wrong: those numbers are reproducible, and Section~\ref{sec:results:baselines}
+reproduces them. It shows that a WikiANN-sq score does not predict performance on
+full-length Albanian prose --- in this comparison it predicts it \emph{backwards}. A
+practitioner choosing an Albanian NER model by its WikiANN score would have selected the
+worst of the four available options for running text.
+
+The mechanism is visible in how the corpora differ. The two mBERT checkpoints were trained
+on WikiANN-sq, whose median sentence is 6 tokens and which contains fragments and residual
+markup (Section~\ref{sec:results:corpus}). They are strongest on text of that shape and
+degrade on the 20-token sentences here. Davlan XLM-R HRL was trained on high-resource
+languages and applied to Albanian zero-shot, so it never fitted WikiANN-sq's idiosyncrasies
+and transfers to ordinary prose more evenly. Specialising on a silver benchmark bought
+performance on that benchmark at the cost of performance on the language.
+
+\subsection{Fine-tuning on the annotated corpus}
+\label{sec:results:gold-finetune}
+
+Fine-tuning \texttt{xlm-roberta-base} on 483 gold training sentences reaches
+$F_1 = 0.709 \pm 0.028$ across three seeds (Table~\ref{tab:gold-finetune}), against 0.711
+for the best zero-shot checkpoint. A paired bootstrap gives a difference of $+0.012$ with a
+95\% interval of $[-0.034, +0.055]$ and $p = 0.590$: the two are indistinguishable.
+
+\begin{table}[htbp]
+\centering
+\caption{Fine-tuned on the gold training split. The bracketed interval is a bootstrap CI
+over test sentences for the best-dev seed; $\pm$ is run-to-run variance across seeds.}
+\label{tab:gold-finetune}
+\begin{tabular}{lccc}
+\toprule
+Seed & dev $F_1$ & test $F_1$ & \\
+\midrule
+1 & 0.774 & 0.723 & [0.660, 0.782] \\
+2 & 0.747 & 0.728 & \\
+3 & 0.770 & 0.677 & \\
+\midrule
+Mean & & \multicolumn{2}{l}{0.709 $\pm$ 0.028} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three observations, none of them flattering, all of them worth reporting.
+
+First, 483 training sentences do not beat zero-shot cross-lingual transfer. This is a
+statement about corpus size rather than about the pipeline, which reaches parity with
+published work when given WikiANN's 5\,000 sentences
+(Section~\ref{sec:results:validation}).
+
+Second, \texttt{ORG} is much the weakest class at $F_1 = 0.530$, against 0.855 for
+\texttt{PER}. The corpus contains 192 \texttt{ORG} entities in total, so this is likely a
+data-quantity problem before it is a modelling one --- and it matches \texttt{ORG} being
+hardest for every published checkpoint (Section~\ref{sec:results:errors}).
+
+Third, seed 3 scored 0.677 on test while achieving the second-highest dev score of the
+three. With 121 development sentences, epoch selection is barely better than chance, and
+the $\pm 0.028$ figure should be read as a lower bound on true run-to-run variance rather
+than a tight estimate. Combined with the $\pm 0.06$ confidence interval that 201 test
+sentences afford, this corpus can currently resolve differences of roughly 0.12 and no
+finer. That bound, rather than any single score, is what the present corpus size buys.
+
 \subsection{Fine-tuning: pipeline validation}
 \label{sec:results:validation}
 
