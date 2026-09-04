@@ -164,13 +164,98 @@ Any conclusive claim would require more seeds or wider budget spacing.
 \subsection{Annotation}
 \label{sec:results:annotation}
 
-%% TODO: requires the completed annotation campaign.
-%%   - dataset statistics: sentences, entities by type, sentences with no entities
-%%   - inter-annotator agreement: Fleiss' kappa, pairwise Cohen's kappa, span-level F1,
-%%     reported separately for the full-span and head conventions
-%%   - the assistance experiment: agreement and time per sentence, with and without the
-%%     model's suggestions; how often an incorrect suggestion was accepted
-%%   - junk flag rate and whether annotators agreed on what counted as junk
+%% Written from the campaign as of 2026-09-04: 10 of 12 batches complete. Batches 02 and
+%% 07 are still outstanding; update the counts here if they land before submission.
+
+Ten annotators completed 1\,000 annotations covering 820 distinct sentences
+(Table~\ref{tab:corpus-stats}). Each batch embedded the same 20 shared sentences, so those
+20 carry an annotation from every annotator while the remaining 800 carry one each.
+
+\begin{table}[htbp]
+\centering
+\caption{The annotated corpus. Head counts entities whose proper-name core is narrower
+than the full span --- the cases the dual-boundary convention exists for.}
+\label{tab:corpus-stats}
+\begin{tabular}{lr}
+\toprule
+Sentences & 820 \\
+Annotations & 1\,000 \\
+Annotators & 10 \\
+Entities & 1\,207 \\
+\quad PER / ORG / LOC & 241 / 192 / 774 \\
+Sentences with no entity & 261 \\
+Entities where head $\neq$ full span & 183 (15.2\%) \\
+Median sentence length & 19 tokens \\
+Flagged junk by majority & 15 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Inter-annotator agreement.}
+Over the 20 shared sentences and all ten annotators, Fleiss' $\kappa$ is 0.829 under the
+full-span convention and 0.760 under the head convention; mean pairwise span-level $F_1$ is
+0.757 and 0.714. The ordering is expected and informative: the head convention asks
+annotators to locate the proper-name core inside a phrase, which is precisely the judgement
+Albanian's \emph{X i Y} construction makes ambiguous, so agreement falls when they are
+asked to make it. That gap is the empirical case for recording both boundaries rather than
+legislating one.
+
+The two measures should be read together. $\kappa$ near 0.83 looks strong, but it is
+computed over tokens of which the overwhelming majority are \texttt{O}, where agreement is
+trivial. Span-level $F_1$ of 0.757 is the more honest figure, and it says that two
+annotators picked from this pool agree on roughly three of four entity spans exactly.
+Junk-flag agreement is much weaker ($\kappa = 0.43$): one shared sentence was flagged by
+someone and none by everyone, so what counts as unusable text is the least standardised
+judgement in the protocol.
+
+\paragraph{The assistance experiment.}
+The shared sentences were annotated by five annotators with the model's suggestions visible
+and five without, which lets the anchoring question be answered directly rather than
+assumed. Agreement is far higher in the assisted condition (Table~\ref{tab:assistance}).
+
+\begin{table}[htbp]
+\centering
+\caption{Agreement within each condition, over the same 20 shared sentences and five
+annotators per condition.}
+\label{tab:assistance}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{Fleiss' $\kappa$} & \multicolumn{2}{c}{Pairwise span $F_1$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Condition & full & head & full & head \\
+\midrule
+Assisted & 0.940 & 0.925 & 0.890 & 0.887 \\
+From scratch & 0.759 & 0.664 & 0.711 & 0.640 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Higher agreement is not the same as higher quality, and the direction of the second
+measurement shows why. Scoring each annotator against the model's own pre-labels,
+assisted annotators match it at $F_1 = 0.900$ against 0.679 for those working from scratch
+(0.913 against 0.645 under the head convention). The two groups do not overlap: the lowest
+assisted annotator (0.871) still matches the model more closely than the highest scratch
+annotator (0.754). An exact permutation test over all 252 possible splits of ten annotators
+into two groups of five gives $p = 0.004$ one-tailed --- the smallest value this design can
+produce.
+
+The assisted annotators therefore agree with each other more because they are agreeing with
+the model, which is anchoring rather than accuracy. Their errors are correlated by
+construction, and a corpus built this way would be evaluated against a standard the model
+partly wrote. This is a concrete argument for the from-scratch condition being retained in
+the final corpus rather than treated as a control that could be dropped once assistance
+proved faster.
+
+\paragraph{Time.}
+Assistance did not measurably reduce annotation time. Median time per sentence was 9.6\,s
+assisted against 14.3\,s from scratch, but that comparison treats 1\,000 sentences as
+independent when the annotator is the real unit: per-annotator medians overlap heavily
+(5.6--22.9\,s assisted, 9.4--29.4\,s from scratch), and an exact permutation test on them
+gives $p = 0.15$. The apparent 32\% speed-up does not survive being tested at the right
+level of aggregation.
+
+Taken together the two results are unfavourable to LLM pre-annotation as used here: it
+measurably changed what annotators produced, and did not measurably speed them up.
 
 \subsection{Error analysis}
 \label{sec:results:errors}
