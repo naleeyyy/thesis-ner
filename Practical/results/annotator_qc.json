@@ -1,0 +1,109 @@
+{
+  "annotators": [
+    {
+      "annotator": "1",
+      "sentences": 101,
+      "entities": 164,
+      "multi_token": 70,
+      "narrowed": 20,
+      "narrow_rate": 0.2857,
+      "median_time_s": 12.0,
+      "junk_flagged": 0
+    },
+    {
+      "annotator": "10",
+      "sentences": 100,
+      "entities": 139,
+      "multi_token": 88,
+      "narrowed": 33,
+      "narrow_rate": 0.375,
+      "median_time_s": 5.6,
+      "junk_flagged": 0
+    },
+    {
+      "annotator": "11",
+      "sentences": 100,
+      "entities": 169,
+      "multi_token": 73,
+      "narrowed": 0,
+      "narrow_rate": 0.0,
+      "median_time_s": 9.4,
+      "junk_flagged": 2,
+      "flag": "never marked a head",
+      "p_if_lowest_peer_rate": 0.000317
+    },
+    {
+      "annotator": "13",
+      "sentences": 100,
+      "entities": 144,
+      "multi_token": 67,
+      "narrowed": 7,
+      "narrow_rate": 0.1045,
+      "median_time_s": 19.7,
+      "junk_flagged": 3
+    },
+    {
+      "annotator": "14",
+      "sentences": 100,
+      "entities": 173,
+      "multi_token": 86,
+      "narrowed": 42,
+      "narrow_rate": 0.4884,
+      "median_time_s": 9.5,
+      "junk_flagged": 6
+    },
+    {
+      "annotator": "15",
+      "sentences": 100,
+      "entities": 132,
+      "multi_token": 82,
+      "narrowed": 33,
+      "narrow_rate": 0.4024,
+      "median_time_s": 16.3,
+      "junk_flagged": 2
+    },
+    {
+      "annotator": "3",
+      "sentences": 99,
+      "entities": 127,
+      "multi_token": 72,
+      "narrowed": 27,
+      "narrow_rate": 0.375,
+      "median_time_s": 8.8,
+      "junk_flagged": 2
+    },
+    {
+      "annotator": "4",
+      "sentences": 100,
+      "entities": 156,
+      "multi_token": 73,
+      "narrowed": 16,
+      "narrow_rate": 0.2192,
+      "median_time_s": 12.7,
+      "junk_flagged": 2
+    },
+    {
+      "annotator": "5",
+      "sentences": 100,
+      "entities": 125,
+      "multi_token": 82,
+      "narrowed": 34,
+      "narrow_rate": 0.4146,
+      "median_time_s": 29.4,
+      "junk_flagged": 3
+    },
+    {
+      "annotator": "8",
+      "sentences": 100,
+      "entities": 141,
+      "multi_token": 76,
+      "narrowed": 17,
+      "narrow_rate": 0.2237,
+      "median_time_s": 22.9,
+      "junk_flagged": 0
+    }
+  ],
+  "flagged": [
+    "11"
+  ]
+}
