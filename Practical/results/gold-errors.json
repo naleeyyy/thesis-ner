@@ -1,0 +1,127 @@
+[
+  {
+    "model": "gold-full-seed1",
+    "n_sentences": 201,
+    "n_gold_entities": 285,
+    "n_errors": 104,
+    "by_kind": {
+      "boundary": 40,
+      "spurious": 30,
+      "type": 18,
+      "missed": 16
+    },
+    "by_entity_type": {
+      "PER": {
+        "boundary": 4,
+        "spurious": 6,
+        "missed": 3,
+        "type": 1
+      },
+      "LOC": {
+        "boundary": 32,
+        "spurious": 17,
+        "missed": 5,
+        "type": 4
+      },
+      "ORG": {
+        "type": 13,
+        "missed": 8,
+        "boundary": 4,
+        "spurious": 7
+      }
+    },
+    "type_confusions": {
+      "ORG->LOC": 12,
+      "LOC->ORG": 4,
+      "ORG->PER": 1,
+      "PER->LOC": 1
+    },
+    "boundary_shapes": {
+      "too narrow": 38,
+      "too wide": 2
+    }
+  },
+  {
+    "model": "gold-baselines-davlan-xlmr-hrl",
+    "n_sentences": 201,
+    "n_gold_entities": 285,
+    "n_errors": 102,
+    "by_kind": {
+      "missed": 15,
+      "boundary": 56,
+      "spurious": 22,
+      "type": 9
+    },
+    "by_entity_type": {
+      "PER": {
+        "missed": 4,
+        "spurious": 8,
+        "type": 2,
+        "boundary": 4
+      },
+      "LOC": {
+        "boundary": 42,
+        "spurious": 14,
+        "type": 3,
+        "missed": 1
+      },
+      "ORG": {
+        "boundary": 10,
+        "missed": 10,
+        "type": 4
+      }
+    },
+    "type_confusions": {
+      "LOC->PER": 2,
+      "ORG->PER": 2,
+      "PER->LOC": 2,
+      "ORG->LOC": 2,
+      "LOC->ORG": 1
+    },
+    "boundary_shapes": {
+      "too narrow": 51,
+      "too wide": 5
+    }
+  },
+  {
+    "model": "gold-baselines-kushtrim-mbert-sq",
+    "n_sentences": 201,
+    "n_gold_entities": 285,
+    "n_errors": 184,
+    "by_kind": {
+      "type": 4,
+      "boundary": 70,
+      "spurious": 73,
+      "missed": 37
+    },
+    "by_entity_type": {
+      "PER": {
+        "type": 1,
+        "boundary": 7,
+        "spurious": 11,
+        "missed": 11
+      },
+      "LOC": {
+        "boundary": 53,
+        "spurious": 23,
+        "missed": 21,
+        "type": 1
+      },
+      "ORG": {
+        "boundary": 10,
+        "type": 2,
+        "missed": 5,
+        "spurious": 39
+      }
+    },
+    "type_confusions": {
+      "ORG->LOC": 2,
+      "PER->ORG": 1,
+      "LOC->ORG": 1
+    },
+    "boundary_shapes": {
+      "too narrow": 65,
+      "too wide": 5
+    }
+  }
+]

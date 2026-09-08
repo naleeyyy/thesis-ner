@@ -46,9 +46,7 @@ PREDICTIONS_DIR = RESULTS_DIR / "predictions"
 CONDITIONS = ("gold_only", "wikiann_only", "gold_plus_wikiann")
 
 
-def training_set(
-    condition: str, gold_train: list[Example], wikiann_train: list[Example]
-) -> list[Example]:
+def training_set(condition: str, gold_train: list[Example], wikiann_train: list[Example]) -> list[Example]:
     if condition == "gold_only":
         return list(gold_train)
     if condition == "wikiann_only":
@@ -73,8 +71,9 @@ def main() -> int:
     p.add_argument("--dev-frac", type=float, default=0.15)
     p.add_argument("--test-frac", type=float, default=0.25)
     p.add_argument("--split-seed", type=int, default=20260811)
-    p.add_argument("--wikiann-limit", type=int, default=None,
-                   help="Cap the WikiANN training data (for a cheaper run).")
+    p.add_argument(
+        "--wikiann-limit", type=int, default=None, help="Cap the WikiANN training data (for a cheaper run)."
+    )
     p.add_argument("--out-prefix", default="ablation")
     args = p.parse_args()
 
@@ -85,15 +84,32 @@ def main() -> int:
         wikiann_train = wikiann_train[: args.wikiann_limit]
     wikiann_test = load_wikiann("test")
 
+    # Two of the three conditions train on WikiANN and are scored on the gold test split,
+    # so any shared sentence between the corpora would inflate those conditions and
+    # nothing downstream would notice. Checked rather than assumed.
+    gold_test_sents = {" ".join(e.tokens) for e in test}
+    wk_train_sents = {" ".join(e.tokens) for e in wikiann_train}
+    overlap = gold_test_sents & wk_train_sents
+    if overlap:
+        raise SystemExit(
+            f"{len(overlap)} gold test sentences also appear in WikiANN train; the "
+            "wikiann_only and gold_plus_wikiann conditions would be contaminated."
+        )
+    gold_train_sents = {" ".join(e.tokens) for e in gold_train}
+    wk_test_leak = gold_train_sents & {" ".join(e.tokens) for e in wikiann_test}
+    if wk_test_leak:
+        raise SystemExit(f"{len(wk_test_leak)} gold train sentences appear in WikiANN test.")
+
     device = resolve_device()
     hardware = hardware_info(device)
     refs = [e.tags for e in test]
     wikiann_refs = [e.tags for e in wikiann_test]
 
-    print(f"gold {args.gold.name} ({args.mode}): train {len(gold_train)}, dev {len(dev)}, "
-          f"test {len(test)}   |   WikiANN train {len(wikiann_train)}")
-    print(f"{len(args.conditions)} conditions x {len(args.seeds)} seeds on "
-          f"{hardware['accelerator']}\n")
+    print(
+        f"gold {args.gold.name} ({args.mode}): train {len(gold_train)}, dev {len(dev)}, "
+        f"test {len(test)}   |   WikiANN train {len(wikiann_train)}"
+    )
+    print(f"{len(args.conditions)} conditions x {len(args.seeds)} seeds on {hardware['accelerator']}\n")
 
     results: dict[str, dict] = {}
     best_preds: dict[str, list[list[str]]] = {}
@@ -109,22 +125,27 @@ def main() -> int:
             model, tokenizer, hist = train_one_seed(seed, train, dev, args, device)
             preds = predict(model, tokenizer, test, device, args.max_length)
             gold_f1 = f1_of(preds, refs)
-            wikiann_f1 = f1_of(
-                predict(model, tokenizer, wikiann_test, device, args.max_length), wikiann_refs
-            )
+            wikiann_f1 = f1_of(predict(model, tokenizer, wikiann_test, device, args.max_length), wikiann_refs)
             elapsed = time.perf_counter() - t_seed
 
             scores.append(gold_f1)
             wikiann_scores.append(wikiann_f1)
-            per_seed.append({"seed": seed, "gold_test_f1": round(gold_f1, 4),
-                             "wikiann_test_f1": round(wikiann_f1, 4),
-                             "best_dev_f1": round(hist["best_dev_f1"], 4),
-                             "n_train": len(train), "seconds": round(elapsed, 1)})
+            per_seed.append(
+                {
+                    "seed": seed,
+                    "gold_test_f1": round(gold_f1, 4),
+                    "wikiann_test_f1": round(wikiann_f1, 4),
+                    "best_dev_f1": round(hist["best_dev_f1"], 4),
+                    "n_train": len(train),
+                    "seconds": round(elapsed, 1),
+                }
+            )
             # Keep the best-by-dev seed's predictions: selecting on test would leak.
             if hist["best_dev_f1"] > best_dev:
                 best_dev, best_pred = hist["best_dev_f1"], preds
-            print(f"  [{condition}] seed {seed}: gold {gold_f1:.4f}  "
-                  f"wikiann {wikiann_f1:.4f}  ({elapsed:.0f}s)")
+            print(
+                f"  [{condition}] seed {seed}: gold {gold_f1:.4f}  wikiann {wikiann_f1:.4f}  ({elapsed:.0f}s)"
+            )
 
             del model
             free_cache(device)
@@ -151,19 +172,29 @@ def main() -> int:
     for i, a in enumerate(ordered):
         for b in ordered[i + 1 :]:
             result = stats.paired_bootstrap(
-                a, stats.sentence_counts(best_preds[a], refs),
-                b, stats.sentence_counts(best_preds[b], refs), indices,
+                a,
+                stats.sentence_counts(best_preds[a], refs),
+                b,
+                stats.sentence_counts(best_preds[b], refs),
+                indices,
             )
             comparisons.append(result.to_dict())
 
     total_s = time.perf_counter() - t0
     report = {
-        "gold": str(args.gold), "mode": args.mode, "model": args.model,
-        "seeds": args.seeds, "n_gold_train": len(gold_train),
-        "n_dev": len(dev), "n_test": len(test), "n_wikiann_train": len(wikiann_train),
+        "gold": str(args.gold),
+        "mode": args.mode,
+        "model": args.model,
+        "seeds": args.seeds,
+        "n_gold_train": len(gold_train),
+        "n_dev": len(dev),
+        "n_test": len(test),
+        "n_wikiann_train": len(wikiann_train),
         "hyperparams": {"epochs": args.epochs, "batch_size": args.batch_size, "lr": args.lr},
-        "conditions": results, "comparisons": comparisons,
-        "hardware": hardware, "software": software_info(),
+        "conditions": results,
+        "comparisons": comparisons,
+        "hardware": hardware,
+        "software": software_info(),
         "total_compute_s": round(total_s, 1),
     }
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -172,24 +203,31 @@ def main() -> int:
 
     print("condition             n_train   gold test F1      wikiann test F1")
     for condition, r in results.items():
-        print(f"  {condition:20s} {r['n_train']:6d}   "
-              f"{r['gold_test_f1_mean']:.4f} ± {r['gold_test_f1_std']:.4f}   "
-              f"{r['wikiann_test_f1_mean']:.4f}")
+        print(
+            f"  {condition:20s} {r['n_train']:6d}   "
+            f"{r['gold_test_f1_mean']:.4f} ± {r['gold_test_f1_std']:.4f}   "
+            f"{r['wikiann_test_f1_mean']:.4f}"
+        )
     print("\npaired comparisons on the gold test set:")
     for c in comparisons:
         verdict = "significant" if c["significant"] else "not distinguishable"
-        print(f"  {c['model_a']:20s} vs {c['model_b']:20s} {c['delta']:+.4f}  "
-              f"[{c['ci_low']:+.4f}, {c['ci_high']:+.4f}]  {verdict}")
+        print(
+            f"  {c['model_a']:20s} vs {c['model_b']:20s} {c['delta']:+.4f}  "
+            f"[{c['ci_low']:+.4f}, {c['ci_high']:+.4f}]  {verdict}"
+        )
     print(f"\n{describe(hardware, total_s)}\n→ results/{args.out_prefix}.md")
     return 0
 
 
 def _write_markdown(r: dict, path: Path) -> None:
     lines = [
-        "# Does the gold set earn its keep?", "",
+        "# Does the gold set earn its keep?",
+        "",
         f"All three conditions are evaluated on the **same** held-out gold test split "
-        f"({r['n_test']} sentences, split seed fixed). Only the training data varies.", "",
-        f"{r['model']}, seeds {r['seeds']}, {r['hyperparams']['epochs']} epochs.", "",
+        f"({r['n_test']} sentences, split seed fixed). Only the training data varies.",
+        "",
+        f"{r['model']}, seeds {r['seeds']}, {r['hyperparams']['epochs']} epochs.",
+        "",
         "| Condition | Train size | Gold test F1 | WikiANN test F1 |",
         "| --- | ---: | ---: | ---: |",
     ]
@@ -204,7 +242,8 @@ def _write_markdown(r: dict, path: Path) -> None:
         "## Are the differences real?",
         "",
         "Paired bootstrap on the gold test set, using each condition's best-by-dev seed. "
-        "A gap whose interval includes zero is not a result.", "",
+        "A gap whose interval includes zero is not a result.",
+        "",
         "| A | B | ΔF1 | 95% CI | verdict |",
         "| --- | --- | ---: | ---: | :--- |",
     ]
@@ -217,7 +256,8 @@ def _write_markdown(r: dict, path: Path) -> None:
     lines += [
         "",
         f"- Hardware: {r['hardware']['accelerator']} ({r['hardware']['device']})",
-        f"- Total compute: {r['total_compute_s'] / 60:.1f} min", "",
+        f"- Total compute: {r['total_compute_s'] / 60:.1f} min",
+        "",
     ]
     path.write_text("\n".join(lines))
 

@@ -1,0 +1,29 @@
+{
+  "n_test": 201,
+  "n_flagged": 18,
+  "annotator": "11",
+  "seeds": [
+    {
+      "seed": 1,
+      "all": 0.8055,
+      "excl_flagged": 0.8134,
+      "flagged_only": 0.7111
+    },
+    {
+      "seed": 2,
+      "all": 0.809,
+      "excl_flagged": 0.8165,
+      "flagged_only": 0.7234
+    },
+    {
+      "seed": 3,
+      "all": 0.7719,
+      "excl_flagged": 0.7821,
+      "flagged_only": 0.6522
+    }
+  ],
+  "all_mean": 0.7955,
+  "excl_flagged_mean": 0.804,
+  "flagged_only_mean": 0.6956,
+  "note": "Same model and predictions throughout; only the scoring subset varies, so the difference isolates the effect of annotator 11's sentences on evaluation. Training a separate model on a corpus with those sentences removed would NOT answer this: it changes the split, the training size and the test set at once."
+}

@@ -58,7 +58,7 @@ Davlan XLM-R HRL      & 0.520 & [0.489, 0.551] & & 0.711 & [0.648, 0.772] \\
 
 
 Two observations. ORG is the hardest class for every model without exception, which
-motivates the error analysis in Section~\ref{sec:results:errors}. And the two checkpoints
+motivates the error analysis in Appendix~\ref{app:erroranalysis}. And the two checkpoints
 nominally trained on the same data differ by 0.145 $F_1$ --- a reproducibility gap worth
 noting, since it suggests that releasing checkpoints without training and evaluation code
 leaves published numbers difficult to interpret.
@@ -143,12 +143,12 @@ Three observations, none of them flattering, all of them worth reporting.
 First, 483 training sentences do not beat zero-shot cross-lingual transfer. This is a
 statement about corpus size rather than about the pipeline, which reaches parity with
 published work when given WikiANN's 5\,000 sentences
-(Section~\ref{sec:results:validation}).
+(Appendix~\ref{app:validation}).
 
 Second, \texttt{ORG} is much the weakest class at $F_1 = 0.530$, against 0.855 for
 \texttt{PER}. The corpus contains 192 \texttt{ORG} entities in total, so this is likely a
 data-quantity problem before it is a modelling one --- and it matches \texttt{ORG} being
-hardest for every published checkpoint (Section~\ref{sec:results:errors}).
+hardest for every published checkpoint (Appendix~\ref{app:erroranalysis}).
 
 Third, seed 3 scored 0.677 on test while achieving the second-highest dev score of the
 three. With 121 development sentences, epoch selection is barely better than chance, and
@@ -157,19 +157,41 @@ than a tight estimate. Combined with the $\pm 0.06$ confidence interval that 201
 sentences afford, this corpus can currently resolve differences of roughly 0.12 and no
 finer. That bound, rather than any single score, is what the present corpus size buys.
 
-\subsection{Fine-tuning: pipeline validation}
-\label{sec:results:validation}
+Before being applied to the annotated data the training pipeline was validated on
+WikiANN-sq, where it reaches parity with the best published checkpoint
+(Appendix~\ref{app:validation}). Differences reported here are therefore attributable to
+the data rather than to the training setup.
 
-Before applying the training pipeline to the annotated data, it was validated on
-WikiANN-sq. A fine-tuned \texttt{xlm-roberta-base} reached $F_1 = 0.928$ on the WikiANN
-test split, against 0.925 for the published Kushtrim checkpoint. A paired bootstrap gives a
-difference of $+0.003$ with a 95\% confidence interval of $[-0.012, +0.018]$ and $p =
-0.691$: the two are statistically indistinguishable.
+\subsection{The boundary convention is worth 0.09 $F_1$}
+\label{sec:results:head}
 
-This is reported not as a contribution but as a control. It establishes that the training
-configuration reaches parity with published work on the standard benchmark, so differences
-observed later on the annotated corpus are attributable to the data rather than to the
-training setup.
+Every figure so far uses the full-span convention. Training the same model on the same
+sentences under the head convention --- identical split, identical hyperparameters, only
+the labels differing --- gives $F_1 = 0.795 \pm 0.021$ against $0.707 \pm 0.033$. The
+choice of convention is worth more than most modelling decisions in this report.
+
+The error profile explains why, and the explanation is specific rather than a general
+appeal to shorter spans being easier. Under the full-span convention 40 of 104 errors are
+boundary errors, and they are almost entirely under-extensions: 38 spans too narrow against
+2 too wide. Under the head convention boundary errors fall to 14 of 83 and the asymmetry
+disappears entirely, 7 against 7. The model, in other words, natively predicts something
+close to the proper-name head. Asked for the full phrase it systematically under-reaches;
+asked for the head it is unbiased. \texttt{LOC} errors fall furthest, from 58 to 34, which
+is where \emph{X i Y} constructions live (\emph{qyteti i Tiran\"es}).
+
+This is the payoff of recording both boundaries. A corpus that silently adopts full spans
+reports roughly 0.09 $F_1$ less than one that silently adopts heads, for identical
+underlying competence, and neither can be converted into the other after the fact. Two
+published Albanian scores need not disagree about any model to differ by more than the gap
+between the best and worst checkpoint in Table~\ref{tab:baselines}.
+
+\paragraph{Sensitivity to annotator non-compliance.}
+One annotator never marked a head (Section~\ref{sec:conclusion}), so their sentences carry
+head~$=$~full by omission. Scoring the same predictions on subsets of the test split
+isolates the effect: their 18 sentences score 0.696 against 0.804 for the other 183, a gap
+consistent across all three seeds and in the direction their omission predicts. Because
+they are a small share of the split, the reported figure is depressed by only 0.008, which
+is inside seed variance. The defect is real and detectable but does not carry the result.
 
 \subsection{Annotation}
 \label{sec:results:annotation}
@@ -267,36 +289,3 @@ level of aggregation.
 Taken together the two results are unfavourable to LLM pre-annotation as used here: it
 measurably changed what annotators produced, and did not measurably speed them up.
 
-\subsection{Error analysis}
-\label{sec:results:errors}
-
-An $F_1$ score says a model is wrong without saying how. Classifying every mismatch into
-four categories --- a gold entity with no overlapping prediction (\emph{missed}), a
-prediction overlapping no gold entity (\emph{spurious}), the same token extent with the
-wrong type (\emph{type}), and overlapping extents that do not match exactly
-(\emph{boundary}) --- separates failures that annotation guidelines can address from
-failures that are modelling problems (Figure~\ref{fig:errors}, Appendix~\ref{app:errors}).
-
-
-
-Three findings stand out.
-
-\emph{Boundary errors are overwhelmingly under-extensions.} Across every model, a span
-that is wrong at its edges is far more often too short than too long --- 150 against 5 for
-akdeniz27, 116 against 7 for Babelscape, 153 against 1 for Davlan. Models truncate
-multi-token entities rather than over-reaching. This is directly relevant to the
-annotation design: Albanian's \emph{X i Y} construction produces exactly the multi-token
-spans that are being cut short, which is part of why the boundary convention was recorded
-twice rather than fixed in advance (Section~\ref{sec:method:annotation}).
-
-\emph{The reproducibility gap is a boundary problem, not a recall problem.} The two
-mBERT checkpoints nominally trained on the same data differ by 0.145 $F_1$, and the error
-profiles show why: 56\% of akdeniz27's errors are boundary errors against 21\% for
-Kushtrim. The weaker model is not failing to find entities so much as failing to delimit
-them.
-
-\emph{ORG is confused with LOC, in that direction.} ORG$\rightarrow$LOC is the most
-common type confusion for four of the five models. This is consistent with the class being
-hardest for every model in Table~\ref{tab:baselines}, and with the Albanian pattern in
-which institutions are named after places --- a distinction the annotation guidelines had
-to legislate explicitly.
