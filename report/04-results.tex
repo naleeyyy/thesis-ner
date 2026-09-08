@@ -103,8 +103,9 @@ and transfers to ordinary prose more evenly.
 
 It would overstate the evidence to conclude from this that training on WikiANN-sq damages a
 model, because the mismatch runs both ways. A model fine-tuned on the gold corpus here
-scores 0.548 $\pm$ 0.020 on WikiANN-sq test, against 0.707 $\pm$ 0.027 on its own test split
-(Section~\ref{sec:results:gold-finetune}). Set beside Kushtrim's 0.574 on the gold split,
+scores 0.544 $\pm$ 0.031 on WikiANN-sq test, against 0.709 $\pm$ 0.022 on its own test split
+(Section~\ref{sec:results:gold-finetune}); both figures pool six training runs, two
+independent sets of three seeds. Set beside Kushtrim's 0.574 on the gold split,
 the picture is symmetric: each model reaches roughly 0.55--0.57 on the corpus it was not
 trained on, whichever direction the move is made.
 
@@ -132,11 +133,14 @@ for the best zero-shot checkpoint. A paired bootstrap gives a difference of $+0.
 
 
 
-The same three models were also scored on WikiANN-sq test, giving
-$F_1 = 0.548 \pm 0.020$. That number belongs with the transfer discussion in
+The same models were also scored on WikiANN-sq test, giving
+$F_1 = 0.544 \pm 0.031$ over six runs. That number belongs with the transfer discussion in
 Section~\ref{sec:results:transfer}: it establishes that the domain gap is symmetric rather
-than a one-way deficiency of the silver corpus. Note that it is the more precisely measured
-of the two figures, since WikiANN-sq test has 1\,000 sentences against the gold split's 201.
+than a one-way deficiency of the silver corpus. Two independent sets of three seeds were run under
+identical settings and gave means of 0.548 and 0.541 on WikiANN-sq, individual runs ranging
+from 0.500 to 0.582 --- a spread that illustrates the hardware non-determinism described in
+Section~\ref{sec:method:stats} more sharply than any single run's $\pm$ conveys, and the
+reason the pooled figure is quoted here.
 
 Three observations, none of them flattering, all of them worth reporting.
 
