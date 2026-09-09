@@ -75,16 +75,22 @@ routine. The ranking inverts between them.
 \centering
 \includegraphics[width=\linewidth]{images/fig_transfer}
 \caption{The same four checkpoints, the same scoring routine, two benchmarks. Rank on
-WikiANN-sq does not predict rank on hand-verified Albanian prose; Spearman's
-$\rho = -0.80$.}
+WikiANN-sq does not predict performance on hand-verified Albanian prose. The individual
+score changes, not the rank order, are what carry the evidence.}
 \label{fig:transfer}
 \end{figure}
 
 The best model on WikiANN-sq is the third-best here, losing 0.351 $F_1$; the worst model on
-WikiANN-sq is the best here, gaining 0.191. Spearman's rank correlation between the two
-orderings is $-0.80$, close to a perfect inversion. Every pairwise gap on the gold split is significant under a paired bootstrap except
-Kushtrim against akdeniz27 ($p = 0.345$), so the new ordering is not an artefact of the
-test sample.
+WikiANN-sq is the best here, gaining 0.191. Every pairwise gap on the gold split is
+significant under a paired bootstrap except Kushtrim against akdeniz27 ($p = 0.345$), so
+the new ordering is not an artefact of the test sample.
+
+The rank correlation between the two orderings is $\rho = -0.80$, but it is quoted here as
+description rather than evidence: with four models an exact permutation test gives
+$p = 0.167$, and even a perfect inversion could not reach $p < 0.05$. What carries the
+result is the size of the individual changes and the intervals around them --- Kushtrim
+falls 0.351 with non-overlapping confidence intervals at both ends --- not the ordering
+statistic computed over four points.
 
 This is the central result of the report, and it is worth stating carefully. It does not
 show that the Albanian-specific checkpoints are bad models, nor that their published
