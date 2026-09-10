@@ -219,19 +219,18 @@ Institute of Machine Learning, Johannes Kepler University Linz}
 %\setbottommark{Space for your bottom mark}
 
 %% Command \abstract{text}: set the document abstract on the title page
-%% DRAFT abstract. Two numbers are still missing because the annotation campaign is
-%% running; they are marked \todonum below and must be filled before submission.
-\newcommand{\todonum}[1]{\textbf{[#1]}}
 \abstract{%
-    Albanian's most widely used NER resource, WikiANN-sq, is built by automatic
-    cross-lingual projection: its median sentence is 6 tokens against 20 in freshly
-    sampled Wikipedia text. This report presents a hand-verified Albanian NER corpus of
-    \todonum{N} sentences with inter-annotator agreement measured rather than assumed.
-    Every entity carries both a full span and a proper-name head, so the boundary of
-    Albanian's ambiguous \emph{X i Y} construction remains a reporting choice rather than a
-    property of the data. The effect of large-language-model pre-annotation on annotators
-    is measured in a between-subjects design (\todonum{result}). All model comparisons use
-    bootstrap confidence intervals and paired significance tests.%
+    Albanian is under-resourced for named entity recognition, and its most widely used
+    resource, WikiANN-sq, is built by automatic cross-lingual projection: its median
+    sentence is 6 tokens against 20 in freshly sampled Wikipedia text. This report presents
+    a hand-verified Albanian NER corpus of 820 sentences and 1\,207 entities, annotated by
+    ten people with inter-annotator agreement measured rather than assumed (Fleiss'
+    $\kappa = 0.83$). Every entity carries both a full span and a proper-name head, which
+    makes the boundary convention a reporting choice and shows it to be worth 0.09 $F_1$.
+    Rank order on WikiANN-sq does not predict performance on full-length prose. The 483
+    hand-annotated training sentences outperform 5\,000 automatically projected ones by
+    0.132 $F_1$. Annotators shown model pre-annotations converged on the model's own output
+    ($p = 0.004$) without working measurably faster.%
 }
 
 %% Command \keywords{text}: set the document keywords

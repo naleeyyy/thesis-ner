@@ -18,7 +18,7 @@ remainder passed through a quality filter (Table~\ref{tab:filter}). Every rule w
 calibrated against a held-out sample rather than chosen a~priori, and the calibration
 changed the rules twice. A naive ``an isolated lowercase letter indicates a split word''
 test flags the unit symbol in \emph{400~m} and \emph{1--2~m}, and the Spanish particle in
-\emph{Diego Rodríguez de Silva y Velázquez} --- the latter a sentence containing a person
+\emph{Diego Rodríguez de Silva y Velázquez}. The latter is a sentence containing a person
 entity. The final rule therefore exempts letters adjacent to a number, letters between two
 capitalised tokens, and uppercase letters, which in this corpus are Roman numerals and
 initials.
@@ -35,8 +35,8 @@ them the apostrophe cases the repair declines to touch.
 
 Finally, exact duplicates were removed and near-identical stub sentences capped at three
 per template family. Albanian Wikipedia contains generated geography stubs that differ only
-in their figures; one such template occurred fifteen times. These are genuine negatives ---
-a model must learn that a sentence may contain no entities --- but fifteen near-copies add
+in their figures; one such template occurred fifteen times. These are genuine negatives, since
+a model must learn that a sentence may contain no entities, but fifteen near-copies add
 nothing over three while consuming annotation effort. The final pool holds 2\,500 sentences
 from 865 distinct articles, median length 20 tokens.
 
@@ -69,8 +69,8 @@ volunteer native speakers.%
 The corpus was annotated by [ANNOTATOR NAMES], whose contribution is gratefully
 acknowledged.}
 Work is issued in numbered batches of 100 sentences; an append-only ledger records every
-assignment, which prevents a sentence being issued twice --- inflating apparent agreement
---- or never issued at all.
+assignment, which prevents a sentence being issued twice, which would inflate apparent agreement,
+or never issued at all.
 
 \paragraph{Two boundary conventions.}
 Albanian's \emph{X i Y} construction is genuinely ambiguous about where a name ends.
@@ -87,7 +87,7 @@ Each batch embeds the same 20 shared sentences, so every annotator contributes t
 inter-annotator agreement without a separate assignment. Odd-numbered batches are issued
 with the model's suggestions visible and even-numbered batches without them. Because both
 contain the same shared sentences, this yields the same sentences annotated under both
-conditions --- a between-subjects design, which avoids the memory effects that would arise
+conditions. This is a between-subjects design, which avoids the memory effects that would arise
 from having one annotator work both ways.
 
 Agreement is reported three ways: Fleiss'~$\kappa$~\cite{bib:fleiss1971} across all
@@ -119,7 +119,7 @@ practical option here, since a live loop would require annotators on standby bet
 and could not be replayed under a different seed.
 
 Two strategies are compared. \emph{Random} samples uniformly. \emph{Uncertainty} ranks
-candidates by mean per-token predictive entropy --- mean rather than sum, so that the
+candidates by mean per-token predictive entropy. Mean rather than sum, so that the
 strategy does not simply prefer long sentences and thereby confound informativeness with
 annotation cost. Each round retrains from scratch on the labelled subset.
 

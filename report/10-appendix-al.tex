@@ -38,8 +38,8 @@ across three seeds; they overlap at every budget.}
 
 No budget shows a significant difference. The largest gap, 0.024 at 750 sentences, reaches
 $t = -2.03$ against the $|t| > 2.8$ required at three seeds. The direction of the
-difference also alternates --- uncertainty leads at three of five budgets and random at two
---- which is characteristic of noise rather than of an effect.
+difference also alternates, with uncertainty leading at three of five budgets and random at two,
+which is characteristic of noise rather than of an effect.
 
 Uncertainty sampling is slightly \emph{worse} at intermediate budgets. This is consistent
 with a known property of entropy-based acquisition: it favours atypical and difficult
@@ -144,10 +144,10 @@ training setup.
 \label{app:erroranalysis}
 
 An $F_1$ score says a model is wrong without saying how. Classifying every mismatch into
-four categories --- a gold entity with no overlapping prediction (\emph{missed}), a
+four categories, a gold entity with no overlapping prediction (\emph{missed}), a
 prediction overlapping no gold entity (\emph{spurious}), the same token extent with the
 wrong type (\emph{type}), and overlapping extents that do not match exactly
-(\emph{boundary}) --- separates failures that annotation guidelines can address from
+(\emph{boundary}), separates failures that annotation guidelines can address from
 failures that are modelling problems (Figure~\ref{fig:errors}).
 
 
@@ -155,7 +155,7 @@ failures that are modelling problems (Figure~\ref{fig:errors}).
 Three findings stand out.
 
 \emph{Boundary errors are overwhelmingly under-extensions.} Across every model, a span
-that is wrong at its edges is far more often too short than too long --- 150 against 5 for
+that is wrong at its edges is far more often too short than too long: 150 against 5 for
 akdeniz27, 116 against 7 for Babelscape, 153 against 1 for Davlan. Models truncate
 multi-token entities rather than over-reaching. This is directly relevant to the
 annotation design: Albanian's \emph{X i Y} construction produces exactly the multi-token
@@ -171,5 +171,28 @@ them.
 \emph{ORG is confused with LOC, in that direction.} ORG$\rightarrow$LOC is the most
 common type confusion for four of the five models. This is consistent with the class being
 hardest for every model in Table~\ref{tab:baselines}, and with the Albanian pattern in
-which institutions are named after places --- a distinction the annotation guidelines had
+which institutions are named after places, a distinction the annotation guidelines had
 to legislate explicitly.
+
+\section{Corpus statistics}
+\label{app:corpusstats}
+
+\begin{table}[htbp]
+\centering
+\caption{The annotated corpus. Head counts entities whose proper-name core is narrower
+than the full span, the cases the dual-boundary convention exists for.}
+\label{tab:corpus-stats}
+\begin{tabular}{lr}
+\toprule
+Sentences & 820 \\
+Annotations & 1\,000 \\
+Annotators & 10 \\
+Entities & 1\,207 \\
+\quad PER / ORG / LOC & 241 / 192 / 774 \\
+Sentences with no entity & 261 \\
+Entities where head $\neq$ full span & 183 (15.2\%) \\
+Median sentence length & 19 tokens \\
+Flagged junk by majority & 15 \\
+\bottomrule
+\end{tabular}
+\end{table}

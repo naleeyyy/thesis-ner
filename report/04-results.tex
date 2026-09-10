@@ -59,7 +59,7 @@ Davlan XLM-R HRL      & 0.520 & [0.489, 0.551] & & 0.711 & [0.648, 0.772] \\
 
 Two observations. ORG is the hardest class for every model without exception, which
 motivates the error analysis in Appendix~\ref{app:erroranalysis}. And the two checkpoints
-nominally trained on the same data differ by 0.145 $F_1$ --- a reproducibility gap worth
+nominally trained on the same data differ by 0.145 $F_1$, a reproducibility gap worth
 noting, since it suggests that releasing checkpoints without training and evaluation code
 leaves published numbers difficult to interpret.
 
@@ -88,15 +88,15 @@ the new ordering is not an artefact of the test sample.
 The rank correlation between the two orderings is $\rho = -0.80$, but it is quoted here as
 description rather than evidence: with four models an exact permutation test gives
 $p = 0.167$, and even a perfect inversion could not reach $p < 0.05$. What carries the
-result is the size of the individual changes and the intervals around them --- Kushtrim
-falls 0.351 with non-overlapping confidence intervals at both ends --- not the ordering
+result is the size of the individual changes and the intervals around them. Kushtrim
+falls 0.351 with non-overlapping confidence intervals at both ends. It is not the ordering
 statistic computed over four points.
 
 This is the central result of the report, and it is worth stating carefully. It does not
 show that the Albanian-specific checkpoints are bad models, nor that their published
 numbers are wrong: those numbers are reproducible, and Section~\ref{sec:results:baselines}
 reproduces them. It shows that a WikiANN-sq score does not predict performance on
-full-length Albanian prose --- in this comparison it predicts it \emph{backwards}. A
+full-length Albanian prose. In this comparison it predicts it \emph{backwards}. A
 practitioner choosing an Albanian NER model by its WikiANN score would have selected the
 worst of the four available options for running text.
 
@@ -124,7 +124,7 @@ penalised for over-reaching, and the head convention would fare worse still.
 
 What the evidence supports is narrower than a claim about damage, and more useful. The two
 benchmarks measure different things, neither substitutes for the other, and a WikiANN-sq
-score does not order models by their performance on running text --- in this comparison it
+score does not order models by their performance on running text. In this comparison it
 orders them almost exactly backwards. Since applications process running text, that is the
 setting an evaluation set has to represent, and none existed for Albanian.
 
@@ -144,7 +144,7 @@ $F_1 = 0.544 \pm 0.031$ over six runs. That number belongs with the transfer dis
 Section~\ref{sec:results:transfer}: it establishes that the domain gap is symmetric rather
 than a one-way deficiency of the silver corpus. Two independent sets of three seeds were run under
 identical settings and gave means of 0.548 and 0.541 on WikiANN-sq, individual runs ranging
-from 0.500 to 0.582 --- a spread that illustrates the hardware non-determinism described in
+from 0.500 to 0.582, a spread that illustrates the hardware non-determinism described in
 Section~\ref{sec:method:stats} more sharply than any single run's $\pm$ conveys, and the
 reason the pooled figure is quoted here.
 
@@ -157,7 +157,7 @@ published work when given WikiANN's 5\,000 sentences
 
 Second, \texttt{ORG} is much the weakest class at $F_1 = 0.530$, against 0.855 for
 \texttt{PER}. The corpus contains 192 \texttt{ORG} entities in total, so this is likely a
-data-quantity problem before it is a modelling one --- and it matches \texttt{ORG} being
+data-quantity problem before it is a modelling one, and it matches \texttt{ORG} being
 hardest for every published checkpoint (Appendix~\ref{app:erroranalysis}).
 
 Third, seed 3 scored 0.677 on test while achieving the second-highest dev score of the
@@ -172,12 +172,58 @@ WikiANN-sq, where it reaches parity with the best published checkpoint
 (Appendix~\ref{app:validation}). Differences reported here are therefore attributable to
 the data rather than to the training setup.
 
+\subsection{Does the annotation effort pay for itself?}
+\label{sec:results:ablation}
+
+The corpus is small. WikiANN-sq offers ten times as many training sentences at no
+annotation cost, so it is fair to ask whether the hand-annotated data was worth
+collecting. Three training sets were compared on one fixed test split
+(Table~\ref{tab:ablation}), with every condition also scored on WikiANN-sq test so that
+both directions are visible.
+
+\begin{table}[htbp]
+\centering
+\caption{Three training sets, two test sets. Mean over three seeds, except the combined
+condition, which reports two.}
+\label{tab:ablation}
+\begin{tabular}{lcc}
+\toprule
+Training data & gold test & WikiANN test \\
+\midrule
+Gold only (483 sentences)      & 0.687 & 0.551 \\
+WikiANN only (5\,000)          & 0.543 & 0.931 \\
+Gold + WikiANN (5\,483)        & 0.691 & 0.932 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On the gold test split, 483 hand-annotated sentences beat 5\,000 automatically projected
+ones by 0.132 $F_1$, with a 95\% confidence interval of $[+0.072, +0.191]$ and
+$p < 0.001$ under a paired bootstrap. Ten annotators working for a few days produced
+training data worth more, on text of the kind applications actually process, than a corpus
+an order of magnitude larger built by cross-lingual projection. That is the clearest
+justification available for the annotation effort, and it is a measured result rather than
+an appeal to the value of hand-checked data.
+
+The WikiANN-only condition is also a useful control. It reaches 0.931 on WikiANN test,
+slightly above the best published Albanian checkpoint at 0.925, using the same architecture
+and hyperparameters as every other model here. The low scores that models trained on
+WikiANN obtain on the gold split are therefore a property of the training data rather than
+a weakness of the training setup.
+
+The third condition answers a practical question. Combining both corpora matches the better
+specialist on each test set, gaining 0.003 on gold and 0.001 on WikiANN, while each
+specialist alone loses roughly 0.14 to 0.39 on the other's test set. The two distributions
+do not compete for model capacity. Anyone building an Albanian NER system should train on
+both, and the earlier finding is better stated as a limitation of training on WikiANN
+\emph{alone} rather than as harm done by including it.
+
 \subsection{The boundary convention is worth 0.09 $F_1$}
 \label{sec:results:head}
 
 Every figure so far uses the full-span convention. Training the same model on the same
-sentences under the head convention --- identical split, identical hyperparameters, only
-the labels differing --- gives $F_1 = 0.795 \pm 0.021$ against $0.707 \pm 0.033$. The
+sentences under the head convention, with an identical split, identical hyperparameters and only
+the labels differing, gives $F_1 = 0.795 \pm 0.021$ against $0.707 \pm 0.033$. The
 choice of convention is worth more than most modelling decisions in this report.
 
 The error profile explains why, and the explanation is specific rather than a general
@@ -188,6 +234,13 @@ disappears entirely, 7 against 7. The model, in other words, natively predicts s
 close to the proper-name head. Asked for the full phrase it systematically under-reaches;
 asked for the head it is unbiased. \texttt{LOC} errors fall furthest, from 58 to 34, which
 is where \emph{X i Y} constructions live (\emph{qyteti i Tiran\"es}).
+
+The difference is entirely one of delimitation, not of finding entities at all. Rescoring
+both models with a relaxed rule, under which a predicted span counts if it overlaps a gold
+span of the same type, gives 0.856 for the full-span model and 0.847 for the head model.
+Under that rule the ordering reverses and the gap disappears. Both models locate
+essentially the same entities, 250 and 246 of 285. What separates them is whether the edges
+land where the convention says they should.
 
 This is the payoff of recording both boundaries. A corpus that silently adopts full spans
 reports roughly 0.09 $F_1$ less than one that silently adopts heads, for identical
@@ -210,28 +263,12 @@ is inside seed variance. The defect is real and detectable but does not carry th
 %% 07 are still outstanding; update the counts here if they land before submission.
 
 Ten annotators completed 1\,000 annotations covering 820 distinct sentences
-(Table~\ref{tab:corpus-stats}). Each batch embedded the same 20 shared sentences, so those
+covering 1\,207 entities (PER 241, ORG 192, LOC 774), with 261 sentences containing none
+and a median length of 19 tokens. Full counts are in Table~\ref{tab:corpus-stats},
+Appendix~\ref{app:corpusstats}. Each batch embedded the same 20 shared sentences, so those
 20 carry an annotation from every annotator while the remaining 800 carry one each.
 
-\begin{table}[htbp]
-\centering
-\caption{The annotated corpus. Head counts entities whose proper-name core is narrower
-than the full span --- the cases the dual-boundary convention exists for.}
-\label{tab:corpus-stats}
-\begin{tabular}{lr}
-\toprule
-Sentences & 820 \\
-Annotations & 1\,000 \\
-Annotators & 10 \\
-Entities & 1\,207 \\
-\quad PER / ORG / LOC & 241 / 192 / 774 \\
-Sentences with no entity & 261 \\
-Entities where head $\neq$ full span & 183 (15.2\%) \\
-Median sentence length & 19 tokens \\
-Flagged junk by majority & 15 \\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 \paragraph{Inter-annotator agreement.}
 Over the 20 shared sentences and all ten annotators, Fleiss' $\kappa$ is 0.829 under the
@@ -278,7 +315,7 @@ assisted annotators match it at $F_1 = 0.900$ against 0.679 for those working fr
 (0.913 against 0.645 under the head convention). The two groups do not overlap: the lowest
 assisted annotator (0.871) still matches the model more closely than the highest scratch
 annotator (0.754). An exact permutation test over all 252 possible splits of ten annotators
-into two groups of five gives $p = 0.004$ one-tailed --- the smallest value this design can
+into two groups of five gives $p = 0.004$ one-tailed, the smallest value this design can
 produce.
 
 The assisted annotators therefore agree with each other more because they are agreeing with

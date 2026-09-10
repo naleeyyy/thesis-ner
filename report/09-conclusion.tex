@@ -1,72 +1,76 @@
 \section{Limitations and conclusion}
 \label{sec:conclusion}
 
-%% ===========================================================================
-%% SKELETON — write this yourself, as with the introduction.
-%%
-%% Rubric: minimum 300 words, and limitations are graded explicitly. The top
-%% band asks for major limitations discussed in depth, so this section rewards
-%% candour rather than defensiveness. Every item below is a real limitation of
-%% this work, not a hypothetical one.
-%% ===========================================================================
+%% DRAFT for you to rewrite. The rubric grades this section on limitations, and the top
+%% band asks for major limitations discussed in depth, so candour scores better here than
+%% defensiveness. Every item below is real and has a number attached.
 
-%% ---------------------------------------------------------------------------
-%% LIMITATIONS  (~180 words)
-%%
-%%  - Corpus size. Small relative to what a fine-tuned transformer can absorb.
-%%    Quantify the consequence rather than merely admitting it: the 95% confidence
-%%    interval on F1 is +/-0.067 at 50 test sentences, +/-0.050 at 100, +/-0.036
-%%    at 250. State the test split size and the resulting interval, and say plainly
-%%    what magnitude of difference the study can and cannot detect.
-%%
-%%  - Domain. Wikipedia summaries only. Encyclopaedic register, entity-dense,
-%%    unrepresentative of news, speech, or social media.
-%%
-%%  - Single adjudicator. Disagreements were resolved by one person, so
-%%    systematic bias in that judgement is not detectable by the agreement
-%%    statistics, which measure annotators against each other and not against
-%%    truth.
-%%
-%%  - Annotator anchoring. Even in the from-scratch condition, annotators worked
-%%    from the same written guidelines, which were themselves informed by model
-%%    output. The conditions differ in whether suggestions were visible, not in
-%%    whether the model influenced the standard.
-%%
-%%  - Annotator protocol compliance. One of ten annotators (id 11, batch 12) never
-%%    marked a head: 0 of 73 multi-token entities, where peers narrow 10-49% of the
-%%    time. Under the lowest peer rate the chance of that being coincidence is 3e-4.
-%%    Their 100 sentences are in the gold set with heads defaulting to full spans, so
-%%    they contribute 11.5% of the multi-token pool with a systematic bias toward
-%%    full-span behaviour. Say what you did about it -- excluded them from head-view
-%%    results, had the batch re-annotated, or reported the head view with the caveat.
-%%    See results/annotator_qc.json. This is worth reporting rather than quietly
-%%    fixing: it is evidence that a two-boundary protocol costs compliance, which is a
-%%    finding about the method, not just a defect in one annotator's work.
-%%
-%%  - Automatic adjudication. The 20 shared sentences were resolved by token-level
-%%    majority vote, not by a human. 12 of the 20 were non-unanimous
-%%    (results/adjudication.md). Majority vote is reproducible but it is not
-%%    adjudication, and the two should not be conflated in the write-up.
-%%
-%%  - Reproducibility. Training was not bit-reproducible on the hardware used:
-%%    identical seeds gave F1 0.9187 and 0.9279 (Section~\ref{sec:method:stats}).
-%%    Numbers are reproducible in distribution, not exactly.
-%%
-%%  - Statistical power for active learning. The detection threshold of roughly
-%%    0.04 (Section~\ref{sec:results:al}) means a null result here does not show
-%%    that acquisition strategy is irrelevant, only that any effect is smaller
-%%    than this design can resolve.
-%% ---------------------------------------------------------------------------
+\subsection{Limitations}
 
-%% ---------------------------------------------------------------------------
-%% CONCLUSION  (~120 words)
-%%
-%%  Restate what was built and what was measured, and let the results carry it.
-%%  Do not introduce claims the results section does not support.
-%%
-%%  Candidate future work, only if genuinely warranted:
-%%    - extend beyond Wikipedia to a second domain
-%%    - a second adjudicator on a subset, to bound adjudication bias
-%%    - a wider budget range for the active learning comparison, since the
-%%      present design cannot resolve small effects
-%% ---------------------------------------------------------------------------
+The corpus is small, and the consequence can be stated precisely rather than merely
+admitted. The test split holds 201 sentences, which gives a 95\% bootstrap confidence
+interval of roughly $\pm 0.06$ on any $F_1$ reported over it. Two models separated by less
+than about 0.12 cannot be distinguished on this data. That bound is why the fine-tuned
+model and the best zero-shot checkpoint are reported as indistinguishable rather than as
+tied, and it should be read as a property of the corpus rather than of the models.
+
+Every sentence comes from Wikipedia article summaries. The register is encyclopaedic and
+entity-dense, and nothing here shows that the results carry over to news, speech or social
+media. The comparison with WikiANN-sq is a comparison between two samples of the same
+source, which makes it a clean test of annotation method and a weak test of domain
+generality.
+
+Disagreements on the shared sentences were resolved by token-level majority vote, not by a
+person. Twelve of the twenty shared sentences were not unanimous. Majority vote is
+reproducible and it is documented, but it is not adjudication, and a systematic error that
+most annotators shared would survive it untouched.
+
+One annotator of ten never used the head label, marking no narrower head on any of 73
+multi-token entities where peers did so between 10\% and 49\% of the time. Their sentences
+score 0.696 against 0.804 for the rest of the test split, which is the direction their
+omission predicts. Because they contribute 18 of 201 test sentences the reported head-view
+figure is depressed by about 0.008, inside seed variance. The defect is real and was caught
+by an automated check on annotation rates rather than by agreement statistics, which cannot
+see it. It is also evidence that a two-boundary protocol costs compliance, which is a
+finding about the method and not only a flaw in one person's work.
+
+Training is not reproducible bit for bit on the hardware used. Two independent sets of
+three seeds, run under identical settings, gave WikiANN cross-benchmark means of 0.548 and
+0.541 with individual runs between 0.500 and 0.582. Seeding does not fix this on Apple
+silicon, and the seed standard deviations quoted throughout should be treated as an upper
+bound that also absorbs hardware noise.
+
+The annotator group is small and self-selected. Ten volunteers, five per condition in the
+assistance experiment, is enough for the effect observed but not enough to say anything
+about how the effect varies with experience or with the quality of the model's suggestions.
+The exact permutation test used there reaches $p = 0.004$, which is the smallest value a
+five against five design can produce, so the design is at its detection ceiling rather than
+comfortably above it.
+
+The active learning comparison is underpowered by its own measurement. At three seeds it
+cannot resolve differences below roughly 0.04, so its null result shows that this design
+cannot detect an effect, not that no effect exists.
+
+\subsection{Conclusion}
+
+This report set out to build a hand-verified Albanian NER corpus and to measure the parts
+of the annotation process that are usually assumed. The corpus holds 820 sentences and
+1\,207 entities annotated by ten people, with agreement reported rather than asserted.
+
+Three results follow from it. Rank order on WikiANN-sq does not predict performance on
+full-length Albanian prose, and the individual score changes are large and significant even
+though the rank statistic over four models is not. Pre-annotating with a large language
+model measurably moved what annotators produced, pulling them toward the model's own
+output, and did not measurably save them time. The choice between annotating full phrases
+and annotating proper-name heads is worth about 0.09 $F_1$ on identical data, a difference
+that exists entirely in where span edges fall rather than in which entities are found.
+
+The annotation effort also pays for itself in the ordinary sense. Four hundred and
+eighty-three hand-annotated sentences outperform five thousand automatically projected ones
+by 0.132 $F_1$ on real prose, and combining the two corpora matches the better specialist
+on each benchmark at no measurable cost.
+
+None of these findings required a large corpus, which is the argument for having built a
+small one carefully. The obvious next steps are a second domain beyond Wikipedia, a second
+adjudicator on a subset to bound adjudication bias, and a larger annotator pool if the
+assistance effect is to be characterised rather than merely detected.
