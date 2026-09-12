@@ -1,0 +1,278 @@
+{
+  "anchoring": {
+    "n_shared": 20,
+    "views": {
+      "full": {
+        "per_annotator": {
+          "4": {
+            "f1_vs_model": 0.871,
+            "condition": "assisted"
+          },
+          "3": {
+            "f1_vs_model": 0.918,
+            "condition": "assisted"
+          },
+          "13": {
+            "f1_vs_model": 0.6552,
+            "condition": "scratch"
+          },
+          "8": {
+            "f1_vs_model": 0.918,
+            "condition": "assisted"
+          },
+          "15": {
+            "f1_vs_model": 0.7037,
+            "condition": "scratch"
+          },
+          "5": {
+            "f1_vs_model": 0.7541,
+            "condition": "scratch"
+          },
+          "14": {
+            "f1_vs_model": 0.9206,
+            "condition": "assisted"
+          },
+          "1": {
+            "f1_vs_model": 0.7,
+            "condition": "scratch"
+          },
+          "10": {
+            "f1_vs_model": 0.871,
+            "condition": "assisted"
+          },
+          "11": {
+            "f1_vs_model": 0.5806,
+            "condition": "scratch"
+          }
+        },
+        "assisted": [
+          0.871,
+          0.871,
+          0.918,
+          0.918,
+          0.921
+        ],
+        "scratch": [
+          0.581,
+          0.655,
+          0.7,
+          0.704,
+          0.754
+        ],
+        "groups_overlap": false,
+        "test": {
+          "mean_a": 0.8997,
+          "mean_b": 0.6787,
+          "difference": 0.221,
+          "n_splits": 252,
+          "p_one_tailed": 0.00397,
+          "p_two_tailed": 0.00794,
+          "floor_one_tailed": 0.00397
+        }
+      },
+      "head": {
+        "per_annotator": {
+          "4": {
+            "f1_vs_model": 0.9032,
+            "condition": "assisted"
+          },
+          "3": {
+            "f1_vs_model": 0.918,
+            "condition": "assisted"
+          },
+          "13": {
+            "f1_vs_model": 0.6552,
+            "condition": "scratch"
+          },
+          "8": {
+            "f1_vs_model": 0.918,
+            "condition": "assisted"
+          },
+          "15": {
+            "f1_vs_model": 0.6667,
+            "condition": "scratch"
+          },
+          "5": {
+            "f1_vs_model": 0.6557,
+            "condition": "scratch"
+          },
+          "14": {
+            "f1_vs_model": 0.9206,
+            "condition": "assisted"
+          },
+          "1": {
+            "f1_vs_model": 0.7,
+            "condition": "scratch"
+          },
+          "10": {
+            "f1_vs_model": 0.9032,
+            "condition": "assisted"
+          },
+          "11": {
+            "f1_vs_model": 0.5484,
+            "condition": "scratch"
+          }
+        },
+        "assisted": [
+          0.903,
+          0.903,
+          0.918,
+          0.918,
+          0.921
+        ],
+        "scratch": [
+          0.548,
+          0.655,
+          0.656,
+          0.667,
+          0.7
+        ],
+        "groups_overlap": false,
+        "test": {
+          "mean_a": 0.9126,
+          "mean_b": 0.6452,
+          "difference": 0.2674,
+          "n_splits": 252,
+          "p_one_tailed": 0.00397,
+          "p_two_tailed": 0.00794,
+          "floor_one_tailed": 0.00397
+        }
+      }
+    }
+  },
+  "annotation_time": {
+    "per_annotator_medians": {
+      "1 (scratch)": 12.0,
+      "10 (assisted)": 5.6,
+      "11 (scratch)": 9.4,
+      "13 (scratch)": 19.7,
+      "14 (assisted)": 9.5,
+      "15 (scratch)": 16.3,
+      "3 (assisted)": 8.8,
+      "4 (assisted)": 12.7,
+      "5 (scratch)": 29.4,
+      "8 (assisted)": 22.9
+    },
+    "assisted_medians": [
+      5.58,
+      8.837,
+      9.501,
+      12.651,
+      22.948999999999998
+    ],
+    "scratch_medians": [
+      9.375499999999999,
+      12.0255,
+      16.254,
+      19.6535,
+      29.412
+    ],
+    "test_on_annotator_medians": {
+      "mean_a": 17.3441,
+      "mean_b": 11.9036,
+      "difference": 5.4405,
+      "n_splits": 252,
+      "p_one_tailed": 0.14683,
+      "p_two_tailed": 0.29365,
+      "floor_one_tailed": 0.00397
+    },
+    "naive_per_sentence": {
+      "median_assisted_s": 9.6,
+      "median_scratch_s": 14.3,
+      "apparent_speedup_pct": 32.3,
+      "note": "treats 1000 sentences as independent; not the reported test"
+    }
+  },
+  "delimitation": {
+    "gold-full-seed1": {
+      "exact": {
+        "tp": 211,
+        "fp": 88,
+        "fn": 74,
+        "f1": 0.7226
+      },
+      "relaxed": {
+        "tp": 250,
+        "fp": 49,
+        "fn": 35,
+        "f1": 0.8562
+      },
+      "spans_overlapping_but_inexact": 39,
+      "cost_of_exact_matching": 0.1336
+    },
+    "gold-head-seed1": {
+      "exact": {
+        "tp": 234,
+        "fp": 62,
+        "fn": 51,
+        "f1": 0.8055
+      },
+      "relaxed": {
+        "tp": 246,
+        "fp": 50,
+        "fn": 39,
+        "f1": 0.8468
+      },
+      "spans_overlapping_but_inexact": 12,
+      "cost_of_exact_matching": 0.0413
+    }
+  },
+  "entity_lengths": {
+    "wikiann_test": {
+      "n": 1074,
+      "mean": 2.3,
+      "median": 2.0
+    },
+    "gold_full": {
+      "n": 1198,
+      "mean": 1.93,
+      "median": 2.0
+    },
+    "gold_head": {
+      "n": 1198,
+      "mean": 1.68,
+      "median": 1.0
+    }
+  },
+  "rank_correlation": {
+    "n_models": 4,
+    "rho": -0.8,
+    "p_one_tailed": 0.1667,
+    "p_two_tailed": 0.3333,
+    "min_attainable_p_one_tailed": 0.0417,
+    "changes": {
+      "akdeniz27-mbert-sq": -0.226,
+      "babelscape-wikineural": -0.071,
+      "davlan-xlmr-hrl": 0.19,
+      "kushtrim-mbert-sq": -0.35
+    }
+  },
+  "head_sensitivity": {
+    "annotator": "11",
+    "n_test": 201,
+    "n_flagged": 18,
+    "seeds": [
+      {
+        "seed": 1,
+        "all": 0.8055,
+        "excl_flagged": 0.8134,
+        "flagged_only": 0.7111
+      },
+      {
+        "seed": 2,
+        "all": 0.809,
+        "excl_flagged": 0.8165,
+        "flagged_only": 0.7234
+      },
+      {
+        "seed": 3,
+        "all": 0.7719,
+        "excl_flagged": 0.7821,
+        "flagged_only": 0.6522
+      }
+    ],
+    "all_mean": 0.7955,
+    "excl_flagged_mean": 0.804,
+    "flagged_only_mean": 0.6956
+  }
+}

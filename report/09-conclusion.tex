@@ -20,6 +20,16 @@ media. The comparison with WikiANN-sq is a comparison between two samples of the
 source, which makes it a clean test of annotation method and a weak test of domain
 generality.
 
+Half of the corpus carries the model's fingerprints. 399 of the 820 sentences (49\%)
+were annotated by someone who could see the model's suggestions, and the assistance
+experiment shows that such annotators converge on the model's output. Those labels are
+therefore not independent of the pre-annotation system, and a model evaluated on them is
+partly being scored against a standard that another model helped write. The from-scratch
+half is free of this, and any evaluation that needs to be independent of the pre-annotation
+model should be restricted to it. This is the reason the assistance condition was designed
+to be measured rather than assumed, and the measurement is unfavourable enough that the
+design choice to pre-annotate at all deserves reconsideration in future work.
+
 Disagreements on the shared sentences were resolved by token-level majority vote, not by a
 person. Twelve of the twenty shared sentences were not unanimous. Majority vote is
 reproducible and it is documented, but it is not adjudication, and a systematic error that
@@ -36,7 +46,7 @@ finding about the method and not only a flaw in one person's work.
 
 Training is not reproducible bit for bit on the hardware used. Two independent sets of
 three seeds, run under identical settings, gave WikiANN cross-benchmark means of 0.548 and
-0.541 with individual runs between 0.500 and 0.582. Seeding does not fix this on Apple
+0.551 with individual runs between 0.518 and 0.574. Seeding does not fix this on Apple
 silicon, and the seed standard deviations quoted throughout should be treated as an upper
 bound that also absorbs hardware noise.
 

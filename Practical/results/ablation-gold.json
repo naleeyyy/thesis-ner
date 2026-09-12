@@ -1,0 +1,167 @@
+{
+  "gold": "data/labeled/gold.jsonl",
+  "mode": "full",
+  "model": "xlm-roberta-base",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "n_gold_train": 483,
+  "n_dev": 121,
+  "n_test": 201,
+  "n_wikiann_train": 5000,
+  "hyperparams": {
+    "epochs": 8,
+    "batch_size": 8,
+    "lr": 3e-05
+  },
+  "conditions": {
+    "gold_only": {
+      "n_train": 483,
+      "gold_test_f1_mean": 0.6874,
+      "gold_test_f1_std": 0.0207,
+      "wikiann_test_f1_mean": 0.5507,
+      "per_seed": [
+        {
+          "seed": 1,
+          "gold_test_f1": 0.6711,
+          "wikiann_test_f1": 0.5601,
+          "best_dev_f1": 0.7439,
+          "n_train": 483,
+          "seconds": 363.4
+        },
+        {
+          "seed": 2,
+          "gold_test_f1": 0.7107,
+          "wikiann_test_f1": 0.5744,
+          "best_dev_f1": 0.7853,
+          "n_train": 483,
+          "seconds": 351.0
+        },
+        {
+          "seed": 3,
+          "gold_test_f1": 0.6804,
+          "wikiann_test_f1": 0.5177,
+          "best_dev_f1": 0.7666,
+          "n_train": 483,
+          "seconds": 350.5
+        }
+      ]
+    },
+    "wikiann_only": {
+      "n_train": 5000,
+      "gold_test_f1_mean": 0.5434,
+      "gold_test_f1_std": 0.0311,
+      "wikiann_test_f1_mean": 0.9311,
+      "per_seed": [
+        {
+          "seed": 1,
+          "gold_test_f1": 0.5791,
+          "wikiann_test_f1": 0.9299,
+          "best_dev_f1": 0.6556,
+          "n_train": 5000,
+          "seconds": 3465.3
+        },
+        {
+          "seed": 2,
+          "gold_test_f1": 0.5226,
+          "wikiann_test_f1": 0.9333,
+          "best_dev_f1": 0.6409,
+          "n_train": 5000,
+          "seconds": 4323.0
+        },
+        {
+          "seed": 3,
+          "gold_test_f1": 0.5284,
+          "wikiann_test_f1": 0.9302,
+          "best_dev_f1": 0.6129,
+          "n_train": 5000,
+          "seconds": 3477.9
+        }
+      ]
+    },
+    "gold_plus_wikiann": {
+      "n_train": 5483,
+      "gold_test_f1_mean": 0.6924,
+      "gold_test_f1_std": 0.0064,
+      "wikiann_test_f1_mean": 0.9317,
+      "per_seed": [
+        {
+          "seed": 1,
+          "gold_test_f1": 0.6961,
+          "wikiann_test_f1": 0.9343,
+          "best_dev_f1": 0.7542,
+          "n_train": 5483,
+          "seconds": 4169.6
+        },
+        {
+          "seed": 2,
+          "gold_test_f1": 0.685,
+          "wikiann_test_f1": 0.9298,
+          "best_dev_f1": 0.7451,
+          "n_train": 5483,
+          "seconds": 4469.5
+        },
+        {
+          "seed": 3,
+          "gold_test_f1": 0.6961,
+          "wikiann_test_f1": 0.931,
+          "best_dev_f1": 0.75,
+          "n_train": 5483,
+          "seconds": 4200.5
+        }
+      ]
+    }
+  },
+  "comparisons": [
+    {
+      "model_a": "gold_only",
+      "model_b": "wikiann_only",
+      "f1_a": 0.7106598984771574,
+      "f1_b": 0.5791245791245792,
+      "delta": 0.13153531935257823,
+      "ci_low": 0.07176537724836161,
+      "ci_high": 0.19056834864024177,
+      "p_value": 0.0,
+      "significant": true
+    },
+    {
+      "model_a": "gold_only",
+      "model_b": "gold_plus_wikiann",
+      "f1_a": 0.7106598984771574,
+      "f1_b": 0.6960950764006791,
+      "delta": 0.014564822076478245,
+      "ci_low": -0.025338995758660027,
+      "ci_high": 0.054297435019536475,
+      "p_value": 0.455,
+      "significant": false
+    },
+    {
+      "model_a": "wikiann_only",
+      "model_b": "gold_plus_wikiann",
+      "f1_a": 0.5791245791245792,
+      "f1_b": 0.6960950764006791,
+      "delta": -0.11697049727609998,
+      "ci_low": -0.17337099085551042,
+      "ci_high": -0.05938943935439267,
+      "p_value": 0.0,
+      "significant": true
+    }
+  ],
+  "hardware": {
+    "device": "mps",
+    "accelerator": "Apple M4 Pro",
+    "cpu_count": 12,
+    "total_ram_gb": 24.0,
+    "platform": "macOS-26.2-arm64-arm-64bit",
+    "python": "3.11.14"
+  },
+  "software": {
+    "torch": "2.12.0",
+    "transformers": "5.10.2",
+    "datasets": "4.8.5",
+    "numpy": "2.4.6"
+  },
+  "total_compute_s": 25171.0
+}

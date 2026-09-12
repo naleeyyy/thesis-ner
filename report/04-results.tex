@@ -100,18 +100,20 @@ full-length Albanian prose. In this comparison it predicts it \emph{backwards}. 
 practitioner choosing an Albanian NER model by its WikiANN score would have selected the
 worst of the four available options for running text.
 
-The mechanism is visible in how the corpora differ. The two mBERT checkpoints were trained
-on WikiANN-sq, whose median sentence is 6 tokens and which contains fragments and residual
-markup (Section~\ref{sec:results:corpus}). They are strongest on text of that shape and
-degrade on the 20-token sentences here. Davlan XLM-R HRL was trained on high-resource
-languages and applied to Albanian zero-shot, so it never fitted WikiANN-sq's idiosyncrasies
-and transfers to ordinary prose more evenly.
+The mechanism is visible in how the corpora differ. The Kushtrim checkpoint's model card
+states that it was fine-tuned on WikiANN, whose Albanian portion has a median sentence of 6
+tokens and contains fragments and residual markup (Section~\ref{sec:results:corpus}); the
+akdeniz27 card is not publicly readable, though its name and its behaviour here are
+consistent with the same source. Models trained on text of that shape are strongest on it
+and degrade on the 20-token sentences here. Davlan XLM-R HRL was trained on ten
+high-resource languages that do not include Albanian and applied to it zero-shot, so it
+never fitted WikiANN-sq's idiosyncrasies and transfers to ordinary prose more evenly.
 
 It would overstate the evidence to conclude from this that training on WikiANN-sq damages a
 model, because the mismatch runs both ways. A model fine-tuned on the gold corpus here
-scores 0.544 $\pm$ 0.031 on WikiANN-sq test, against 0.709 $\pm$ 0.022 on its own test split
-(Section~\ref{sec:results:gold-finetune}); both figures pool six training runs, two
-independent sets of three seeds. Set beside Kushtrim's 0.574 on the gold split,
+scores 0.549 $\pm$ 0.024 on WikiANN-sq test, against 0.697 $\pm$ 0.029 on its own test split
+(Section~\ref{sec:results:gold-finetune}); both figures pool the six training runs that were
+scored on both benchmarks, two independent sets of three seeds. Set beside Kushtrim's 0.574 on the gold split,
 the picture is symmetric: each model reaches roughly 0.55--0.57 on the corpus it was not
 trained on, whichever direction the move is made.
 
@@ -139,14 +141,15 @@ for the best zero-shot checkpoint. A paired bootstrap gives a difference of $+0.
 
 
 
-The same models were also scored on WikiANN-sq test, giving
-$F_1 = 0.544 \pm 0.031$ over six runs. That number belongs with the transfer discussion in
-Section~\ref{sec:results:transfer}: it establishes that the domain gap is symmetric rather
-than a one-way deficiency of the silver corpus. Two independent sets of three seeds were run under
-identical settings and gave means of 0.548 and 0.541 on WikiANN-sq, individual runs ranging
-from 0.500 to 0.582, a spread that illustrates the hardware non-determinism described in
+Two further sets of three seeds, a repeat of this configuration and the gold-only
+condition of Section~\ref{sec:results:ablation}, were also scored on WikiANN-sq test.
+Pooled, they give $F_1 = 0.549 \pm 0.024$ there. That number belongs with the transfer
+discussion in Section~\ref{sec:results:transfer}: it establishes that the domain gap is
+symmetric rather than a one-way deficiency of the silver corpus. The two sets were run under
+identical settings and gave means of 0.548 and 0.551 on WikiANN-sq, with individual runs
+from 0.518 to 0.574, a spread that illustrates the hardware non-determinism described in
 Section~\ref{sec:method:stats} more sharply than any single run's $\pm$ conveys, and the
-reason the pooled figure is quoted here.
+reason a pooled figure is quoted.
 
 Three observations, none of them flattering, all of them worth reporting.
 
@@ -183,8 +186,7 @@ both directions are visible.
 
 \begin{table}[htbp]
 \centering
-\caption{Three training sets, two test sets. Mean over three seeds, except the combined
-condition, which reports two.}
+\caption{Three training sets, two test sets. Mean over three seeds.}
 \label{tab:ablation}
 \begin{tabular}{lcc}
 \toprule
@@ -192,7 +194,7 @@ Training data & gold test & WikiANN test \\
 \midrule
 Gold only (483 sentences)      & 0.687 & 0.551 \\
 WikiANN only (5\,000)          & 0.543 & 0.931 \\
-Gold + WikiANN (5\,483)        & 0.691 & 0.932 \\
+Gold + WikiANN (5\,483)        & 0.692 & 0.932 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -212,8 +214,9 @@ WikiANN obtain on the gold split are therefore a property of the training data r
 a weakness of the training setup.
 
 The third condition answers a practical question. Combining both corpora matches the better
-specialist on each test set, gaining 0.003 on gold and 0.001 on WikiANN, while each
-specialist alone loses roughly 0.14 to 0.39 on the other's test set. The two distributions
+specialist on each test set, gaining 0.005 on gold and 0.001 on WikiANN, neither of which is
+distinguishable from zero (gold: 95\% CI $[-0.025, +0.054]$), while each specialist alone
+loses roughly 0.14 to 0.39 on the other's test set. The two distributions
 do not compete for model capacity. Anyone building an Albanian NER system should train on
 both, and the earlier finding is better stated as a limitation of training on WikiANN
 \emph{alone} rather than as harm done by including it.
@@ -223,7 +226,7 @@ both, and the earlier finding is better stated as a limitation of training on Wi
 
 Every figure so far uses the full-span convention. Training the same model on the same
 sentences under the head convention, with an identical split, identical hyperparameters and only
-the labels differing, gives $F_1 = 0.795 \pm 0.021$ against $0.707 \pm 0.033$. The
+the labels differing, gives $F_1 = 0.795 \pm 0.021$ against $0.709 \pm 0.028$. The
 choice of convention is worth more than most modelling decisions in this report.
 
 The error profile explains why, and the explanation is specific rather than a general
@@ -295,7 +298,9 @@ assumed. Agreement is far higher in the assisted condition (Table~\ref{tab:assis
 \begin{table}[htbp]
 \centering
 \caption{Agreement within each condition, over the same 20 shared sentences and five
-annotators per condition.}
+annotators per condition. The from-scratch group includes the annotator who never marked a
+head (Section~\ref{sec:results:head}); without them its head-convention $\kappa$ is 0.693,
+which does not change the comparison.}
 \label{tab:assistance}
 \begin{tabular}{lcccc}
 \toprule
