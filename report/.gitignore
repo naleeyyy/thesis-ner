@@ -14,3 +14,7 @@
 main-report.pdf
 main-seminarreport.pdf
 main-thesis.pdf
+
+# Shipped precompiled bibliography, so an Overleaf upload can compile in one pass
+# (see latexmkrc). Regenerate with a plain latexmk build before committing.
+!main-report.bbl

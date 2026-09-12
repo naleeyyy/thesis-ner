@@ -1,0 +1,15 @@
+# Overleaf honours a latexmkrc in the project root, and this one exists for the free
+# plan's compile timeout. A clean build of this template needs three XeLaTeX passes plus
+# biber, which does not fit; a single pass does.
+#
+# So each compile is one pass. Cross-references and citations converge across successive
+# compiles instead of within one: the first compile after a structural edit may leave a
+# "??" or two, the second resolves them. The bibliography is shipped precompiled as
+# main-report.bbl so biber only runs when that file is missing.
+#
+# Do not use this for the final submission build. Delete it (or build locally with plain
+# `latexmk -xelatex main-report.tex`) so everything resolves in one go.
+
+$max_repeat = 1;        # one XeLaTeX pass per compile
+$bibtex_use = 1.5;      # run biber only if main-report.bbl is missing
+$force_mode = 1;        # still produce the PDF when a reference is not yet resolved

@@ -1,0 +1,479 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{bib:albner}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=1a4b019b3ea4dbe4d2345337f2a4431c}{%
+           family={Çano},
+           familyi={Ç\bibinitperiod},
+           given={Erion},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{1a4b019b3ea4dbe4d2345337f2a4431c}
+      \strng{fullhash}{1a4b019b3ea4dbe4d2345337f2a4431c}
+      \strng{fullhashraw}{1a4b019b3ea4dbe4d2345337f2a4431c}
+      \strng{bibnamehash}{1a4b019b3ea4dbe4d2345337f2a4431c}
+      \strng{authorbibnamehash}{1a4b019b3ea4dbe4d2345337f2a4431c}
+      \strng{authornamehash}{1a4b019b3ea4dbe4d2345337f2a4431c}
+      \strng{authorfullhash}{1a4b019b3ea4dbe4d2345337f2a4431c}
+      \strng{authorfullhashraw}{1a4b019b3ea4dbe4d2345337f2a4431c}
+      \field{sortinit}{Ç}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.CL}
+      \field{eprinttype}{arXiv}
+      \field{howpublished}{arXiv preprint arXiv:2309.08741}
+      \field{month}{9}
+      \field{title}{{AlbNER: A Corpus for Named Entity Recognition in Albanian}}
+      \field{year}{2023}
+      \verb{doi}
+      \verb 10.48550/arXiv.2309.08741
+      \endverb
+      \verb{eprint}
+      \verb 2309.08741
+      \endverb
+    \endentry
+    \entry{bib:cohen1960}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=eaad07ee1c6ef93a9308150f12c3c2eb}{%
+           family={Cohen},
+           familyi={C\bibinitperiod},
+           given={Jacob},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{eaad07ee1c6ef93a9308150f12c3c2eb}
+      \strng{fullhash}{eaad07ee1c6ef93a9308150f12c3c2eb}
+      \strng{fullhashraw}{eaad07ee1c6ef93a9308150f12c3c2eb}
+      \strng{bibnamehash}{eaad07ee1c6ef93a9308150f12c3c2eb}
+      \strng{authorbibnamehash}{eaad07ee1c6ef93a9308150f12c3c2eb}
+      \strng{authornamehash}{eaad07ee1c6ef93a9308150f12c3c2eb}
+      \strng{authorfullhash}{eaad07ee1c6ef93a9308150f12c3c2eb}
+      \strng{authorfullhashraw}{eaad07ee1c6ef93a9308150f12c3c2eb}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Educational and Psychological Measurement}
+      \field{month}{4}
+      \field{number}{1}
+      \field{title}{{A Coefficient of Agreement for Nominal Scales}}
+      \field{volume}{20}
+      \field{year}{1960}
+      \field{pages}{37\bibrangedash 46}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1177/001316446002000104
+      \endverb
+    \endentry
+    \entry{bib:xlmr}{inproceedings}{}{}
+      \name{author}{10}{}{%
+        {{hash=7cf7ac6a9456559cc67ee138c7f21cec}{%
+           family={Conneau},
+           familyi={C\bibinitperiod},
+           given={Alexis},
+           giveni={A\bibinitperiod}}}%
+        {{hash=9e9a1e2c7a348addec1212ed39541436}{%
+           family={Khandelwal},
+           familyi={K\bibinitperiod},
+           given={Kartikay},
+           giveni={K\bibinitperiod}}}%
+        {{hash=78a420900f50a8470ad085fb05231bf6}{%
+           family={Goyal},
+           familyi={G\bibinitperiod},
+           given={Naman},
+           giveni={N\bibinitperiod}}}%
+        {{hash=f2b6a497c32b61dbbfc24edec6778700}{%
+           family={Chaudhary},
+           familyi={C\bibinitperiod},
+           given={Vishrav},
+           giveni={V\bibinitperiod}}}%
+        {{hash=a9187426ad03289115e1167fcbb50a3e}{%
+           family={Wenzek},
+           familyi={W\bibinitperiod},
+           given={Guillaume},
+           giveni={G\bibinitperiod}}}%
+        {{hash=f2e3a540fe772c40c15564f8e6056c14}{%
+           family={Guzmán},
+           familyi={G\bibinitperiod},
+           given={Francisco},
+           giveni={F\bibinitperiod}}}%
+        {{hash=ebdea2c3aa9f759075733b20dce6b873}{%
+           family={Grave},
+           familyi={G\bibinitperiod},
+           given={Edouard},
+           giveni={E\bibinitperiod}}}%
+        {{hash=b13aa2bad5258fa5ef7a733f2d305a49}{%
+           family={Ott},
+           familyi={O\bibinitperiod},
+           given={Myle},
+           giveni={M\bibinitperiod}}}%
+        {{hash=1dbd3a5b42828fb2cebd7786488ba425}{%
+           family={Zettlemoyer},
+           familyi={Z\bibinitperiod},
+           given={Luke},
+           giveni={L\bibinitperiod}}}%
+        {{hash=9b97236dd2d1a104fc5cf9660dd5582e}{%
+           family={Stoyanov},
+           familyi={S\bibinitperiod},
+           given={Veselin},
+           giveni={V\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computational Linguistics}%
+      }
+      \strng{namehash}{2916bb4d39f814823624e9e16627e23a}
+      \strng{fullhash}{caec96fdd725afa21762b0ec790cf812}
+      \strng{fullhashraw}{caec96fdd725afa21762b0ec790cf812}
+      \strng{bibnamehash}{caec96fdd725afa21762b0ec790cf812}
+      \strng{authorbibnamehash}{caec96fdd725afa21762b0ec790cf812}
+      \strng{authornamehash}{2916bb4d39f814823624e9e16627e23a}
+      \strng{authorfullhash}{caec96fdd725afa21762b0ec790cf812}
+      \strng{authorfullhashraw}{caec96fdd725afa21762b0ec790cf812}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics}
+      \field{month}{7}
+      \field{title}{{Unsupervised Cross-lingual Representation Learning at Scale}}
+      \field{year}{2020}
+      \field{pages}{8440\bibrangedash 8451}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.18653/v1/2020.acl-main.747
+      \endverb
+    \endentry
+    \entry{bib:fleiss1971}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=5fc699ceae2e032e82bec411cfd14c9e}{%
+           family={Fleiss},
+           familyi={F\bibinitperiod},
+           given={Joseph\bibnamedelima L.},
+           giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \strng{namehash}{5fc699ceae2e032e82bec411cfd14c9e}
+      \strng{fullhash}{5fc699ceae2e032e82bec411cfd14c9e}
+      \strng{fullhashraw}{5fc699ceae2e032e82bec411cfd14c9e}
+      \strng{bibnamehash}{5fc699ceae2e032e82bec411cfd14c9e}
+      \strng{authorbibnamehash}{5fc699ceae2e032e82bec411cfd14c9e}
+      \strng{authornamehash}{5fc699ceae2e032e82bec411cfd14c9e}
+      \strng{authorfullhash}{5fc699ceae2e032e82bec411cfd14c9e}
+      \strng{authorfullhashraw}{5fc699ceae2e032e82bec411cfd14c9e}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Psychological Bulletin}
+      \field{month}{11}
+      \field{number}{5}
+      \field{title}{{Measuring Nominal Scale Agreement Among Many Raters}}
+      \field{volume}{76}
+      \field{year}{1971}
+      \field{pages}{378\bibrangedash 382}
+      \range{pages}{5}
+      \verb{doi}
+      \verb 10.1037/h0031619
+      \endverb
+    \endentry
+    \entry{bib:koehn2004}{inproceedings}{}{}
+      \name{author}{1}{}{%
+        {{hash=dac0b41a5ea5e261d00f3251b76b91bd}{%
+           family={Koehn},
+           familyi={K\bibinitperiod},
+           given={Philipp},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Barcelona, Spain}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computational Linguistics}%
+      }
+      \strng{namehash}{dac0b41a5ea5e261d00f3251b76b91bd}
+      \strng{fullhash}{dac0b41a5ea5e261d00f3251b76b91bd}
+      \strng{fullhashraw}{dac0b41a5ea5e261d00f3251b76b91bd}
+      \strng{bibnamehash}{dac0b41a5ea5e261d00f3251b76b91bd}
+      \strng{authorbibnamehash}{dac0b41a5ea5e261d00f3251b76b91bd}
+      \strng{authornamehash}{dac0b41a5ea5e261d00f3251b76b91bd}
+      \strng{authorfullhash}{dac0b41a5ea5e261d00f3251b76b91bd}
+      \strng{authorfullhashraw}{dac0b41a5ea5e261d00f3251b76b91bd}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 2004 Conference on Empirical Methods in Natural Language Processing}
+      \field{month}{7}
+      \field{title}{{Statistical Significance Tests for Machine Translation Evaluation}}
+      \field{year}{2004}
+      \field{pages}{388\bibrangedash 395}
+      \range{pages}{8}
+    \endentry
+    \entry{bib:kote2025}{inproceedings}{}{}
+      \name{author}{6}{}{%
+        {{hash=b2f69d14e5b3b61215e01c3fee73f43a}{%
+           family={Kote},
+           familyi={K\bibinitperiod},
+           given={Nelda},
+           giveni={N\bibinitperiod}}}%
+        {{hash=0b618992d3d6b39744df6c80ab68baa3}{%
+           family={Kalliri},
+           familyi={K\bibinitperiod},
+           given={Klea},
+           giveni={K\bibinitperiod}}}%
+        {{hash=ada6f42609fb30352d91c9727ab4ba09}{%
+           family={Kalliri},
+           familyi={K\bibinitperiod},
+           given={Kejsi},
+           giveni={K\bibinitperiod}}}%
+        {{hash=aa736ca73d4d801fdda0b0b508c23421}{%
+           family={Haveriku},
+           familyi={H\bibinitperiod},
+           given={Alba},
+           giveni={A\bibinitperiod}}}%
+        {{hash=0baef6bb8e86db1beb98fb447e36fe96}{%
+           family={Muraku},
+           familyi={M\bibinitperiod},
+           given={Besjana},
+           giveni={B\bibinitperiod}}}%
+        {{hash=444a0ba96f7e3dc7352209973291412d}{%
+           family={Kajo\bibnamedelima Meçe},
+           familyi={K\bibinitperiod\bibinitdelim M\bibinitperiod},
+           given={Elinda},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer Nature Switzerland}%
+      }
+      \strng{namehash}{9ee3d567ced0a6b2a5e18221ced141a5}
+      \strng{fullhash}{04966ca9b2d879f4aa6c0d00874f9ab6}
+      \strng{fullhashraw}{04966ca9b2d879f4aa6c0d00874f9ab6}
+      \strng{bibnamehash}{04966ca9b2d879f4aa6c0d00874f9ab6}
+      \strng{authorbibnamehash}{04966ca9b2d879f4aa6c0d00874f9ab6}
+      \strng{authornamehash}{9ee3d567ced0a6b2a5e18221ced141a5}
+      \strng{authorfullhash}{04966ca9b2d879f4aa6c0d00874f9ab6}
+      \strng{authorfullhashraw}{04966ca9b2d879f4aa6c0d00874f9ab6}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advanced Information Networking and Applications (AINA 2025)}
+      \field{series}{Lecture Notes on Data Engineering and Communications Technologies}
+      \field{title}{{NER for Albanian Language: A Manually Annotated Corpus and Machine Learning Models}}
+      \field{year}{2025}
+      \field{pages}{153\bibrangedash 165}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1007/978-3-031-87769-8_14
+      \endverb
+    \endentry
+    \entry{bib:wikiann}{inproceedings}{}{}
+      \name{author}{6}{}{%
+        {{hash=18277bfd8661fc97bd51ea353d29400b}{%
+           family={Pan},
+           familyi={P\bibinitperiod},
+           given={Xiaoman},
+           giveni={X\bibinitperiod}}}%
+        {{hash=536945b13fd5298cfa013c68e8191b46}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Boliang},
+           giveni={B\bibinitperiod}}}%
+        {{hash=be5886b6b904bf38c0617ff1305a5300}{%
+           family={May},
+           familyi={M\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=b92b9241b4c25551cd7ea434e96dc8de}{%
+           family={Nothman},
+           familyi={N\bibinitperiod},
+           given={Joel},
+           giveni={J\bibinitperiod}}}%
+        {{hash=49fbfd99532ca0bf67fc21d5b6c1328a}{%
+           family={Knight},
+           familyi={K\bibinitperiod},
+           given={Kevin},
+           giveni={K\bibinitperiod}}}%
+        {{hash=a8c594661b4a56762abc0b9e37e92872}{%
+           family={Ji},
+           familyi={J\bibinitperiod},
+           given={Heng},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computational Linguistics}%
+      }
+      \strng{namehash}{71d91a145c24cf4c714aa927e36e17c8}
+      \strng{fullhash}{65819f4470ab7e37e5312363743dd98f}
+      \strng{fullhashraw}{65819f4470ab7e37e5312363743dd98f}
+      \strng{bibnamehash}{65819f4470ab7e37e5312363743dd98f}
+      \strng{authorbibnamehash}{65819f4470ab7e37e5312363743dd98f}
+      \strng{authornamehash}{71d91a145c24cf4c714aa927e36e17c8}
+      \strng{authorfullhash}{65819f4470ab7e37e5312363743dd98f}
+      \strng{authorfullhashraw}{65819f4470ab7e37e5312363743dd98f}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 55th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)}
+      \field{month}{7}
+      \field{title}{{Cross-lingual Name Tagging and Linking for 282 Languages}}
+      \field{year}{2017}
+      \field{pages}{1946\bibrangedash 1958}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.18653/v1/P17-1178
+      \endverb
+    \endentry
+    \entry{bib:stanza}{inproceedings}{}{}
+      \name{author}{5}{}{%
+        {{hash=90315a68d91c0dd0775cb493bc6967a6}{%
+           family={Qi},
+           familyi={Q\bibinitperiod},
+           given={Peng},
+           giveni={P\bibinitperiod}}}%
+        {{hash=b43cba616065799ba45d146e48b95dd8}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Yuhao},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=4a029fd7cea6a9c680cd411bbb8ad43c}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Yuhui},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=8887405f904d8e7aac699b64e5afebbf}{%
+           family={Bolton},
+           familyi={B\bibinitperiod},
+           given={Jason},
+           giveni={J\bibinitperiod}}}%
+        {{hash=2214edb8305f7ccd7cdc310b3a8ae1b4}{%
+           family={Manning},
+           familyi={M\bibinitperiod},
+           given={Christopher\bibnamedelima D.},
+           giveni={C\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computational Linguistics}%
+      }
+      \strng{namehash}{c5ca5753844ce2bbe5685fd5bd2adc73}
+      \strng{fullhash}{94986be266f7a6dd2613a7415fd8d732}
+      \strng{fullhashraw}{94986be266f7a6dd2613a7415fd8d732}
+      \strng{bibnamehash}{94986be266f7a6dd2613a7415fd8d732}
+      \strng{authorbibnamehash}{94986be266f7a6dd2613a7415fd8d732}
+      \strng{authornamehash}{c5ca5753844ce2bbe5685fd5bd2adc73}
+      \strng{authorfullhash}{94986be266f7a6dd2613a7415fd8d732}
+      \strng{authorfullhashraw}{94986be266f7a6dd2613a7415fd8d732}
+      \field{sortinit}{Q}
+      \field{sortinithash}{ce69a400a872ddd02ee7fdb3b38c6abd}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics: System Demonstrations}
+      \field{month}{7}
+      \field{title}{{Stanza: A Python Natural Language Processing Toolkit for Many Human Languages}}
+      \field{year}{2020}
+      \field{pages}{101\bibrangedash 108}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.18653/v1/2020.acl-demos.14
+      \endverb
+    \endentry
+    \entry{bib:wikiann-splits}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=306d193d7f058f7b1ba6057dd87300af}{%
+           family={Rahimi},
+           familyi={R\bibinitperiod},
+           given={Afshin},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e5d6fa51a69f9c96a946952d51fd92f7}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Yuan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=fcbee11f57094a6fbbfcbf494f023974}{%
+           family={Cohn},
+           familyi={C\bibinitperiod},
+           given={Trevor},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computational Linguistics}%
+      }
+      \strng{namehash}{f1bf194324b286be53525db59fe548a6}
+      \strng{fullhash}{62f89ff626c29ec4c38841cfce84b2e3}
+      \strng{fullhashraw}{62f89ff626c29ec4c38841cfce84b2e3}
+      \strng{bibnamehash}{62f89ff626c29ec4c38841cfce84b2e3}
+      \strng{authorbibnamehash}{62f89ff626c29ec4c38841cfce84b2e3}
+      \strng{authornamehash}{f1bf194324b286be53525db59fe548a6}
+      \strng{authorfullhash}{62f89ff626c29ec4c38841cfce84b2e3}
+      \strng{authorfullhashraw}{62f89ff626c29ec4c38841cfce84b2e3}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics}
+      \field{month}{7}
+      \field{title}{{Massively Multilingual Transfer for NER}}
+      \field{year}{2019}
+      \field{pages}{151\bibrangedash 164}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.18653/v1/P19-1015
+      \endverb
+    \endentry
+    \entry{bib:settles2009}{report}{}{}
+      \name{author}{1}{}{%
+        {{hash=9941c4d5402b5e6ceeb53599273e07a3}{%
+           family={Settles},
+           familyi={S\bibinitperiod},
+           given={Burr},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {University of Wisconsin--Madison}%
+      }
+      \strng{namehash}{9941c4d5402b5e6ceeb53599273e07a3}
+      \strng{fullhash}{9941c4d5402b5e6ceeb53599273e07a3}
+      \strng{fullhashraw}{9941c4d5402b5e6ceeb53599273e07a3}
+      \strng{bibnamehash}{9941c4d5402b5e6ceeb53599273e07a3}
+      \strng{authorbibnamehash}{9941c4d5402b5e6ceeb53599273e07a3}
+      \strng{authornamehash}{9941c4d5402b5e6ceeb53599273e07a3}
+      \strng{authorfullhash}{9941c4d5402b5e6ceeb53599273e07a3}
+      \strng{authorfullhashraw}{9941c4d5402b5e6ceeb53599273e07a3}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{1648}
+      \field{title}{{Active Learning Literature Survey}}
+      \field{type}{Computer Sciences Technical Report}
+      \field{year}{2009}
+      \verb{urlraw}
+      \verb https://minds.wisconsin.edu/handle/1793/60660
+      \endverb
+      \verb{url}
+      \verb https://minds.wisconsin.edu/handle/1793/60660
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
