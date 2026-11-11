@@ -76,7 +76,7 @@ Mean & & \multicolumn{2}{l}{0.709 $\pm$ 0.028} \\
 \section{Pipeline validation on WikiANN-sq}
 \label{app:validation}
 
-Before applying the training pipeline to the annotated data, it was validated on WikiANN-sq. A fine-tuned \texttt{xlm-roberta-base} reached $F_1 = 0.928$ on the WikiANN test split, against 0.925 for the published Kushtrim checkpoint. A paired bootstrap gives a difference of $+0.003$ with a 95\% confidence interval of $[-0.012, +0.018]$ and $p = 0.691$: the two are statistically indistinguishable.
+Before applying the training pipeline to the annotated data, it was validated on WikiANN-sq. A fine-tuned \texttt{xlm-roberta-base} reached $F_1 = 0.928$ on the WikiANN test split, against 0.925 for the published Kushtrim checkpoint. A paired bootstrap gives a difference of $+0.003$ with a 95\% confidence interval of $[-0.012, +0.018]$ and $p = 0.691$: the two are statistically indistinguishable. A later three-seed run of the same architecture, the WikiANN-only condition of Section~\ref{sec:results:ablation}, reached 0.931; the two figures are separate trainings of the same setup.
 
 \section{Error analysis}
 \label{app:erroranalysis}
