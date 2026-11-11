@@ -1,63 +1,9 @@
-\section{Active learning calibration}
-\label{app:al}
-
-This calibration was run on WikiANN-sq before the annotated corpus existed, to establish
-whether the acquisition strategy comparison could resolve a difference at all. It is
-reported here rather than in the body because it measures the experimental design rather
-than the corpus: the answer turned out to be that at three seeds the design cannot resolve
-differences below roughly 0.04, which is a fact about the method and not a finding about
-Albanian.
-
-Table~\ref{tab:al} reports a calibration sweep on WikiANN-sq: two acquisition strategies,
-three seeds, five annotation budgets, 30 model trainings in total.
-
-\begin{table}[htbp]
-\centering
-\caption{Active learning on WikiANN-sq. Mean $F_1 \pm$ standard deviation over three seeds.}
-\label{tab:al}
-\begin{tabular}{lcc}
-\toprule
-Labelled sentences & Random & Uncertainty \\
-\midrule
-250  & 0.685 $\pm$ 0.000 & 0.692 $\pm$ 0.016 \\
-500  & 0.863 $\pm$ 0.017 & 0.847 $\pm$ 0.017 \\
-750  & 0.882 $\pm$ 0.007 & 0.858 $\pm$ 0.019 \\
-1000 & 0.883 $\pm$ 0.029 & 0.888 $\pm$ 0.025 \\
-1250 & 0.898 $\pm$ 0.004 & 0.906 $\pm$ 0.012 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig_learning_curve}
-\caption{Active learning on WikiANN-sq. Shaded bands are $\pm$ one standard deviation
-across three seeds; they overlap at every budget.}
-\label{fig:al}
-\end{figure}
-
-No budget shows a significant difference. The largest gap, 0.024 at 750 sentences, reaches
-$t = -2.03$ against the $|t| > 2.8$ required at three seeds. The direction of the
-difference also alternates, with uncertainty leading at three of five budgets and random at two,
-which is characteristic of noise rather than of an effect.
-
-Uncertainty sampling is slightly \emph{worse} at intermediate budgets. This is consistent
-with a known property of entropy-based acquisition: it favours atypical and difficult
-sentences, which early in training are unrepresentative of the test distribution.
-
-The practical consequence is a detection threshold. With three seeds at these budgets, a
-strategy difference below approximately 0.04 cannot be distinguished from seed variance.
-Any conclusive claim would require more seeds or wider budget spacing.
-
-
-
 \section{Corpus construction detail}
 \label{app:corpus}
 
 \begin{table}[htbp]
 \centering
-\caption{Sentences discarded during corpus construction (2\,687 candidates). One sentence
-carried two issues, so reasons sum to 121.}
+\caption{Sentences discarded during corpus construction (2\,687 candidates). One sentence carried two issues, so reasons sum to 121.}
 \label{tab:filter}
 \begin{tabular}{lr}
 \toprule
@@ -130,51 +76,20 @@ Mean & & \multicolumn{2}{l}{0.709 $\pm$ 0.028} \\
 \section{Pipeline validation on WikiANN-sq}
 \label{app:validation}
 
-Before applying the training pipeline to the annotated data, it was validated on
-WikiANN-sq. A fine-tuned \texttt{xlm-roberta-base} reached $F_1 = 0.928$ on the WikiANN
-test split, against 0.925 for the published Kushtrim checkpoint. A paired bootstrap gives a
-difference of $+0.003$ with a 95\% confidence interval of $[-0.012, +0.018]$ and $p =
-0.691$: the two are statistically indistinguishable.
-
-This is reported not as a contribution but as a control. It establishes that the training
-configuration reaches parity with published work on the standard benchmark, so differences
-observed later on the annotated corpus are attributable to the data rather than to the
-training setup.
-
+Before applying the training pipeline to the annotated data, it was validated on WikiANN-sq. A fine-tuned \texttt{xlm-roberta-base} reached $F_1 = 0.928$ on the WikiANN test split, against 0.925 for the published Kushtrim checkpoint. A paired bootstrap gives a difference of $+0.003$ with a 95\% confidence interval of $[-0.012, +0.018]$ and $p = 0.691$: the two are statistically indistinguishable.
 
 \section{Error analysis}
 \label{app:erroranalysis}
 
-An $F_1$ score says a model is wrong without saying how. Classifying every mismatch into
-four categories, a gold entity with no overlapping prediction (\emph{missed}), a
-prediction overlapping no gold entity (\emph{spurious}), the same token extent with the
-wrong type (\emph{type}), and overlapping extents that do not match exactly
-(\emph{boundary}), separates failures that annotation guidelines can address from
-failures that are modelling problems (Figure~\ref{fig:errors}).
-
-
+An $F_1$ score says a model is wrong without saying how. Classifying every mismatch into four categories, a gold entity with no overlapping prediction (\emph{missed}), a prediction overlapping no gold entity (\emph{spurious}), the same token extent with the wrong type (\emph{type}), and overlapping extents that do not match exactly (\emph{boundary}), separates failures that annotation guidelines can address from failures that are modelling problems (Figure~\ref{fig:errors}).
 
 Three findings stand out.
 
-\emph{Boundary errors are overwhelmingly under-extensions.} Across every model, a span
-that is wrong at its edges is far more often too short than too long: 150 against 5 for
-akdeniz27, 116 against 7 for Babelscape, 153 against 1 for Davlan. Models truncate
-multi-token entities rather than over-reaching. This is directly relevant to the
-annotation design: Albanian's \emph{X i Y} construction produces exactly the multi-token
-spans that are being cut short, which is part of why the boundary convention was recorded
-twice rather than fixed in advance (Section~\ref{sec:method:annotation}).
+\emph{Boundary errors are overwhelmingly under-extensions.} Across every model, a span that is wrong at its edges is far more often too short than too long: 150 against 5 for akdeniz27, 116 against 7 for Babelscape, 153 against 1 for Davlan. Models truncate multi-token entities rather than over-reaching. This is directly relevant to the annotation design: Albanian's \emph{X i Y} construction produces exactly the multi-token spans that are being cut short, which is part of why the boundary convention was recorded twice rather than fixed in advance (Section~\ref{sec:method:annotation}).
 
-\emph{The reproducibility gap is a boundary problem, not a recall problem.} The two
-mBERT checkpoints nominally trained on the same data differ by 0.145 $F_1$, and the error
-profiles show why: 56\% of akdeniz27's errors are boundary errors against 21\% for
-Kushtrim. The weaker model is not failing to find entities so much as failing to delimit
-them.
+\emph{The reproducibility gap is a boundary problem, not a recall problem.} The two mBERT checkpoints nominally trained on the same data differ by 0.145 $F_1$, and the error profiles show why: 56\% of akdeniz27's errors are boundary errors against 21\% for Kushtrim. The weaker model is not failing to find entities so much as failing to delimit them.
 
-\emph{ORG is confused with LOC, in that direction.} ORG$\rightarrow$LOC is the most
-common type confusion for four of the five models. This is consistent with the class being
-hardest for every model in Table~\ref{tab:baselines}, and with the Albanian pattern in
-which institutions are named after places, a distinction the annotation guidelines had
-to legislate explicitly.
+\emph{ORG is confused with LOC, in that direction.} ORG$\rightarrow$LOC is the most common type confusion for four of the five models. This is consistent with the class being hardest for every model in Table~\ref{tab:baselines}, and with the Albanian pattern in which institutions are named after places, a distinction the annotation guidelines had to legislate explicitly.
 
 \section{Corpus statistics}
 \label{app:corpusstats}

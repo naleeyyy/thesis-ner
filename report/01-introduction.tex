@@ -1,55 +1,33 @@
 \section{Introduction}
 \label{sec:introduction}
 
-%% DRAFT — rewrite in your own voice before submission.
-%%
-%% The rubric assesses, in this section and the conclusion, whether *you* understand and
-%% can motivate the work. The argument below is sound and every number in it is real, but
-%% a grader can tell the difference between an argument you made and one you inherited.
-%% Keep the structure, say it the way you would say it.
-
-Albanian is spoken by roughly seven million people and remains under-resourced in natural
-language processing. Named entity recognition, which locates mentions of people,
+Albanian is spoken by roughly seven million people and remains under-resourced in natural language processing. Named entity recognition, which locates mentions of people,
 organisations and places in running text, sits underneath information extraction,
 search and question answering, so a language without a dependable NER resource inherits
 that gap in everything built on top of it.
 
-Albanian is not unresourced. WikiANN~\cite{bib:wikiann,bib:wikiann-splits} supplies silver
-data for the language, and two hand-annotated corpora exist~\cite{bib:albner,bib:kote2025},
-the larger of them an order of magnitude bigger than the corpus built here. The gap this
+WikiANN~\cite{bib:wikiann,bib:wikiann-splits} supplies silver data for the language, and two hand-annotated corpora exist~\cite{bib:albner,bib:kote2025}, the larger of them an order of magnitude bigger than the corpus built here. The gap this
 work addresses is therefore not an absence of data but an absence of measurement.
 
-That distinction is what motivates the work, and it can be shown rather than asserted.
-WikiANN-sq is built by projecting annotations across Wikipedia links, a method designed for
-breadth across 282 languages rather than depth in any one of them, and the Albanian portion
-carries the cost of that trade: its median sentence is 6 tokens against 20 in a freshly
-sampled Wikipedia corpus, and it contains fragments, leaked wiki markup, and lines
-beginning with the redirect directive \texttt{RIDREJTO} presented as sentences
-(Section~\ref{sec:results:corpus}). A model scored on such text has been measured on
-something other than Albanian prose. This is a limitation of automatic construction, not a
-criticism of the method, which achieved what it set out to achieve.
+WikiANN-sq is built by projecting annotations across Wikipedia links, a method designed for breadth across 282 languages rather than depth in any one of them, and the Albanian portion carries the cost of that trade: its median sentence is 6 tokens against 20 in a freshly sampled Wikipedia corpus, and it contains fragments, leaked wiki markup, and lines beginning with the redirect directive \texttt{RIDREJTO} presented as sentences (Section~\ref{sec:results:corpus}). A model scored on such text has been measured on something other than Albanian prose. This is a limitation of automatic construction.
 
 Hand annotation avoids that problem and introduces others, which are usually left
 unexamined. Annotators disagree, and how much they disagree bounds how much of a model's
 score is signal. Albanian's \emph{X i Y} construction, a common noun linked to a proper
-name as in \emph{qyteti i Tiranës}, is genuinely ambiguous about where the name ends,
+name as in \emph{qyteti i Tiranës}, is ambiguous about where the name ends,
 and a corpus that quietly picks one reading hides a decision that changes its numbers.
 Pre-annotating with a model to save effort risks anchoring annotators on the model's
-mistakes, converting a labour saving into a correlated error.
+mistakes, converting a labour saving method into a correlated error.
 
 This report treats each of those as something to measure. It contributes a hand-verified
 Albanian NER corpus on the WikiANN tagset, annotated under an explicit written protocol
-with inter-annotator agreement reported rather than assumed; an annotation scheme that
+with inter-annotator agreement measured; an annotation scheme that
 records the full span and the proper-name head of every entity, so the \emph{X i Y}
 boundary stays a reporting choice rather than a commitment baked into the data; a
-between-subjects experiment in which the same sentences are annotated with and without the
-model's suggestions visible, measuring the anchoring effect directly
+between-subjects experiment in which the same sentences are annotated with and without the model's suggestions visible, measuring the anchoring effect directly
 (Section~\ref{sec:method:annotation}); and an evaluation of published checkpoints and a
 fine-tuned model in which every comparison is accompanied by a bootstrap confidence
-interval and a paired significance test, so that reported differences are shown to exceed
-sampling variation. An active learning comparison is included and, on the calibration data,
-returns a null result that the design is reported as being underpowered to resolve
-(Appendix~\ref{app:al}).
+interval and a paired significance test, so that reported differences are shown to exceed sampling variation.
 
 Section~\ref{sec:background} covers the necessary background,
 Section~\ref{sec:method} documents what was built and how it was measured,

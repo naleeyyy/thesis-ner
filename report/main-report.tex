@@ -180,10 +180,10 @@
 %% 
 
 %% Command \title{title}: sets the title of your report
-\title{Building a Hand-Verified Named Entity Recognition Corpus for Albanian}
+\title{LLM-Assisted Annotation and Evaluation for Albanian Named Entity Recognition}
 
 %% Command \titleshort{short title}: sets an abbreviated version of the report title for page heads
-\titleshort{A Hand-Verified NER Corpus for Albanian}
+\titleshort{LLM-Assisted Annotation and Evaluation for Albanian NER}
 
 %% Command \subtitle{subtitle}: sets the subtitle for seminar/technical reports (not used for theses)
 \subtitle{Practical Work Report}
@@ -220,21 +220,15 @@ Institute of Machine Learning, Johannes Kepler University Linz}
 
 %% Command \abstract{text}: set the document abstract on the title page
 \abstract{%
-    Albanian is under-resourced for named entity recognition, and its most widely used
-    resource, WikiANN-sq, is built by automatic cross-lingual projection: its median
-    sentence is 6 tokens against 20 in freshly sampled Wikipedia text. This report presents
-    a hand-verified Albanian NER corpus of 820 sentences and 1\,207 entities, annotated by
-    ten people with inter-annotator agreement measured rather than assumed (Fleiss'
-    $\kappa = 0.83$). Every entity carries both a full span and a proper-name head, which
-    makes the boundary convention a reporting choice and shows it to be worth 0.09 $F_1$.
-    Rank order on WikiANN-sq does not predict performance on full-length prose. The 483
-    hand-annotated training sentences outperform 5\,000 automatically projected ones by
-    0.132 $F_1$. Annotators shown model pre-annotations converged on the model's own output
-    ($p = 0.004$) without working measurably faster.%
+    Albanian is low resourced for named entity recognition, and its most widely used
+    resource, WikiANN-sq, is built by automatic cross-lingual projection. It's median
+    sentence is 6 tokens against 20 in freshly sampled Wikipedia text. This report presents a hand-verified Albanian NER corpus of 820 sentences and 1\,207 entities, annotated by ten people with inter-annotator agreement measured at a Fleiss'
+    $\kappa = 0.83$. Every entity carries both a full span and a proper-name head, which
+    makes the boundary convention a reporting choice and shows it to be worth 0.09 $F_1$. Rank order on WikiANN-sq does not predict performance on full-length prose. The 483 hand-annotated training sentences outperform 5,000 automatically projected ones by 0.132 $F_1$. Annotators shown model pre-annotations converged on the model's own output ($p = 0.004$) without working measurably faster.%
 }
 
 %% Command \keywords{text}: set the document keywords
-\keywords{named entity recognition, Albanian, low-resource NLP, corpus annotation, active learning}
+\keywords{named entity recognition, Albanian, low-resource NLP, corpus annotation}
 
 
 %% Finally, print the title page using the above information:
